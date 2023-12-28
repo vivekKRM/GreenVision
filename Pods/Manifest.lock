@@ -1,0 +1,60 @@
+PODS:
+  - Alamofire (5.8.0)
+  - BSImagePicker (3.3.1)
+  - Cosmos (23.0.0)
+  - Fastis (2.3.0):
+    - JTAppleCalendar (~> 8.0.0)
+    - PrettyCards (~> 1.0.0)
+  - GoogleMaps (8.1.0):
+    - GoogleMaps/Maps (= 8.1.0)
+  - GoogleMaps/Base (8.1.0)
+  - GoogleMaps/Maps (8.1.0):
+    - GoogleMaps/Base
+  - GooglePlaces (8.1.0)
+  - IQKeyboardManagerSwift (6.5.12)
+  - JTAppleCalendar (8.0.5)
+  - LabelSwitch (0.1.7)
+  - lottie-ios (4.2.0)
+  - PrettyCards (1.0.5)
+
+DEPENDENCIES:
+  - Alamofire
+  - BSImagePicker
+  - Cosmos
+  - Fastis
+  - GoogleMaps
+  - GooglePlaces
+  - IQKeyboardManagerSwift
+  - LabelSwitch
+  - lottie-ios
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - BSImagePicker
+    - Cosmos
+    - Fastis
+    - GoogleMaps
+    - GooglePlaces
+    - IQKeyboardManagerSwift
+    - JTAppleCalendar
+    - LabelSwitch
+    - lottie-ios
+    - PrettyCards
+
+SPEC CHECKSUMS:
+  Alamofire: 0e92e751b3e9e66d7982db43919d01f313b8eb91
+  BSImagePicker: 0fe04b574d4d6b81093785d2af6c26227efc8428
+  Cosmos: b5c6a9a637e28a061b54c8f8b1d8529d7d4db73f
+  Fastis: 842bc586c7c6639cc3ce16903e67bd7cae689157
+  GoogleMaps: 97300a4b89a3641563782c52228c4530f5fe0d89
+  GooglePlaces: 6a219644272d9c0f40d0b9ef2f111bfb2043bafc
+  IQKeyboardManagerSwift: 371b08cb39664fb56030f5345c815a4ffc74bbc0
+  JTAppleCalendar: 16c6501b22cb27520372c28b0a2e0b12c8d0cd73
+  LabelSwitch: 97b19eb5e11b27854559374357375134d40c744f
+  lottie-ios: 809ecf2d460ed650a6aed7aa88b2ec45fab4779c
+  PrettyCards: 2b078f2396a42f7f0c4d6624b875149dcb49d3ed
+
+PODFILE CHECKSUM: 9390c46050eb1f1bd0b75d67a908f616f3433104
+
+COCOAPODS: 1.14.3
