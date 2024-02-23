@@ -46,16 +46,42 @@ struct Dash: Codable {
     let ongoing_projects: Int
     let completed_projects: Int
     let upcoming_projects: Int
-    let total_earning: Float
+//    let total_earning: Float?
+    let active_users: Int
+    let inactive_users:Int
     let all_projects: Int
     let spend_time: String
     let profile_image: String?
 }
 
+
+struct WorkDashInfo: Codable {
+    let status: Int
+    let message: String
+    let url: String
+    let data: WorkDash
+}
+
+struct WorkDash: Codable {
+    let name: String
+    let email: String
+    let latitude: String
+    let longitude: String
+    let ongoing_projects: Int
+    let completed_projects: Int
+    let upcoming_projects: Int
+    let total_earning: Float?
+    let all_projects: Int
+    let spend_time: String
+    let profile_image: String?
+}
+
+
 struct ProfileInfo: Codable {
     let status: Int
     let message: String
     let url: String
+    let lang:String
     let data: Prof
 }
 
@@ -272,7 +298,7 @@ struct Task: Codable {
     let id: Int
     let taskTitle: String
     let location: String?
-    let manager_id: String
+    let manager_id: Int
     let manager_name: String
 
     enum CodingKeys: String, CodingKey {
@@ -296,6 +322,9 @@ struct GetTaskNew: Codable {
     let id: Int
     let name: String
     let task_name: String
+    let timecard_type: Int
+    let hours:String
+    let minutes:String
     let short_name: String
     let date: String
     let start_time: String
@@ -304,6 +333,7 @@ struct GetTaskNew: Codable {
     let site_latitude: String
     let site_longitude: String
     let type: String
+    let created_by: Int
 //    let emp_latitude: String
 //    let emp_longitude: String
     let approve: Int
@@ -319,6 +349,7 @@ struct TimeCardDetailsInfo: Codable {
 struct TimeCardDetails: Codable {
     let id: Int
     let task_id: Int
+    let timecard_type:Int
     let project_id: Int
     let task_name: String
     let hours: String
@@ -333,10 +364,13 @@ struct TimeCardDetails: Codable {
     let site_longitude: String
     let member_id: Int
     let member_name: String
-    let manager_id: String//int to string on 
+    let manager_id: Int//int to string on
     let manager_name: String
     let approve: Int
     let notes: [Note]
+    let site_start_time: String
+    let site_end_time:String
+    let location:String
     let `break`: [BreaksDetails]
 }
 
@@ -423,7 +457,7 @@ struct Project: Codable {
     let projectName: String
     let customerName: String
     let location: String
-    let cost: Int
+    let cost: Double
     let latitude: String
     let longitude: String
     let spendTime: String
@@ -486,6 +520,7 @@ struct AdminTask: Codable {
        let title: String
        let location: String
        let startDateTime: String
+       let shortName: [ShortName]
        let dueDateTime: String
        let totalChecklist: Int
        let status: String
@@ -494,10 +529,20 @@ struct AdminTask: Codable {
 
        enum CodingKeys: String, CodingKey {
            case taskId = "task_id"
+           case shortName = "short_name"
            case title, location, startDateTime = "start_date_time", dueDateTime = "due_date_time"
            case totalChecklist = "total_checklist", status, checkedChecklist = "checked_checklist", totalNotes = "total_notes"
        }
 }
+
+struct ShortName: Codable {
+       let short_name: String
+       let background_color: String
+       let text_color: String
+}
+
+
+
 
 
 struct AddAdminTasks: Codable {
@@ -543,7 +588,7 @@ struct DetailAdminTask: Codable {
        let projectName: String
        let memberId: String
        let memberName: String
-       let managerId: String
+       let managerId: Int
        let managerName: String
        let location: String
        let startDateTime: String
@@ -584,23 +629,32 @@ struct ChecklistItem: Codable {
     let id: Int
 }
 
-struct CrewResponse: Codable {
+struct EmployeeResponse: Codable {
     let status: Int
     let message: String
-    let clockIn: [CrewRecord]
-    let clockOut: [CrewRecord]
-
-    enum CodingKeys: String, CodingKey {
-        case status, message
-        case clockIn = "clock_in"
-        case clockOut = "clock_out"
-    }
+    let invite_data: [EmployeeInvite]
+    let emp_data: [EmployeeData]
 }
 
-struct CrewRecord: Codable {
-    let id: Int
+struct EmployeeInvite: Codable {
+    let role: Int
     let name: String
-    let time: String
+    let email: String
+    let mobile: String
+    let time_tracking: String
+    let time_approver: String
+    let overtime_status: String
+    let overtime_policy: String
+    let mealbreak_policy: String
+    let status: Int
+}
+
+struct EmployeeData: Codable {
+    let name: String
+    let email: String
+    let phone: String
+    let profile_image: String
+    let status: String
 }
 
 
@@ -657,4 +711,131 @@ struct ApiResponse: Codable {
     let status: Int
     let message: String
     let dayWiseData: [DayWiseData]
+}
+
+
+
+struct WorkRespons: Codable {
+    let status: Int
+    let message: String
+    let data: WorkData
+}
+
+struct WorkData: Codable {
+    let id: Int
+    let startTime: String
+    let endTime: String?
+    let status: Int
+//    let duration: Int?
+    let workId: Int
+    let hours: Int
+    let minute: Int
+    let second: Int
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case startTime = "start_time"
+        case endTime = "end_time"
+        case status
+//        case duration
+        case workId = "work_id"
+        case hours
+        case minute
+        case second
+    }
+}
+
+
+struct ApiRespons: Codable {
+    let status: Int
+    let message: String
+    let data: WorkDatas
+    let breakTimes: [BreakTime]?
+}
+
+struct WorkDatas: Codable {
+    let start_time: String
+    let end_time: String?
+    let work_id: Int
+    let `break`: String
+    let status: Int
+    let hours: Int
+    let minute: Int
+    let second: Int
+    let start_latitude: String
+    let start_longitude: String
+    let end_latitudde: String?
+    let end_longitude: String?
+    let location: String
+    let site_start_time: String
+    let site_end_time: String
+    let site_duration: String
+}
+
+struct BreakTime: Codable {
+    let id: Int
+    let duration: String
+    let start_time: String
+    let end_time:String
+}
+
+
+struct ProjectDetails: Codable {
+    let status: Int
+    let message: String
+    let dateFilter: String
+    let totalMiles: String
+    let totalTravelTime: String
+    let totalSpendTime: String
+    let totalCost: String
+    let latitude: String
+    let longitude: String
+    let location: String
+    let data: [UserData]
+
+    enum CodingKeys: String, CodingKey {
+        case status
+        case message
+        case dateFilter = "date_filter"
+        case totalMiles = "total_miles"
+        case totalTravelTime = "total_travel_time"
+        case totalSpendTime = "total_spendtime"
+        case totalCost = "total_cost"
+        case latitude
+        case longitude
+        case location
+        case data
+    }
+}
+
+struct UserData: Codable {
+    let name: String
+    let total_miles: String
+    let total_travel_time: String
+    let total_spendtime: String
+    let total_cost: String
+}
+
+
+struct LanguageResponse: Codable {
+    let status: Int
+    let message: String
+    let languages: [Language]
+    
+    private enum CodingKeys: String, CodingKey {
+        case status, message, languages = "lang"
+    }
+}
+
+struct Language: Codable {
+    let id: Int
+    let name: String
+    let shortName: String
+    let status: Int
+    let createdAt: String
+    let updatedAt: String
+    
+    private enum CodingKeys: String, CodingKey {
+        case id, name, shortName = "short_name", status, createdAt = "created_at", updatedAt = "updated_at"
+    }
 }

@@ -1,0 +1,6 @@
+framework module UIAlertDateTimePicker {
+  umbrella header "UIAlertDateTimePicker-umbrella.h"
+
+  export *
+  module * { export * }
+}

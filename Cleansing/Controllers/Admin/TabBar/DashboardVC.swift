@@ -11,16 +11,19 @@ import Alamofire
 class DashboardVC: UIViewController {
     
     @IBOutlet weak var dashboardTV: UITableView!
-    @IBOutlet weak var firstView: UIView!
-    @IBOutlet weak var secondView: UIView!
-    @IBOutlet weak var locationLabel: UILabel!
-    
-    
     @IBOutlet weak var userView: UIView!
     @IBOutlet weak var userImage: UIImageView!
     @IBOutlet weak var userName: UILabel!
     @IBOutlet weak var userEmail: UILabel!
-    @IBOutlet weak var earningLabel: UILabel!
+    @IBOutlet weak var InactiveWorker: UIView!
+    @IBOutlet weak var activeWorker: UIView!
+    @IBOutlet weak var activeCount: UILabel!
+    @IBOutlet weak var inactiveCount: UILabel!
+    
+    @IBOutlet weak var topLabel: UILabel!
+    @IBOutlet weak var bottomLabel: UILabel!
+    @IBOutlet weak var inactiveLabel: UILabel!
+    @IBOutlet weak var activeLabel: UILabel!
     
     let locationManager = CLLocationManager()
     var dashboardData = [dashboard]()
@@ -32,9 +35,9 @@ class DashboardVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         callFirst()
-        if locationLabel.text == "Location Access Denied"{
-            locationAlert()
-        }
+//        if locationLabel.text == "Location Access Denied"{
+//            locationAlert()
+//        }
     }
     
 }
@@ -44,35 +47,48 @@ extension DashboardVC {
     
     func callFirst()
     {
-        self.navigationController?.isNavigationBarHidden  = true
+        self.navigationController?.isNavigationBarHidden  = false
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
         locationManager.delegate = self
         locationManager.startUpdatingLocation()
 //        checkLocationServices()//Commented on 30 Nov
-        UserDefaults.standard.setValue(true, forKey: "signed")
-        userView.dropShadowWithBlackColor()
-        userImage.layer.cornerRadius = 10
+        userImage.layer.cornerRadius = 10//30
         userImage.layer.masksToBounds = true
-        secondView.applyGradient(colours: [UIColor(red: 23/255, green: 198/255, blue: 253/255, alpha: 1.0),UIColor(red: 25/255, green: 155/255, blue: 246/255, alpha: 1.0)])
-
-        firstView.applyGradient(colours: [UIColor(red: 130/255, green: 223/255, blue: 72/255, alpha: 1.0),UIColor(red: 68/255, green: 198/255, blue: 92/255, alpha: 1.0)])
-      
-        firstView.layer.masksToBounds = true
-        firstView.layer.cornerRadius  = 10
-        secondView.layer.masksToBounds = true
-        secondView.layer.cornerRadius  = 10
-        
+        activeWorker.dropShadowWithBlackColor()
+        InactiveWorker.dropShadowWithBlackColor()
+        self.title = "My Dashboard".localizeString(string: lang)
         let gesture2:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(userViewTapped(_:)))
         gesture2.numberOfTapsRequired = 1
         userView?.isUserInteractionEnabled = true
         userView?.addGestureRecognizer(gesture2)
+        topLabel.text = "Here are your project/task overview".localizeString(string: lang)
+        bottomLabel.text = "Here are your employee overview".localizeString(string: lang)
+        activeLabel.text = "Active".localizeString(string: lang)
+        inactiveLabel.text = "InActive".localizeString(string: lang)
         
+        bellIconNavi()
+        
+    }
+    
+    func bellIconNavi()
+    {
+        let bellButton = UIButton(type: .system)
+        bellButton.setImage(UIImage(systemName: "bell"), for: .normal)
+        bellButton.addTarget(self, action: #selector(bellButtonTapped), for: .touchUpInside)
+        bellButton.tintColor = UIColor.black
+        let bellBarButtonItem = UIBarButtonItem(customView: bellButton)
+        navigationItem.rightBarButtonItem = bellBarButtonItem
+    }
+    @objc func bellButtonTapped() {
+        // Handle the bell button tap event
+        print("Bell button tapped")
     }
     
     @objc func userViewTapped(_ sender: UITapGestureRecognizer)
     {
         if let VC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ProfileVC") as? ProfileVC{
+            VC.hidesBottomBarWhenPushed = true
                  self.navigationController?.pushViewController(VC, animated: true)
              }
     }
@@ -81,7 +97,7 @@ extension DashboardVC {
         let customFont = UIFont(name: "Poppins-Medium", size: 17)
 
         let attributedString = NSAttributedString(
-            string: "Location access denied. Please enable location services from iPhone settings",
+            string: "Location access denied. Please enable location services from iPhone settings".localizeString(string: lang),
             attributes: [NSAttributedString.Key.font: customFont as Any]
         )
         let alertController = UIAlertController(
@@ -107,14 +123,32 @@ extension DashboardVC: UITableViewDelegate, UITableViewDataSource
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dashboardData[section].image.count
+        return 2
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "dCell", for: indexPath) as! DashboardTVC
-        cell.dashImage.image = UIImage(named: dashboardData[indexPath.section].image[indexPath.row])
-        cell.dashCount.text = "\(dashboardData[indexPath.section].count[indexPath.row])"
-        cell.dashTitle.text = dashboardData[indexPath.section].name[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "dCell", for: indexPath) as! AdminDashTVC
+        let leftIndex = indexPath.row * 2
+            let rightIndex = leftIndex + 1
+            
+            // Make sure the indices are within the bounds of your data array
+            if leftIndex < dashboardData[indexPath.section].name.count {
+                cell.leftTitle.text = dashboardData[indexPath.section].name[leftIndex]
+                cell.leftValue.text = "\(dashboardData[indexPath.section].count[leftIndex])"
+            } else {
+                // Handle the case where the index is out of bounds (optional)
+                cell.leftTitle.text = ""
+                cell.leftValue.text = ""
+            }
+
+            if rightIndex < dashboardData[indexPath.section].name.count {
+                cell.rightTitle.text = dashboardData[indexPath.section].name[rightIndex]
+                cell.rightValue.text = "\(dashboardData[indexPath.section].count[rightIndex])"
+            } else {
+                // Handle the case where the index is out of bounds (optional)
+                cell.rightTitle.text = ""
+                cell.rightValue.text = ""
+            }
         return cell
     }
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath)
@@ -129,8 +163,7 @@ extension DashboardVC: UITableViewDelegate, UITableViewDataSource
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print(indexPath.row)
-
-
+       
     }
 
 }
@@ -150,7 +183,7 @@ extension DashboardVC: CLLocationManagerDelegate {
                 print("Latitude: \(latitude), Longitude: \(longitude)")
 //            if count < 1{
 //                count+=1
-                workerDashboard(latitude: latitude, longitude: longitude, fcmToken: 1)
+                workerDashboard(latitude: latitude, longitude: longitude)
 //            }
                 // You can stop updating location if you only need it once
                 locationManager.stopUpdatingLocation()
@@ -165,8 +198,8 @@ extension DashboardVC: CLLocationManagerDelegate {
             }
             
             if let placemark = placemarks?.first {
-                if let locality = placemark.locality, let country = placemark.country {
-                    self.locationLabel.text = "\(locality), \(country)"
+                if let country = placemark.country ,let locality = placemark.locality, let location = placemark.subLocality, let state = placemark.administrativeArea{
+//                    self.locationLabel.text = "\(location),\(locality),\(state),\(country)"
                 }
             }
         }
@@ -181,8 +214,8 @@ extension DashboardVC: CLLocationManagerDelegate {
                case .authorizedWhenInUse, .authorizedAlways:
                    break
                case .denied, .restricted:
-                locationAlert()
-                   locationLabel.text = "Location Access Denied"
+            //            locationAlert()//commented for app upload
+                        break;//added for app upload
                case .notDetermined:
                    break // Handle the case where the user hasn't made a decision yet
                @unknown default:
@@ -213,16 +246,16 @@ extension DashboardVC: CLLocationManagerDelegate {
 extension DashboardVC{
     
     //MARK: Dashboard API
-    func workerDashboard(latitude: Double, longitude: Double, fcmToken: Int)
+    func workerDashboard(latitude: Double, longitude: Double)
     {
         if reachability.isConnectedToNetwork() == false{
-            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return
         }
         let progressHUD = ProgressHUD()
         self.view.addSubview(progressHUD)
         progressHUD.show()
-        
+        let fcmToken:String = UserDefaults.standard.string(forKey: "fcm") ?? ""
         var param: Parameters = ["":""]
         let url = "\(ApiLink.HOST_URL)/manager_dashboard"
         let accessToken = UserDefaults.standard.string(forKey: "token") ?? ""
@@ -243,13 +276,13 @@ extension DashboardVC{
                         if let jsonData = try? JSONSerialization.data(withJSONObject: value),
                            let loginResponse = try? JSONDecoder().decode(DashboardInfo.self, from: jsonData) {
                             
-                            self.userName.text = loginResponse.data.name
+                            self.userName.text =   "Hello, ".localizeString(string: lang) + loginResponse.data.name
                             self.userEmail.text = loginResponse.data.email
-                            self.earningLabel.text = "$ " + "\(loginResponse.data.total_earning)"
-//                            self.totalHrs.text = loginResponse.data.spend_time
+                            self.activeCount.text = "\(loginResponse.data.active_users)"
+                            self.inactiveCount.text = "\(loginResponse.data.inactive_users)"
                             self.dashboardData.removeAll()
                             self.getImageFromURL(imageView: self.userImage, stringURL:  (loginResponse.data.profile_image ?? ""))
-                            self.dashboardData.append(dashboard.init(image: ["target-form", "completed","remaming-form","upcoming"], name: ["All Projects","Completed Projects","OnGoing Projects","Upcoming Projects"], count: [loginResponse.data.all_projects , loginResponse.data.completed_projects , loginResponse.data.ongoing_projects , loginResponse.data.upcoming_projects]))
+                            self.dashboardData.append(dashboard.init(image: ["target-form", "completed","remaming-form","upcoming"], name: ["All".localizeString(string: lang),"Completed".localizeString(string: lang),"OnGoing".localizeString(string: lang),"Upcoming".localizeString(string: lang)], count: [loginResponse.data.all_projects , loginResponse.data.completed_projects , loginResponse.data.ongoing_projects , loginResponse.data.upcoming_projects]))
                             
                             progressHUD.hide()
                             
@@ -259,29 +292,29 @@ extension DashboardVC{
                             
                         } else {
                             print("Error decoding JSON")
-                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             progressHUD.hide()
                         }
-                    }else if self.status == 403{
+                    }else if self.status == 502{
                         progressHUD.hide()
                         if let appDomain = Bundle.main.bundleIdentifier {
                             UserDefaults.standard.removePersistentDomain(forName: appDomain)
                         }
                         NotificationCenter.default.removeObserver(self)
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                             if isOtherButton == true {
                                 ksceneDelegate?.logout()
                             }
                         }
                     }else if self.status == 202{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }else if self.status == 201{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
                     }else{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }
                     
                 case .failure(_):
@@ -295,11 +328,11 @@ extension DashboardVC{
                             }
                             if let message = JSON?["message"] as? String {
                                 print(message)
-                                _ = SweetAlert().showAlert("Failure", subTitle:  message, style: AlertStyle.error,buttonTitle:"OK")
+                                _ = SweetAlert().showAlert("Failure".localizeString(string: lang), subTitle:  message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             }
                         } catch {
                             // Your handling code
-                            _ = SweetAlert().showAlert("Oops..", subTitle:  "Something went wrong ", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("Oops..".localizeString(string: lang), subTitle:  "Something went wrong".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             
                         }
                     }

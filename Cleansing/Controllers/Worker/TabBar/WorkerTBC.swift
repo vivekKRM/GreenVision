@@ -23,6 +23,7 @@ class WorkerTBC: UITabBarController {
         let tabBarAppearance = tabBar.standardAppearance
         tabBarAppearance.selectionIndicatorTintColor = UIColor.init(hexString: "004080")
         tabBar.standardAppearance = tabBarAppearance
+        tabBar.addTopBorder(color: UIColor.lightGray, height: 0.5)
     }
 
     override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
@@ -84,7 +85,8 @@ extension WorkerTBC: CLLocationManagerDelegate {
                case .authorizedWhenInUse, .authorizedAlways:
                    break
                case .denied, .restricted:
-                locationAlert()
+            //            locationAlert()//commented for app upload
+                        break;//added for app upload
                case .notDetermined:
                    break // Handle the case where the user hasn't made a decision yet
                @unknown default:
@@ -95,7 +97,7 @@ extension WorkerTBC: CLLocationManagerDelegate {
     func checkLocationServices() {
             if CLLocationManager.locationServicesEnabled() {
                 locationManager.startUpdatingLocation()
-                locationUpdateTimer = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(updateLocation), userInfo: nil, repeats: true)
+                locationUpdateTimer = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(updateLocation), userInfo: nil, repeats: false)
 
             } else {
 //                locationLabel.text = "Location Services Disabled"
@@ -105,6 +107,8 @@ extension WorkerTBC: CLLocationManagerDelegate {
     @objc func updateLocation() {
         print("Timer fired!")
         // Request a single location update
+        locationUpdateTimer?.invalidate()
+        locationUpdateTimer = nil
         locationManager.requestLocation()
     }
 }
@@ -149,7 +153,7 @@ extension WorkerTBC{
     func saveLatLng(latitude: Double, longitude: Double)
     {
         if reachability.isConnectedToNetwork() == false{
-            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return
         }
         let progressHUD = ProgressHUD()
@@ -178,29 +182,29 @@ extension WorkerTBC{
                                 progressHUD.hide()
                             } else {
                                 print("Error decoding JSON")
-                                _ = SweetAlert().showAlert("", subTitle: "Error Decoding", style: AlertStyle.error,buttonTitle:"OK")
+                                _ = SweetAlert().showAlert("", subTitle: "Error Decoding".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                                 progressHUD.hide()
                             }
-                        }else if self.status == 403{
+                        }else if self.status == 502{
                             progressHUD.hide()
                             if let appDomain = Bundle.main.bundleIdentifier {
                                 UserDefaults.standard.removePersistentDomain(forName: appDomain)
                             }
                             NotificationCenter.default.removeObserver(self)
-                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                                 if isOtherButton == true {
                                     ksceneDelegate?.logout()
                                 }
                             }
                         }else if self.status == 202{
                             progressHUD.hide()
-                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                         }else if self.status == 201{
                             progressHUD.hide()
-                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
                         }else{
                             progressHUD.hide()
-                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                         }
                     
                 case .failure(_):
@@ -214,11 +218,11 @@ extension WorkerTBC{
                             }
                             if let message = JSON?["message"] as? String {
                                 print(message)
-                                _ = SweetAlert().showAlert("Failure", subTitle:  message, style: AlertStyle.error,buttonTitle:"OK")
+                                _ = SweetAlert().showAlert("Failure".localizeString(string: lang), subTitle:  message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             }
                         } catch {
                             // Your handling code
-                            _ = SweetAlert().showAlert("Oops..", subTitle:  "Something went wrong ", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("Oops..".localizeString(string: lang), subTitle:  "Something went wrong".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
 
                         }
                     }

@@ -11,7 +11,9 @@ import Alamofire
 class SearchVC: UIViewController {
 
     @IBOutlet weak var searchTV: UITableView!
-//    @IBOutlet weak var filterBtn: UIButton!
+    
+    @IBOutlet weak var topLabel: UILabel!
+    //    @IBOutlet weak var filterBtn: UIButton!
 //    @IBOutlet weak var changeDateView: UIView!
 //    @IBOutlet weak var changeDateBtn: UIButton!
     
@@ -19,13 +21,18 @@ class SearchVC: UIViewController {
     var searchData = [search]()
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Projects"
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationController?.isNavigationBarHidden = true
         firstCall()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.isNavigationBarHidden = false
     }
     
     
@@ -44,6 +51,7 @@ extension SearchVC {
     
     func firstCall()
     {
+        topLabel.text = "All Projects".localizeString(string: lang)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name("disconnectPaxiSocket"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name("disconnectPaxiSockets"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name("disconnectPaxiSocketss"), object: nil)
@@ -54,6 +62,13 @@ extension SearchVC {
         UserDefaults.standard.synchronize()
 //        changeDateView.layer.masksToBounds = true
 //        changeDateView.layer.cornerRadius = 5
+        UserDefaults.standard.set("", forKey: "dfilter")
+        UserDefaults.standard.setValue( "", forKey: "workerT")
+        UserDefaults.standard.setValue( "all", forKey: "statusT")
+        UserDefaults.standard.setValue("", forKey: "workerV")
+        UserDefaults.standard.setValue("", forKey: "statusV")
+        UserDefaults.standard.setValue("", forKey: "approverV")
+        UserDefaults.standard.setValue("", forKey: "approverT")
         getProject()
         floatingBtn()
     }
@@ -62,11 +77,11 @@ extension SearchVC {
     func floatingBtn(){
         let floatingButton = UIButton(type: .system)
         floatingButton.frame = CGRect(x: UIScreen.main.bounds.width * 0.8, y: UIScreen.main.bounds.height * 0.8, width: 60, height: 60)
-        floatingButton.backgroundColor = UIColor.init(hexString: "004080")
+        floatingButton.backgroundColor = UIColor.init(hexString: "5FB8EE")
         floatingButton.layer.cornerRadius = 30 // Half of the width
         floatingButton.setTitle("+", for: .normal)
         floatingButton.titleLabel?.font = UIFont.systemFont(ofSize: 30)
-        floatingButton.setTitleColor(UIColor.white, for: .normal)
+        floatingButton.setTitleColor(UIColor.black, for: .normal)
         
         // Add a tap action to the button
         floatingButton.addTarget(self, action: #selector(floatingButtonTapped), for: .touchUpInside)
@@ -79,6 +94,7 @@ extension SearchVC {
         // Handle the button tap action
         print("Floating button tapped!")
         if let VC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AddAdminProjVC") as? AddAdminProjVC{
+            VC.hidesBottomBarWhenPushed = true
                  self.navigationController?.pushViewController(VC, animated: true)
              }
     }
@@ -86,16 +102,18 @@ extension SearchVC {
     //MARK: Choose Date
     func chooseDate() {
             let fastisController = FastisController(mode: .range)
-            fastisController.title = "Choose range"
+        fastisController.title = "Choose range".localizeString(string: lang)
             fastisController.maximumDate = Date()
             fastisController.allowToChooseNilDate = true
             fastisController.allowDateRangeChanges = true
             fastisController.shortcuts = [.today, .lastWeek]
             fastisController.doneHandler = { resultRange in
                 print(resultRange)
-                let todata = resultRange?.toDate
-                let fromdata = resultRange?.fromDate
-                self.changeDate(toDate: todata!, fromDate: fromdata!)
+                if resultRange != nil{
+                    let todata = resultRange?.toDate
+                    let fromdata = resultRange?.fromDate
+                    self.changeDate(toDate: todata!, fromDate: fromdata!)
+                }
                 
             }
             fastisController.present(above: self)
@@ -156,6 +174,8 @@ extension SearchVC: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print(indexPath.row)
         if let VC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "DetailAdminProjVC") as? DetailAdminProjVC{
+            VC.hidesBottomBarWhenPushed = true
+            VC.taskId = searchData[indexPath.row].id
             self.navigationController?.pushViewController(VC, animated: true)
         }
     }
@@ -163,6 +183,7 @@ extension SearchVC: UITableViewDelegate, UITableViewDataSource{
     @objc func editBtnTap(_ sender: UIButton){
         let tag = sender.tag
         if let VC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AddAdminProjVC") as? AddAdminProjVC{
+            VC.hidesBottomBarWhenPushed = true
             VC.type = "Edit"
             VC.otherProj = searchData[tag].id
                  self.navigationController?.pushViewController(VC, animated: true)
@@ -177,7 +198,7 @@ extension SearchVC{
     func getProject()
     {
         if reachability.isConnectedToNetwork() == false{
-            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return
         }
         let progressHUD = ProgressHUD()
@@ -206,7 +227,7 @@ extension SearchVC{
 //                            self.changeDateBtn.setTitle(loginResponse.filter, for: .normal)
 //                            self.date_selection = loginResponse.filter
                             for i in 0..<loginResponse.projects.count{
-                                self.searchData.append(search.init(workingType: loginResponse.projects[i].location , name: loginResponse.projects[i].customerName, taskTitle: loginResponse.projects[i].projectName, dateRange:"", startTime: loginResponse.projects[i].spendTime, id: loginResponse.projects[i].id, endTime: "", breakTime: "\(loginResponse.projects[i].cost)", servicelat: "", servicelong: "", type: ""))
+                                self.searchData.append(search.init(workingType: loginResponse.projects[i].location , name: loginResponse.projects[i].customerName, taskTitle: loginResponse.projects[i].projectName, dateRange:"", startTime: loginResponse.projects[i].spendTime, id: loginResponse.projects[i].id, endTime: "", breakTime: "\(loginResponse.projects[i].cost)", servicelat: "", servicelong: "", type: "", timeCardType: 0, createBy: 0, taskName: "", hours: "",minutes: ""))
                             }
                             progressHUD.hide()
                             DispatchQueue.main.async {
@@ -216,17 +237,17 @@ extension SearchVC{
                             }
                         } else {
                             print("Error decoding JSON")
-                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             progressHUD.hide()
                         }
                         
-                    }else if self.status == 403{
+                    }else if self.status == 502{
                         progressHUD.hide()
                         if let appDomain = Bundle.main.bundleIdentifier {
                             UserDefaults.standard.removePersistentDomain(forName: appDomain)
                         }
                         NotificationCenter.default.removeObserver(self)
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                             if isOtherButton == true {
                                 ksceneDelegate?.logout()
                             }
@@ -236,18 +257,18 @@ extension SearchVC{
                         self.searchData.removeAll()
                         self.searchTV.reloadData()
                         
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }else if self.status == 201{
                         progressHUD.hide()
                         self.searchData.removeAll()
 //                        self.changeDateBtn.setTitle( dict["filter"] as? String, for: .normal)
                         self.searchTV.reloadData()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
                     }else{
                         progressHUD.hide()
                         self.searchData.removeAll()
                         self.searchTV.reloadData()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }
                     
                     
@@ -262,11 +283,11 @@ extension SearchVC{
                             }
                             if let message = JSON?["message"] as? String {
                                 print(message)
-                                _ = SweetAlert().showAlert("Failure", subTitle:  message, style: AlertStyle.error,buttonTitle:"OK")
+                                _ = SweetAlert().showAlert("Failure".localizeString(string: lang), subTitle:  message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             }
                         } catch {
                             // Your handling code
-                            _ = SweetAlert().showAlert("Oops..", subTitle:  "Something went wrong ", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("Oops..".localizeString(string: lang), subTitle:  "Something went wrong".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             
                         }
                     }

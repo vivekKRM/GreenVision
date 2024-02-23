@@ -29,8 +29,8 @@ class SelectionVC: UIViewController {
     var calledType:String = ""
     var checklist = [showCheckListDetails]()
     var selections = [selectionDetails]()
-    var breakPolicy: [String] = ["Paid","UnPaid"]
-    var exemption: [String] = ["Exempt","Non Exempt"]
+    var breakPolicy: [String] = ["Paid".localizeString(string: lang),"UnPaid".localizeString(string: lang)]
+    var exemption: [String] = ["Exempt".localizeString(string: lang),"Non Exempt".localizeString(string: lang)]
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -72,6 +72,7 @@ extension SelectionVC {
     {
         sm.removeAll()
         si.removeAll()
+        submitBtn.setTitle("Submit".localizeString(string: lang), for: .normal)
         submitBtn.roundedButton()
         if calledType == "TimeZone"{
             getTimeZone()
@@ -82,17 +83,19 @@ extension SelectionVC {
         }else if calledType == "Watcher"{
             getManager()
         }else if calledType == "Exempt"{
-            self.title = "Select an exemption status"
-            self.checklist.append(showCheckListDetails(id: 0, employee_id: 0, title: "Exempt", project_id: 0, task_id: 0, status:0))
-            self.checklist.append(showCheckListDetails(id: 0, employee_id: 0, title: "Non Exempt", project_id: 0, task_id: 0, status:0))
+            self.title = "Select an exemption status".localizeString(string: lang)
+            self.checkListTopName.text = "Exempt Status".localizeString(string: lang)
+            self.checklist.append(showCheckListDetails(id: 1, employee_id: 0, title: "Exempt".localizeString(string: lang), project_id: 0, task_id: 0, status:0))
+            self.checklist.append(showCheckListDetails(id: 2, employee_id: 0, title: "Non Exempt".localizeString(string: lang), project_id: 0, task_id: 0, status:0))
             self.selection = Array(repeating: false, count: self.checklist.count)
             self.checkListTV.delegate = self
             self.checkListTV.dataSource = self
             self.checkListTV.reloadData()
         }else if calledType == "Break"{
-            self.title = "Select a meal break policy"
-            self.checklist.append(showCheckListDetails(id: 0, employee_id: 0, title: "Paid", project_id: 0, task_id: 0, status:0))
-            self.checklist.append(showCheckListDetails(id: 0, employee_id: 0, title: "UnPaid", project_id: 0, task_id: 0, status:0))
+            self.checkListTopName.text = "Choose Meal Type".localizeString(string: lang)
+            self.title = "Select a meal break policy".localizeString(string: lang)
+            self.checklist.append(showCheckListDetails(id: 1, employee_id: 0, title: "Paid".localizeString(string: lang), project_id: 0, task_id: 0, status:0))
+            self.checklist.append(showCheckListDetails(id: 2, employee_id: 0, title: "UnPaid".localizeString(string: lang), project_id: 0, task_id: 0, status:0))
             self.selection = Array(repeating: false, count: self.checklist.count)
             self.checkListTV.delegate = self
             self.checkListTV.dataSource = self
@@ -134,9 +137,9 @@ extension SelectionVC: UITableViewDelegate, UITableViewDataSource{
             }else if calledType == "Watcher"{
                 selections.append(selectionDetails.init(member_id: "", timezone_id: 0, project_id: 0, label_id: 0, watcher_id: "\(checklist[indexPath.row].id)", member_name: "", timezone_name: "", project_name: "", label_name: "", watcher_name: checklist[indexPath.row].title, type: "Watcher", location: ""))
             }else if calledType == "Exempt"{
-                selections.append(selectionDetails.init(member_id: "", timezone_id: 0, project_id: 0, label_id: 0, watcher_id: "", member_name: "", timezone_name: "", project_name: "", label_name: "", watcher_name: checklist[indexPath.row].title, type: "Exempt", location: ""))
+                selections.append(selectionDetails.init(member_id: "", timezone_id: 0, project_id: 0, label_id: 0, watcher_id: "\(checklist[indexPath.row].id)", member_name: "", timezone_name: "", project_name: "", label_name: "", watcher_name: checklist[indexPath.row].title, type: "Exempt", location: ""))
             }else if calledType == "Break"{
-                selections.append(selectionDetails.init(member_id: "", timezone_id: 0, project_id: 0, label_id: 0, watcher_id: "", member_name: "", timezone_name: "", project_name: "", label_name: "", watcher_name: checklist[indexPath.row].title, type: "Break", location: ""))
+                selections.append(selectionDetails.init(member_id: "", timezone_id: 0, project_id: 0, label_id: 0, watcher_id: "\(checklist[indexPath.row].id)", member_name: "", timezone_name: "", project_name: "", label_name: "", watcher_name: checklist[indexPath.row].title, type: "Break", location: ""))
             }else{
 //                selections.append(selectionDetails.init(member_id: "\(checklist[indexPath.row].id)", timezone_id: 0, project_id: 0, label_id: 0, watcher_id: "", member_name: checklist[indexPath.row].title, timezone_name: "", project_name: "", label_name: "", watcher_name: "", type: "Member", location: ""))
             }
@@ -271,7 +274,7 @@ extension SelectionVC {
     func getTimeZone()
     {
         if reachability.isConnectedToNetwork() == false{
-            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return
         }
         let progressHUD = ProgressHUD()
@@ -297,7 +300,7 @@ extension SelectionVC {
                         if let jsonData = try? JSONSerialization.data(withJSONObject: value),
                            let loginResponse = try? JSONDecoder().decode(TimeZoneResponse.self, from: jsonData) {
                             
-                            self.checkListTopName.text = "Select timezone"
+                            self.checkListTopName.text = "Select timezone".localizeString(string: lang)
                             
                             
                             self.checklist.removeAll()
@@ -313,29 +316,29 @@ extension SelectionVC {
                             
                         } else {
                             print("Error decoding JSON")
-                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             progressHUD.hide()
                         }
-                    }else if self.status == 403{
+                    }else if self.status == 502{
                         progressHUD.hide()
                         if let appDomain = Bundle.main.bundleIdentifier {
                             UserDefaults.standard.removePersistentDomain(forName: appDomain)
                         }
                         NotificationCenter.default.removeObserver(self)
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                             if isOtherButton == true {
                                 ksceneDelegate?.logout()
                             }
                         }
                     }else if self.status == 202{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }else if self.status == 201{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
                     }else{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }
                     
                     
@@ -350,11 +353,11 @@ extension SelectionVC {
                             }
                             if let message = JSON?["message"] as? String {
                                 print(message)
-                                _ = SweetAlert().showAlert("Failure", subTitle:  message, style: AlertStyle.error,buttonTitle:"OK")
+                                _ = SweetAlert().showAlert("Failure".localizeString(string: lang), subTitle:  message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             }
                         } catch {
                             // Your handling code
-                            _ = SweetAlert().showAlert("Oops..", subTitle:  "Something went wrong ", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("Oops..".localizeString(string: lang), subTitle:  "Something went wrong".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             
                         }
                     }
@@ -367,7 +370,7 @@ extension SelectionVC {
     func getProject()
     {
         if reachability.isConnectedToNetwork() == false{
-            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return
         }
         let progressHUD = ProgressHUD()
@@ -392,7 +395,7 @@ extension SelectionVC {
                     {
                         if let jsonData = try? JSONSerialization.data(withJSONObject: value),
                            let loginResponse = try? JSONDecoder().decode(ProjectResponse.self, from: jsonData) {
-                            self.checkListTopName.text = "Select project name"
+                            self.checkListTopName.text = "Select project name".localizeString(string: lang)
                             self.locations.removeAll()
                             self.saveLat.removeAll()
                             self.saveLng.removeAll()
@@ -412,29 +415,29 @@ extension SelectionVC {
                             
                         } else {
                             print("Error decoding JSON")
-                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             progressHUD.hide()
                         }
-                    }else if self.status == 403{
+                    }else if self.status == 502{
                         progressHUD.hide()
                         if let appDomain = Bundle.main.bundleIdentifier {
                             UserDefaults.standard.removePersistentDomain(forName: appDomain)
                         }
                         NotificationCenter.default.removeObserver(self)
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                             if isOtherButton == true {
                                 ksceneDelegate?.logout()
                             }
                         }
                     }else if self.status == 202{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }else if self.status == 201{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
                     }else{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }
                     
                     
@@ -449,11 +452,11 @@ extension SelectionVC {
                             }
                             if let message = JSON?["message"] as? String {
                                 print(message)
-                                _ = SweetAlert().showAlert("Failure", subTitle:  message, style: AlertStyle.error,buttonTitle:"OK")
+                                _ = SweetAlert().showAlert("Failure".localizeString(string: lang), subTitle:  message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             }
                         } catch {
                             // Your handling code
-                            _ = SweetAlert().showAlert("Oops..", subTitle:  "Something went wrong ", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("Oops..".localizeString(string: lang), subTitle:  "Something went wrong".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             
                         }
                     }
@@ -465,7 +468,7 @@ extension SelectionVC {
     func getMembers()
     {
         if reachability.isConnectedToNetwork() == false{
-            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return
         }
         let progressHUD = ProgressHUD()
@@ -490,7 +493,7 @@ extension SelectionVC {
                     {
                         if let jsonData = try? JSONSerialization.data(withJSONObject: value),
                            let loginResponse = try? JSONDecoder().decode(MembersResponse.self, from: jsonData) {
-                            self.checkListTopName.text = "Select member name"
+                            self.checkListTopName.text = "Select member name".localizeString(string: lang)
                             
                             
                             self.checklist.removeAll()
@@ -505,29 +508,29 @@ extension SelectionVC {
                             
                         } else {
                             print("Error decoding JSON")
-                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             progressHUD.hide()
                         }
-                    }else if self.status == 403{
+                    }else if self.status == 502{
                         progressHUD.hide()
                         if let appDomain = Bundle.main.bundleIdentifier {
                             UserDefaults.standard.removePersistentDomain(forName: appDomain)
                         }
                         NotificationCenter.default.removeObserver(self)
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                             if isOtherButton == true {
                                 ksceneDelegate?.logout()
                             }
                         }
                     }else if self.status == 202{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }else if self.status == 201{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
                     }else{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }
                     
                     
@@ -542,11 +545,11 @@ extension SelectionVC {
                             }
                             if let message = JSON?["message"] as? String {
                                 print(message)
-                                _ = SweetAlert().showAlert("Failure", subTitle:  message, style: AlertStyle.error,buttonTitle:"OK")
+                                _ = SweetAlert().showAlert("Failure".localizeString(string: lang), subTitle:  message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             }
                         } catch {
                             // Your handling code
-                            _ = SweetAlert().showAlert("Oops..", subTitle:  "Something went wrong ", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("Oops..".localizeString(string: lang), subTitle:  "Something went wrong".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             
                         }
                     }
@@ -558,7 +561,7 @@ extension SelectionVC {
     func getManager()
     {
         if reachability.isConnectedToNetwork() == false{
-            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return
         }
         let progressHUD = ProgressHUD()
@@ -583,7 +586,7 @@ extension SelectionVC {
                     {
                         if let jsonData = try? JSONSerialization.data(withJSONObject: value),
                            let loginResponse = try? JSONDecoder().decode(ManagerResponse.self, from: jsonData) {
-                            self.checkListTopName.text = "Select manager name"
+                            self.checkListTopName.text = "Select manager name".localizeString(string: lang)
                             
                             progressHUD.hide()
                             self.checklist.removeAll()
@@ -597,29 +600,29 @@ extension SelectionVC {
                             
                         } else {
                             print("Error decoding JSON")
-                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             progressHUD.hide()
                         }
-                    }else if self.status == 403{
+                    }else if self.status == 502{
                         progressHUD.hide()
                         if let appDomain = Bundle.main.bundleIdentifier {
                             UserDefaults.standard.removePersistentDomain(forName: appDomain)
                         }
                         NotificationCenter.default.removeObserver(self)
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                             if isOtherButton == true {
                                 ksceneDelegate?.logout()
                             }
                         }
                     }else if self.status == 202{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }else if self.status == 201{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
                     }else{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }
                     
                 case .failure(_):
@@ -633,15 +636,19 @@ extension SelectionVC {
                             }
                             if let message = JSON?["message"] as? String {
                                 print(message)
-                                _ = SweetAlert().showAlert("Failure", subTitle:  message, style: AlertStyle.error,buttonTitle:"OK")
+                                _ = SweetAlert().showAlert("Failure".localizeString(string: lang), subTitle:  message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             }
                         } catch {
                             // Your handling code
-                            _ = SweetAlert().showAlert("Oops..", subTitle:  "Something went wrong ", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("Oops..".localizeString(string: lang), subTitle:  "Something went wrong".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             
                         }
                     }
                 }
             }
     }
+    
+    //Filter TimeCard
+    
+
 }

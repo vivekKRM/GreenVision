@@ -17,12 +17,23 @@ class GooglePathVC: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var startView: UIView!
     @IBOutlet weak var endView: UIView!
     
+    @IBOutlet weak var startLabel: UILabel!
+    @IBOutlet weak var endLabel: UILabel!
+    
     //Prompt View
     
+    @IBOutlet weak var topDesc: UILabel!
     @IBOutlet weak var topView: UIView!
     @IBOutlet weak var traveldistance: UILabel!
     @IBOutlet weak var traveltime: UILabel!
     @IBOutlet weak var okBtn: UIButton!
+    
+    
+    @IBOutlet weak var showPathView: UIView!
+    @IBOutlet weak var locationName: UILabel!
+    @IBOutlet weak var startTime: UILabel!
+    @IBOutlet weak var endTime: UILabel!
+    @IBOutlet weak var duration: UILabel!
     
     
     var mapView: MKMapView!
@@ -101,8 +112,11 @@ extension GooglePathVC: MKMapViewDelegate {
     
     func firstCall()
     {
-        self.title = "Path Route"
-        
+        self.title = "Path Route".localizeString(string: lang)
+        okBtn.setTitle("OK".localizeString(string: lang), for: .normal)
+        topDesc.text = "As your journey has been finished, you can see your journey data below".localizeString(string: lang)
+        startLabel.text = "Start Journey".localizeString(string: lang)
+        endLabel.text = "End Journey".localizeString(string: lang)
         okBtn.roundedButton()
         topView.dropShadowWithBlackColor()
         startView.dropShadowWithBlackColor()
@@ -110,8 +124,14 @@ extension GooglePathVC: MKMapViewDelegate {
         self.distance.text = ""
         self.time.text = ""
         if comingFrom == "New"{
+            self.tabBarController?.tabBar.isHidden = true
             journeySV.isHidden = true
-            mapView = MKMapView(frame: CGRect(x: 0, y: 10, width: UIScreen.main.bounds.width * 0.99, height: UIScreen.main.bounds.height * 0.7))
+            mapView = MKMapView(frame: CGRect(x: 0, y: 10, width: UIScreen.main.bounds.width * 0.99, height: UIScreen.main.bounds.height * 0.63))
+            
+//        }else if comingFrom == "News"{
+//                self.tabBarController?.tabBar.isHidden = true
+//                journeySV.isHidden = true
+//                mapView = MKMapView(frame: CGRect(x: 0, y: 10, width: UIScreen.main.bounds.width * 0.99, height: UIScreen.main.bounds.height * 0.75))
         }else if comingFrom == "Task"{
             journeySV.isHidden = true
             mapView = MKMapView(frame: CGRect(x: 0, y: 60, width: UIScreen.main.bounds.width * 0.99, height: UIScreen.main.bounds.height * 0.75))
@@ -127,11 +147,11 @@ extension GooglePathVC: MKMapViewDelegate {
 //        // Call a function to show route between two points
 //        showRouteOnMap()
         // Call a function to show pin on a point
-        if comingFrom == "New"{
+        if comingFrom == "New" {//|| comingFrom == "News"{
            getTimeCard(id: timecard_id)
         }
         if comingFrom == "Task"{
-            showLocationOnMap(lat: endLat, lng: endLng, pTitle: "Current Service")
+            showLocationOnMap(lat: endLat, lng: endLng, pTitle: "Current Service".localizeString(string: lang))
         }
 
         locationManager.delegate = self
@@ -230,11 +250,11 @@ extension GooglePathVC: MKMapViewDelegate {
         
         self.sourceAnnotation = MKPointAnnotation()
         self.sourceAnnotation.coordinate = sourceCoordinate
-        self.sourceAnnotation.subtitle = "Start"
+        self.sourceAnnotation.subtitle = "ClockIn".localizeString(string: lang)
 
         self.destinationAnnotation = MKPointAnnotation()
         self.destinationAnnotation.coordinate = destinationCoordinate
-        self.destinationAnnotation.subtitle = "End"
+        self.destinationAnnotation.subtitle = "ClockOut".localizeString(string: lang)
         
             mapView.addAnnotations([sourceAnnotation, destinationAnnotation])
             
@@ -254,8 +274,11 @@ extension GooglePathVC: MKMapViewDelegate {
                 self.currentRoute = route
                 self.mapView.addOverlay(route.polyline, level: .aboveRoads)
                 
-                let rect = route.polyline.boundingMapRect
-                self.mapView.setRegion(MKCoordinateRegion(rect), animated: true)
+//                let rect = route.polyline.boundingMapRect
+                let region = MKCoordinateRegion(center: route.polyline.coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
+
+//                self.mapView.setRegion(MKCoordinateRegion(rect), animated: true)
+                self.mapView.setRegion(region, animated: true)
             }
         }
         
@@ -297,7 +320,7 @@ extension GooglePathVC: MKMapViewDelegate {
             let annotation = MKPointAnnotation()
             annotation.coordinate = coordinate
             annotation.title = pTitle//"Home Cleaning"
-            annotation.subtitle = "Service Location"
+        annotation.subtitle = "Service Location".localizeString(string: lang)
             
             mapView.addAnnotation(annotation)
             
@@ -412,7 +435,7 @@ extension GooglePathVC {
     func getLocation(latitude: Double, longitude: Double )
         {
             if reachability.isConnectedToNetwork() == false{
-                _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK")
+                _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
                 return
             }
             let progressHUD = ProgressHUD()
@@ -437,8 +460,8 @@ extension GooglePathVC {
                         {
                             if let jsonData = try? JSONSerialization.data(withJSONObject: value),
                                let loginResponse = try? JSONDecoder().decode(RouteData.self, from: jsonData) {
-                                self.distance.text = "\(loginResponse.data.distanceInMiles) Miles"
-                                self.time.text = loginResponse.data.duration == "" || loginResponse.data.duration == "0" ? "0 Min" : loginResponse.data.duration
+                                self.distance.text = "\(loginResponse.data.distanceInMiles) " +  "Miles".localizeString(string: lang)
+                                self.time.text = loginResponse.data.duration == "" || loginResponse.data.duration == "0" ? "0 Min".localizeString(string: lang) : loginResponse.data.duration
                                 self.reachStatus = loginResponse.data.status
                                 if loginResponse.data.status == 1{
                                     self.startView.isHidden = true
@@ -446,35 +469,35 @@ extension GooglePathVC {
                                     self.mapView.removeFromSuperview()
                                     self.journeySV.isHidden = true
                                     self.topView.isHidden = false
-                                    self.traveldistance.text = "Travel Distance Covered is: " + "\(loginResponse.data.distanceInMiles) Miles"
-                                    self.traveltime.text = "Travel time is: " +  (self.time.text ?? "")
+                                    self.traveldistance.text = "Travel Distance Covered is: ".localizeString(string: lang) + "\(loginResponse.data.distanceInMiles) " + "Miles".localizeString(string: lang)
+                                    self.traveltime.text = "Travel time is: ".localizeString(string: lang) +  (self.time.text ?? "")
                                 }
                                 progressHUD.hide()
                                 self.showRouteOnMap(stalat: latitude, stalng: longitude, endlat: self.endLat, endlng: self.endLng)
                                 
                             } else {
                                 print("Error decoding JSON")
-                                _ = SweetAlert().showAlert("", subTitle: "Error Decoding", style: AlertStyle.error,buttonTitle:"OK")
+                                _ = SweetAlert().showAlert("", subTitle: "Error Decoding".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                                 progressHUD.hide()
                             }
                             
-                        }else if self.status == 403{
+                        }else if self.status == 502{
                             progressHUD.hide()
                             if let appDomain = Bundle.main.bundleIdentifier {
                                 UserDefaults.standard.removePersistentDomain(forName: appDomain)
                             }
                             NotificationCenter.default.removeObserver(self)
-                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                                 if isOtherButton == true {
                                     ksceneDelegate?.logout()
                                 }
                             }
                         }else if self.status == 202{
                             progressHUD.hide()
-                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                         }else if self.status == 201{
                             progressHUD.hide()
-                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                                 if isOtherButton == true {
                                     self.startView.isHidden = true
                                     self.endView.isHidden = true
@@ -485,7 +508,7 @@ extension GooglePathVC {
                             }
                         }else{
                             progressHUD.hide()
-                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                         }
                     case .failure(_):
                         progressHUD.hide()
@@ -498,11 +521,11 @@ extension GooglePathVC {
                                 }
                                 if let message = JSON?["message"] as? String {
                                     print(message)
-                                    _ = SweetAlert().showAlert("Failure", subTitle:  message, style: AlertStyle.error,buttonTitle:"OK")
+                                    _ = SweetAlert().showAlert("Failure".localizeString(string: lang), subTitle:  message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                                 }
                             } catch {
                                 // Your handling code
-                                _ = SweetAlert().showAlert("Oops..", subTitle:  "Something went wrong ", style: AlertStyle.error,buttonTitle:"OK")
+                                _ = SweetAlert().showAlert("Oops..".localizeString(string: lang), subTitle:  "Something went wrong".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                                 
                             }
                         }
@@ -513,7 +536,7 @@ extension GooglePathVC {
     func checkDetails(latitude: Double, longitude: Double, status: Int )
     {
         if reachability.isConnectedToNetwork() == false{
-            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return
         }
         let progressHUD = ProgressHUD()
@@ -549,38 +572,38 @@ extension GooglePathVC {
                                 self.locationManager.stopUpdatingLocation()
                             }
                             
-                            self.traveldistance.text = "Travel Distance Covered is: " + "\(loginResponse.data.distanceInMiles) Miles"
-                            self.traveltime.text = "Travel time is: " +  (self.time.text ?? "")
+                            self.traveldistance.text = "Travel Distance Covered is: ".localizeString(string: lang) + "\(loginResponse.data.distanceInMiles) " + "Miles".localizeString(string: lang)
+                            self.traveltime.text = "Travel time is: ".localizeString(string: lang) +  (self.time.text ?? "")
 
                             progressHUD.hide()
                             self.showRouteOnMap(stalat: latitude, stalng: longitude, endlat: self.endLat, endlng: self.endLng)
                 
                         } else {
                             print("Error decoding JSON")
-                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             progressHUD.hide()
                         }
                         
-                    }else if self.status == 403{
+                    }else if self.status == 502{
                         progressHUD.hide()
                         if let appDomain = Bundle.main.bundleIdentifier {
                             UserDefaults.standard.removePersistentDomain(forName: appDomain)
                         }
                         NotificationCenter.default.removeObserver(self)
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                             if isOtherButton == true {
                                 ksceneDelegate?.logout()
                             }
                         }
                     }else if self.status == 202{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }else if self.status == 201{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
                     }else{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }
                 case .failure(_):
                     progressHUD.hide()
@@ -593,11 +616,11 @@ extension GooglePathVC {
                             }
                             if let message = JSON?["message"] as? String {
                                 print(message)
-                                _ = SweetAlert().showAlert("Failure", subTitle:  message, style: AlertStyle.error,buttonTitle:"OK")
+                                _ = SweetAlert().showAlert("Failure".localizeString(string: lang), subTitle:  message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             }
                         } catch {
                             // Your handling code
-                            _ = SweetAlert().showAlert("Oops..", subTitle:  "Something went wrong ", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("Oops..".localizeString(string: lang), subTitle:  "Something went wrong".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             
                         }
                     }
@@ -609,7 +632,7 @@ extension GooglePathVC {
     func getTimeCard(id : Int)
     {
         if reachability.isConnectedToNetwork() == false{
-            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return
         }
         let progressHUD = ProgressHUD()
@@ -634,51 +657,79 @@ extension GooglePathVC {
                     self.status = dict["status"] as! Int
                     if self.status == 200
                     {
+//                        if self.comingFrom == "News"{
+//                            self.showPathView.isHidden = true
+//                        }else{
+                            self.showPathView.isHidden = false
+//                        }
                         if let jsonData = try? JSONSerialization.data(withJSONObject: value),
                            let loginResponse = try? JSONDecoder().decode(TimeCardDetailsInfo.self, from: jsonData) {
-                            if let doubleValue = Double(loginResponse.timeCards[0].site_latitude) {
+                            var empStart:Double = 0.0
+                            var empEnd:Double = 0.0
+                            if let doubleValue = Double(loginResponse.timeCards[0].emp_end_latitude) {
                                 print("Double value: \(doubleValue)")
                                 self.endLat = doubleValue
+                            } else {
+                                print("Invalid input: \(loginResponse.timeCards[0].emp_end_latitude) is not a valid double.")
+                            }
+                            if let doubleValue1 = Double(loginResponse.timeCards[0].emp_end_longitude) {
+                                print("Double value1: \(doubleValue1)")
+                                self.endLng = doubleValue1
+                            } else {
+                                print("Invalid input: \(loginResponse.timeCards[0].emp_end_longitude) is not a valid double.")
+                            }
+                            
+                            if let doubleValue = Double(loginResponse.timeCards[0].emp_start_latitude) {
+                                print("Double value: \(doubleValue)")
+                                empStart = doubleValue
                             } else {
                                 print("Invalid input: \(loginResponse.timeCards[0].site_latitude) is not a valid double.")
                             }
                             
-                            if let doubleValue1 = Double(loginResponse.timeCards[0].site_longitude) {
-                                print("Double value1: \(doubleValue1)")
-                                self.endLng = doubleValue1
+                            if let doubleValue = Double(loginResponse.timeCards[0].emp_start_longitude) {
+                                print("Double value: \(doubleValue)")
+                                empEnd = doubleValue
                             } else {
-                                print("Invalid input: \(loginResponse.timeCards[0].site_longitude) is not a valid double.")
+                                print("Invalid input: \(loginResponse.timeCards[0].site_latitude) is not a valid double.")
                             }
+                            self.locationName.text = loginResponse.timeCards[0].location
+                            self.startTime.text = loginResponse.timeCards[0].site_start_time
+                            self.endTime.text = loginResponse.timeCards[0].site_end_time
+                            self.duration.text = loginResponse.timeCards[0].hours + "h" + " " + loginResponse.timeCards[0].minutes + "m"
                             
-                            self.showLocationOnMap(lat: self.endLat, lng: self.endLng, pTitle: loginResponse.timeCards[0].task_name)
+                        
+                            self.showRouteOnMap(stalat: empStart, stalng: empEnd, endlat: self.endLat, endlng: self.endLng)
+//                            self.showLocationOnMap(lat: self.endLat, lng: self.endLng, pTitle: "ClockOut")
+//                            self.showLocationOnMap(lat: empStart, lng: empEnd, pTitle: "ClockIn")
+                            
                             
                             progressHUD.hide()
                         } else {
                             print("Error decoding JSON")
-                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             progressHUD.hide()
                         }
                         
-                    }else if self.status == 403{
+                    }else if self.status == 502{
                         progressHUD.hide()
                         if let appDomain = Bundle.main.bundleIdentifier {
                             UserDefaults.standard.removePersistentDomain(forName: appDomain)
                         }
                         NotificationCenter.default.removeObserver(self)
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                             if isOtherButton == true {
                                 ksceneDelegate?.logout()
                             }
                         }
                     }else if self.status == 202{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }else if self.status == 201{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
                     }else{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }
                 case .failure(_):
                     progressHUD.hide()
@@ -691,11 +742,11 @@ extension GooglePathVC {
                             }
                             if let message = JSON?["message"] as? String {
                                 print(message)
-                                _ = SweetAlert().showAlert("Failure", subTitle:  message, style: AlertStyle.error,buttonTitle:"OK")
+                                _ = SweetAlert().showAlert("Failure".localizeString(string: lang), subTitle:  message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             }
                         } catch {
                             // Your handling code
-                            _ = SweetAlert().showAlert("Oops..", subTitle:  "Something went wrong ", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("Oops..".localizeString(string: lang), subTitle:  "Something went wrong".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             
                         }
                     }

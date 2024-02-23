@@ -73,7 +73,7 @@ func AddShadow10(button: UIButton){
 }
 
 func addBlackBorder(to textField: UITextField) {
-    textField.layer.borderColor = UIColor.buttonColor().cgColor
+        textField.layer.borderColor = UIColor.init(hexString: "528E4A").cgColor
         textField.layer.borderWidth = 1.0 // You can adjust the border width as needed
         textField.layer.cornerRadius = 5.0 // Optional: Add corner radius for a rounded appearance
     }
@@ -1561,13 +1561,13 @@ public extension String {
     }
 }
 
-//extension String {
-//    func localizeString(string: String) -> String {
-//        let path = Bundle.main.path(forResource: string, ofType: "lproj")
-//        let bundle = Bundle(path: path!)
-//        return NSLocalizedString(self, tableName: nil, bundle: bundle!, value: "", comment: "")
-//    }
-//}
+extension String {
+    func localizeString(string: String) -> String {
+        let path = Bundle.main.path(forResource: string, ofType: "lproj")
+        let bundle = Bundle(path: path!)
+        return NSLocalizedString(self, tableName: nil, bundle: bundle!, value: "", comment: "")
+    }
+}
 extension UIButton{
     func rotate() {
         let rotation : CABasicAnimation = CABasicAnimation(keyPath: "transform.rotation.y")
@@ -1783,5 +1783,20 @@ extension UIView {
         shapeLayer.frame = bounds
         shapeLayer.path = maskPath.cgPath
         layer.mask = shapeLayer
+    }
+}
+extension UITabBar {
+    func addTopBorder(color: UIColor, height: CGFloat) {
+        let topBorder = CALayer()
+        topBorder.backgroundColor = color.cgColor
+        topBorder.frame = CGRect(x: 0, y: 0, width: frame.size.width, height: height)
+        layer.addSublayer(topBorder)
+    }
+}
+class DynamicHeightButton: UIButton {
+    override var intrinsicContentSize: CGSize {
+        let contentSize = titleLabel?.sizeThatFits(CGSize(width: bounds.width, height: CGFloat.greatestFiniteMagnitude)) ?? .zero
+        return CGSize(width: contentSize.width + contentEdgeInsets.left + contentEdgeInsets.right,
+                      height: contentSize.height + contentEdgeInsets.top + contentEdgeInsets.bottom)
     }
 }

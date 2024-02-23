@@ -17,11 +17,16 @@ class WorkerEditProfileVC: UIViewController {
     @IBOutlet weak var mobileTF: UITextField!
     @IBOutlet weak var locationTF: UITextField!
     @IBOutlet weak var updateBtn: UIButton!
+
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var emailLabel: UILabel!
+    @IBOutlet weak var mobileLabel: UILabel!
+    
     var imageselected: UIImage!
     var status: Int = 0
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Edit Profile"
+        self.title = "Edit Profile".localizeString(string: lang)
       
     }
     
@@ -50,33 +55,42 @@ extension WorkerEditProfileVC {
     func firstCall()
     {
         userImage.layer.masksToBounds = true
-        userImage.layer.cornerRadius = 10//userImage.layer.bounds.height/2
+        userImage.layer.cornerRadius = 45
         emailTF.inputView = UIView()
         mobileTF.inputView = UIView()
         mobileTF.inputAccessoryView = UIView()
         mobileTF.tintColor = .white
         emailTF.inputAccessoryView = UIView()
         emailTF.tintColor = .white
-        
-        
+        emailTF.tintColor = UIColor.init(hexString: "528E4A")
+        mobileTF.tintColor = UIColor.init(hexString: "528E4A")
         updateBtn.roundedButton()
         addBlackBorder(to: nameTF)
         addBlackBorder(to: emailTF)
         addBlackBorder(to: mobileTF)
         addBlackBorder(to: locationTF)
+        updateBtn.setTitle("Update".localizeString(string: lang), for: .normal)
+        editImageBtn.setTitle("Update Profile Pic".localizeString(string: lang), for: .normal)
+        nameTF.placeholder = "Enter your name".localizeString(string: lang)
+        emailTF.placeholder = "Enter your email address".localizeString(string: lang)
+        mobileTF.placeholder = "Enter your mobile number".localizeString(string: lang)
+        nameLabel.text = "Name".localizeString(string: lang)
+        emailLabel.text = "Email".localizeString(string: lang)
+        mobileLabel.text = "Mobile Number".localizeString(string: lang)
+        
         workerGetProfile()
     }
     
     func checkAll() -> Bool
     {
         if nameTF.text == "" || nameTF.text?.count ?? 0 < 3{
-            _ = SweetAlert().showAlert("", subTitle:  "Please enter your name", style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle:  "Please enter your name".localizeString(string: lang), style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return false
 //        }else if emailTF.text == "" || isValidEmailAddress(emailAddressString: emailTF.text ?? "") == false{
-//            _ = SweetAlert().showAlert("", subTitle:  "Please enter valid E-mail address", style: AlertStyle.none,buttonTitle:"OK")
+//            _ = SweetAlert().showAlert("", subTitle:  "Please enter valid E-mail address", style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
 //            return false
 //        }else if mobileTF.text == "" || mobileTF.text?.count ?? 0 < 10{
-//            _ = SweetAlert().showAlert("", subTitle:  "Please enter valid mobile number", style: AlertStyle.none,buttonTitle:"OK")
+//            _ = SweetAlert().showAlert("", subTitle:  "Please enter valid mobile number", style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
 //            return false
         }else{
             return true
@@ -126,15 +140,15 @@ extension WorkerEditProfileVC: UIImagePickerControllerDelegate , UINavigationCon
     func addOption()
     {
         let alert = UIAlertController(title: " ", message: nil, preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: "Take Photo", style: .default, handler: { _ in
+        alert.addAction(UIAlertAction(title: "Take Photo".localizeString(string: lang), style: .default, handler: { _ in
             self.openCamera()
         }))
         
-        alert.addAction(UIAlertAction(title: "Choose Photo", style: .default, handler: { _ in
+        alert.addAction(UIAlertAction(title: "Choose Photo".localizeString(string: lang), style: .default, handler: { _ in
             self.openGallery()
         }))
       
-        alert.addAction(UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction.init(title: "Cancel".localizeString(string: lang), style: .cancel, handler: nil))
         
         self.present(alert, animated: true, completion: nil)
     }
@@ -152,7 +166,7 @@ extension WorkerEditProfileVC: UIImagePickerControllerDelegate , UINavigationCon
                     }
                 }
             case .denied: // The user has previously denied access.
-            _ = SweetAlert().showAlert("", subTitle:  "You have denied choosing the photos from camera, please allow access from your phone's settings.", style: AlertStyle.warning,buttonTitle:"OK"){ (isOtherButton) -> Void in
+            _ = SweetAlert().showAlert("", subTitle:  "You have denied choosing the photos from camera, please allow access from your phone's settings.".localizeString(string: lang), style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                 if isOtherButton == true {
                     if let appSettingsURL = NSURL(string: UIApplication.openSettingsURLString) {
                         UIApplication.shared.openURL(appSettingsURL as URL)
@@ -177,7 +191,7 @@ extension WorkerEditProfileVC: UIImagePickerControllerDelegate , UINavigationCon
         }
         else
         {
-            let alert  = UIAlertController(title: "Warning", message: "You don't have camera.", preferredStyle: .alert)
+            let alert  = UIAlertController(title: "Warning".localizeString(string: lang), message: "You don't have camera.".localizeString(string: lang), preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             self.present(alert, animated: true, completion: nil)
         }
@@ -196,12 +210,12 @@ extension WorkerEditProfileVC: UIImagePickerControllerDelegate , UINavigationCon
             }
             else
             {
-                let alert  = UIAlertController(title: "Warning", message: "You don't have permission to access gallery.", preferredStyle: .alert)
+                let alert  = UIAlertController(title: "Warning".localizeString(string: lang), message: "You don't have permission to access gallery.".localizeString(string: lang), preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
             }
             if status == .denied{
-                _ = SweetAlert().showAlert("", subTitle:  "You have denied choosing the photos from library, please allow access from your phone's settings.", style: AlertStyle.warning,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                _ = SweetAlert().showAlert("", subTitle:  "You have denied choosing the photos from library, please allow access from your phone's settings.".localizeString(string: lang), style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                     if isOtherButton == true {
                         if let appSettingsURL = NSURL(string: UIApplication.openSettingsURLString) {
                             UIApplication.shared.openURL(appSettingsURL as URL)
@@ -236,7 +250,7 @@ extension WorkerEditProfileVC {
     func workerGetProfile()
     {
         if reachability.isConnectedToNetwork() == false{
-            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return
         }
         let progressHUD = ProgressHUD()
@@ -270,29 +284,29 @@ extension WorkerEditProfileVC {
                                 
                             } else {
                                 print("Error decoding JSON")
-                                _ = SweetAlert().showAlert("", subTitle: "Error Decoding", style: AlertStyle.error,buttonTitle:"OK")
+                                _ = SweetAlert().showAlert("", subTitle: "Error Decoding".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                                 progressHUD.hide()
                             }
-                        }else if self.status == 403{
+                        }else if self.status == 502{
                             progressHUD.hide()
                             if let appDomain = Bundle.main.bundleIdentifier {
                                 UserDefaults.standard.removePersistentDomain(forName: appDomain)
                             }
                             NotificationCenter.default.removeObserver(self)
-                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                                 if isOtherButton == true {
                                     ksceneDelegate?.logout()
                                 }
                             }
                         }else if self.status == 202{
                             progressHUD.hide()
-                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                         }else if self.status == 201{
                             progressHUD.hide()
-                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
                         }else{
                             progressHUD.hide()
-                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                         }
                     
                     
@@ -307,11 +321,11 @@ extension WorkerEditProfileVC {
                             }
                             if let message = JSON?["message"] as? String {
                                 print(message)
-                                _ = SweetAlert().showAlert("Failure", subTitle:  message, style: AlertStyle.error,buttonTitle:"OK")
+                                _ = SweetAlert().showAlert("Failure".localizeString(string: lang), subTitle:  message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             }
                         } catch {
                             // Your handling code
-                            _ = SweetAlert().showAlert("Oops..", subTitle:  "Something went wrong ", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("Oops..".localizeString(string: lang), subTitle:  "Something went wrong".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
 
                         }
                     }
@@ -323,7 +337,7 @@ extension WorkerEditProfileVC {
     func uploadImage()
     {
         if reachability.isConnectedToNetwork() == false{
-            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return
         }
         let progressHUD = ProgressHUD()
@@ -369,29 +383,29 @@ extension WorkerEditProfileVC {
                         
                     } else {
                         print("Error decoding JSON")
-                        _ = SweetAlert().showAlert("", subTitle: "Error Decoding", style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle: "Error Decoding".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                         progressHUD.hide()
                     }
-                }else if self.status == 403{
+                }else if self.status == 502{
                     progressHUD.hide()
                     if let appDomain = Bundle.main.bundleIdentifier {
                         UserDefaults.standard.removePersistentDomain(forName: appDomain)
                     }
                     NotificationCenter.default.removeObserver(self)
-                    _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                    _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                         if isOtherButton == true {
                             ksceneDelegate?.logout()
                         }
                     }
                 }else if self.status == 202{
                     progressHUD.hide()
-                    _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                    _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                 }else if self.status == 201{
                     progressHUD.hide()
-                    _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK")
+                    _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
                 }else{
                     progressHUD.hide()
-                    _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                    _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                 }
                 
                 
@@ -406,11 +420,11 @@ extension WorkerEditProfileVC {
                         }
                         if let message = JSON?["message"] as? String {
                             print(message)
-                            _ = SweetAlert().showAlert("Failure", subTitle:  message, style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("Failure".localizeString(string: lang), subTitle:  message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                         }
                     } catch {
                         // Your handling code
-                        _ = SweetAlert().showAlert("Oops..", subTitle:  "Something went wrong ", style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("Oops..".localizeString(string: lang), subTitle:  "Something went wrong".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                         
                     }
                 }
@@ -423,7 +437,7 @@ extension WorkerEditProfileVC {
     func workerUpdateProfile()
     {
         if reachability.isConnectedToNetwork() == false{
-            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return
         }
         let progressHUD = ProgressHUD()
@@ -449,7 +463,7 @@ extension WorkerEditProfileVC {
                             if let jsonData = try? JSONSerialization.data(withJSONObject: value),
                                let loginResponse = try? JSONDecoder().decode(DefaultInfo.self, from: jsonData) {
                                 
-                                _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.success,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                                _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.success,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                                     if isOtherButton == true {
                                         self.navigationController?.popViewController(animated: true)
                                     }
@@ -459,29 +473,29 @@ extension WorkerEditProfileVC {
                                 
                             } else {
                                 print("Error decoding JSON")
-                                _ = SweetAlert().showAlert("", subTitle: "Error Decoding", style: AlertStyle.error,buttonTitle:"OK")
+                                _ = SweetAlert().showAlert("", subTitle: "Error Decoding".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                                 progressHUD.hide()
                             }
-                        }else if self.status == 403{
+                        }else if self.status == 502{
                             progressHUD.hide()
                             if let appDomain = Bundle.main.bundleIdentifier {
                                 UserDefaults.standard.removePersistentDomain(forName: appDomain)
                             }
                             NotificationCenter.default.removeObserver(self)
-                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                                 if isOtherButton == true {
                                     ksceneDelegate?.logout()
                                 }
                             }
                         }else if self.status == 202{
                             progressHUD.hide()
-                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                         }else if self.status == 201{
                             progressHUD.hide()
-                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
                         }else{
                             progressHUD.hide()
-                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                         }
                     
                     
@@ -496,15 +510,16 @@ extension WorkerEditProfileVC {
                             }
                             if let message = JSON?["message"] as? String {
                                 print(message)
-                                _ = SweetAlert().showAlert("Failure", subTitle:  message, style: AlertStyle.error,buttonTitle:"OK")
+                                _ = SweetAlert().showAlert("Failure".localizeString(string: lang), subTitle:  message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             }
                         } catch {
                             // Your handling code
-                            _ = SweetAlert().showAlert("Oops..", subTitle:  "Something went wrong ", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("Oops..".localizeString(string: lang), subTitle:  "Something went wrong".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
 
                         }
                     }
                 }
             }
     }
+    
 }

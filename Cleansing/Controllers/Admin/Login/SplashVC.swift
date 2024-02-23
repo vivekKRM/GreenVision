@@ -29,7 +29,7 @@ class SplashVC: UIViewController {
                     ksceneDelegate!.window?.makeKeyAndVisible()
                 }
             }else{
-                if let VC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "LoginVC") as? LoginVC{
+                if let VC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "LanguageVC") as? LanguageVC{
                     self.navigationController?.pushViewController(VC, animated: true)
                 }
             }

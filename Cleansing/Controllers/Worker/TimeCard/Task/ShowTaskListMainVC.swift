@@ -27,6 +27,7 @@ class ShowTaskListMainVC: UIViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
         var viewController = storyboard.instantiateViewController(withIdentifier: "ShowTaskListVC") as! ShowTaskListVC
         viewController.timecard_id = taskID
+        viewController.hidesBottomBarWhenPushed = true
         self.add(asChildViewController: viewController)
         return viewController
     }()
@@ -34,6 +35,7 @@ class ShowTaskListMainVC: UIViewController {
         // Load Storyboard
         let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
         var viewController = storyboard.instantiateViewController(withIdentifier: "GooglePathVC") as! GooglePathVC
+        viewController.hidesBottomBarWhenPushed = true
         viewController.comingFrom = "New"
         viewController.timecard_id = taskID
         self.add(asChildViewController: viewController)
@@ -44,6 +46,7 @@ class ShowTaskListMainVC: UIViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
         var viewController = storyboard.instantiateViewController(withIdentifier: "ShowNotesVC") as! ShowNotesVC
         viewController.calledFrom = "TimeCard"
+        viewController.hidesBottomBarWhenPushed = true
         viewController.taskID = taskID
         self.add(asChildViewController: viewController)
         return viewController
@@ -54,12 +57,13 @@ class ShowTaskListMainVC: UIViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
         var viewController = storyboard.instantiateViewController(withIdentifier: "LogsVC") as! LogsVC
 //        viewController.timecard_id = taskID
+        viewController.hidesBottomBarWhenPushed = true
         self.add(asChildViewController: viewController)
         return viewController
     }()
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Edit TimeCard"
+        self.title = "Edit TimeCard".localizeString(string: lang)
         remove(asChildViewController: notes)
         remove(asChildViewController: sites)
         remove(asChildViewController: logs)
@@ -81,17 +85,17 @@ class ShowTaskListMainVC: UIViewController {
         firstCall()
     }
     @objc func deleteButtonTapped() {
-        if approve == 0 || approve == 2{
-            _ = SweetAlert().showAlert("", subTitle: "Approved/ClockedIn timecard cannot be deleted", style: AlertStyle.warning,buttonTitle:"OK")
+        if  approve == 2{
+            _ = SweetAlert().showAlert("", subTitle: "Approved timecard cannot be deleted".localizeString(string: lang), style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
         }else{
-            let refreshAlert = UIAlertController(title: "", message: "Do you want to delete this timecard ?", preferredStyle: UIAlertController.Style.alert)
+            let refreshAlert = UIAlertController(title: "", message: "Do you want to delete this timecard ?".localizeString(string: lang), preferredStyle: UIAlertController.Style.alert)
             
-            refreshAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in
+            refreshAlert.addAction(UIAlertAction(title: "Cancel".localizeString(string: lang), style: .cancel, handler: { (action: UIAlertAction!) in
                 print("Handle Cancel Logic here")
                 refreshAlert .dismiss(animated: true, completion: nil)
             }))
             
-            refreshAlert.addAction(UIAlertAction(title: "Delete", style: .default, handler: { (action: UIAlertAction!) in
+            refreshAlert.addAction(UIAlertAction(title: "Delete".localizeString(string: lang), style: .default, handler: { (action: UIAlertAction!) in
                 print("Handle Ok logic here")
                 self.deleteTimeCard(id: self.taskID)
             }))
@@ -116,19 +120,19 @@ class ShowTaskListMainVC: UIViewController {
             clockType.isHidden = true
         }
         if sender.selectedSegmentIndex == 0{
-            self.title = "Time Card"
+            self.title = "Time Card".localizeString(string: lang)
             remove(asChildViewController: notes)
             remove(asChildViewController: sites)
             remove(asChildViewController: logs)
             add(asChildViewController: time)
         }else if sender.selectedSegmentIndex == 1{
-            self.title = "Sites"
+            self.title = "Sites".localizeString(string: lang)
             remove(asChildViewController: notes)
             remove(asChildViewController: time)
             remove(asChildViewController: logs)
             add(asChildViewController: sites)
         }else if sender.selectedSegmentIndex == 2{
-            self.title = "View Notes"
+            self.title = "View Notes".localizeString(string: lang)
             remove(asChildViewController: sites)
             remove(asChildViewController: time)
             remove(asChildViewController: logs)
@@ -146,6 +150,10 @@ extension ShowTaskListMainVC{
     func firstCall()
     {
         print(taskID)
+        segmentControl.setTitle("Time".localizeString(string: lang), forSegmentAt: 0)
+        segmentControl.setTitle("Sites".localizeString(string: lang), forSegmentAt: 1)
+        segmentControl.setTitle("Notes".localizeString(string: lang), forSegmentAt: 2)
+        segmentControl.setTitle("Logs".localizeString(string: lang), forSegmentAt: 3)
         customSegment()
         getTimeCard(id: "\(taskID)")
     }
@@ -193,7 +201,7 @@ extension ShowTaskListMainVC{
     func getTimeCard(id : String)
     {
         if reachability.isConnectedToNetwork() == false{
-            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return
         }
         let progressHUD = ProgressHUD()
@@ -238,39 +246,39 @@ extension ShowTaskListMainVC{
                             self.timerLabel.text = loginResponse.timeCards[0].hours + "h " + loginResponse.timeCards[0].minutes + "m"
                             self.approve = loginResponse.timeCards[0].approve
                             if loginResponse.timeCards[0].approve == 0{
-                                self.clockType.text = "CLOCKED IN"
+                                self.clockType.text = "CLOCKED IN".localizeString(string: lang)
                             }else if loginResponse.timeCards[0].approve == 1{
-                                self.clockType.text = "CLOCKED OUT"
+                                self.clockType.text = "CLOCKED OUT".localizeString(string: lang)
                             }else{
-                                self.clockType.text = "APPROVED"
+                                self.clockType.text = "APPROVED".localizeString(string: lang)
                             }
                             progressHUD.hide()
                         } else {
                             print("Error decoding JSON")
-                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             progressHUD.hide()
                         }
                         
-                    }else if self.status == 403{
+                    }else if self.status == 502{
                         progressHUD.hide()
                         if let appDomain = Bundle.main.bundleIdentifier {
                             UserDefaults.standard.removePersistentDomain(forName: appDomain)
                         }
                         NotificationCenter.default.removeObserver(self)
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                             if isOtherButton == true {
                                 ksceneDelegate?.logout()
                             }
                         }
                     }else if self.status == 202{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }else if self.status == 201{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
                     }else{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }
                 case .failure(_):
                     progressHUD.hide()
@@ -283,11 +291,11 @@ extension ShowTaskListMainVC{
                             }
                             if let message = JSON?["message"] as? String {
                                 print(message)
-                                _ = SweetAlert().showAlert("Failure", subTitle:  message, style: AlertStyle.error,buttonTitle:"OK")
+                                _ = SweetAlert().showAlert("Failure".localizeString(string: lang), subTitle:  message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             }
                         } catch {
                             // Your handling code
-                            _ = SweetAlert().showAlert("Oops..", subTitle:  "Something went wrong ", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("Oops..".localizeString(string: lang), subTitle:  "Something went wrong".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             
                         }
                     }
@@ -299,7 +307,7 @@ extension ShowTaskListMainVC{
     func deleteTimeCard(id : Int)
     {
         if reachability.isConnectedToNetwork() == false{
-            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return
         }
         let progressHUD = ProgressHUD()
@@ -327,7 +335,7 @@ extension ShowTaskListMainVC{
                         if let jsonData = try? JSONSerialization.data(withJSONObject: value),
                            let loginResponse = try? JSONDecoder().decode(DefaultInfo.self, from: jsonData) {
                             progressHUD.hide()
-                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.success,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.success,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                                 if isOtherButton == true {
                                     self.navigationController?.popViewController(animated: true)
                                 }
@@ -336,30 +344,30 @@ extension ShowTaskListMainVC{
                          
                         } else {
                             print("Error decoding JSON")
-                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             progressHUD.hide()
                         }
                         
-                    }else if self.status == 403{
+                    }else if self.status == 502{
                         progressHUD.hide()
                         if let appDomain = Bundle.main.bundleIdentifier {
                             UserDefaults.standard.removePersistentDomain(forName: appDomain)
                         }
                         NotificationCenter.default.removeObserver(self)
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                             if isOtherButton == true {
                                 ksceneDelegate?.logout()
                             }
                         }
                     }else if self.status == 202{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }else if self.status == 201{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
                     }else{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }
                 case .failure(_):
                     progressHUD.hide()
@@ -372,11 +380,11 @@ extension ShowTaskListMainVC{
                             }
                             if let message = JSON?["message"] as? String {
                                 print(message)
-                                _ = SweetAlert().showAlert("Failure", subTitle:  message, style: AlertStyle.error,buttonTitle:"OK")
+                                _ = SweetAlert().showAlert("Failure".localizeString(string: lang), subTitle:  message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             }
                         } catch {
                             // Your handling code
-                            _ = SweetAlert().showAlert("Oops..", subTitle:  "Something went wrong ", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("Oops..".localizeString(string: lang), subTitle:  "Something went wrong".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             
                         }
                     }

@@ -3,7 +3,16 @@
 <plist version="1.0">
 <dict>
 	<key>GMSApiKey</key>
-	<string>AIzaSyBS5nIuVZFyJHD18sgBgk25roDshPpVci0</string>
+	<string>AIzaSyCrCGPXfswRFDdMzSdEaGBnZiz9LQNFTCA</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>mailto</string>
+	</array>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Poppins-Regular.ttf</string>
@@ -33,5 +42,10 @@
 			</array>
 		</dict>
 	</dict>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
 </dict>
 </plist>

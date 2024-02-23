@@ -7,7 +7,7 @@
 
 import UIKit
 import GoogleMaps
-import GooglePlaces
+//import GooglePlaces
 import Alamofire
 //import SwiftyJSON
 class GoogleMapsVC: UIViewController, GMSMapViewDelegate {
@@ -35,7 +35,7 @@ class GoogleMapsVC: UIViewController, GMSMapViewDelegate {
         let destinationLongitude = 77.3910 // Delhi's longitude
 
         // Configure your Google Maps Directions API key here
-        let apiKey = "AIzaSyBS5nIuVZFyJHD18sgBgk25roDshPpVci0"
+        let apiKey = "AIzaSyCrCGPXfswRFDdMzSdEaGBnZiz9LQNFTCA"
 
         // Create the URL for the Directions API request
         let directionsURL = "https://maps.googleapis.com/maps/api/directions/json?origin=\(originLatitude),\(originLongitude)&destination=\(destinationLatitude),\(destinationLongitude)&key=\(apiKey)"

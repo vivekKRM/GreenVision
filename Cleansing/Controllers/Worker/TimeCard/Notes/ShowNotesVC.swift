@@ -11,28 +11,49 @@ class ShowNotesVC: UIViewController{
     
     
     @IBOutlet weak var showNotesTV: UITableView!
+    @IBOutlet weak var topView: UIView!
+    @IBOutlet weak var addNotesBtn: UIButton!
+    
+    @IBOutlet weak var nodateLabel: UILabel!
     var status:Int = 0
     var taskID: Int = 0
     var selectedRow: Int = 0
+    var projectType: Int = 0
     var calledFrom: String = ""
     var notesdetails = [showNotes]()
     var exist:[Bool] = []
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "View Notes"
+        self.title = "View Notes".localizeString(string: lang)
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = true
         firstCall()
     }
+    
+    @IBAction func addBtnTap(_ sender: UIButton) {
+        if let VC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AddNotesVC") as? AddNotesVC{
+            VC.hidesBottomBarWhenPushed = true
+            VC.calledType = ""
+            VC.task_id = taskID
+            self.navigationController?.pushViewController(VC, animated: true)
+        }
+    }
+    
+    
 }
 
 extension ShowNotesVC {
     
     func firstCall()
     {
+        addNotesBtn.roundedButton()
+        addNotesBtn.setTitle("ADD NEW NOTES".localizeString(string: lang), for: .normal)
+        
+        nodateLabel.text = "No data found for notes of this task at this moment!".localizeString(string: lang)
         if calledFrom == "TimeCard"{
             floatingBtn()
             getNotes(id: taskID)
@@ -40,7 +61,7 @@ extension ShowNotesVC {
             floatingBtn()
             getTaskAdmin(id: taskID)
         }else{
-            let rightBarButton = UIBarButtonItem(title: "Add Notes", style: .plain, target: self, action: #selector(rightBarButtonTapped))
+            let rightBarButton = UIBarButtonItem(title: "Add Notes".localizeString(string: lang), style: .plain, target: self, action: #selector(rightBarButtonTapped))
             navigationItem.rightBarButtonItem = rightBarButton
             getNotesData(id: taskID)
         }
@@ -50,21 +71,24 @@ extension ShowNotesVC {
         print("Right bar button tapped")
         
         if let VC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AddNotesVC") as? AddNotesVC{
+            VC.hidesBottomBarWhenPushed = true
             VC.calledType = ""
             VC.task_id = taskID
             self.navigationController?.pushViewController(VC, animated: true)
         }
     }
     
+    
+    
     //MARK: Add Floating Button
     func floatingBtn(){
         let floatingButton = UIButton(type: .system)
         floatingButton.frame = CGRect(x: UIScreen.main.bounds.width * 0.8, y: UIScreen.main.bounds.height * 0.65, width: 60, height: 60)
-        floatingButton.backgroundColor = UIColor.init(hexString: "004080")
+        floatingButton.backgroundColor = UIColor.init(hexString: "5FB8EE")
         floatingButton.layer.cornerRadius = 30 // Half of the width
         floatingButton.setTitle("+", for: .normal)
         floatingButton.titleLabel?.font = UIFont.systemFont(ofSize: 30)
-        floatingButton.setTitleColor(UIColor.white, for: .normal)
+        floatingButton.setTitleColor(UIColor.black, for: .normal)
         
         // Add a tap action to the button
         floatingButton.addTarget(self, action: #selector(floatingButtonTapped), for: .touchUpInside)
@@ -74,12 +98,17 @@ extension ShowNotesVC {
     }
     
     @objc func floatingButtonTapped() {
-        // Handle the button tap action
-        print("Floating button tapped!")
-        if let VC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AddNotesVC") as? AddNotesVC{
-            VC.calledType = calledFrom
-            VC.task_id = taskID
-            self.navigationController?.pushViewController(VC, animated: true)
+        if projectType == 2{
+            _ = SweetAlert().showAlert("", subTitle:  "Approved time cards notes cannot be added".localizeString(string: lang), style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
+        }else{
+            // Handle the button tap action
+            print("Floating button tapped!")
+            if let VC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AddNotesVC") as? AddNotesVC{
+                VC.hidesBottomBarWhenPushed = true
+                VC.calledType = calledFrom
+                VC.task_id = taskID
+                self.navigationController?.pushViewController(VC, animated: true)
+            }
         }
     }
 }
@@ -100,6 +129,7 @@ extension ShowNotesVC: UITableViewDelegate, UITableViewDataSource{
         cell.notesTitle.text =  notesdetails[indexPath.row].ntitle
         getImageFromURL(imageView: cell.personImage, stringURL: notesdetails[indexPath.row].npimage)
         cell.personName.text  = notesdetails[indexPath.row].npname
+        cell.viewBtn.setTitle("View".localizeString(string: lang), for: .normal)
         if notesdetails[indexPath.row].roleId == 2 || calledFrom == "WorkerTask"{
             cell.viewBtn.addTarget(self, action: #selector(viewBtnTap(_:)), for: .touchUpInside)
             cell.viewBtn.tag = indexPath.row
@@ -141,6 +171,7 @@ extension ShowNotesVC: UITableViewDelegate, UITableViewDataSource{
         print(indexPath.row)
         if notesdetails[indexPath.row].roleId == 2{
             if let VC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AddNotesVC") as? AddNotesVC{
+                VC.hidesBottomBarWhenPushed = true
                 VC.calledType = "Show"
                 if  calledFrom == "TimeCard"{
                     VC.typee = "Times"
@@ -168,6 +199,7 @@ extension ShowNotesVC: UITableViewDelegate, UITableViewDataSource{
     @objc func viewBtnTap(_ sender: UIButton){
         let tag = sender.tag ?? 0
         if let VC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AddNotesVC") as? AddNotesVC{
+            VC.hidesBottomBarWhenPushed = true
             VC.calledType = "Show"
             if  calledFrom == "TimeCard"{
                 VC.typee = "Times"
@@ -224,6 +256,7 @@ extension ShowNotesVC: UICollectionViewDelegateFlowLayout, UICollectionViewDeleg
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print(indexPath.row)
         if let VC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ShowImageVC") as? ShowImageVC{
+            VC.hidesBottomBarWhenPushed = true
             VC.image = notesdetails[selectedRow].url  + (notesdetails[selectedRow].nImageId[indexPath.row].images ?? "")
             VC.modalPresentationStyle = .formSheet
             self.present(VC, animated: true)
@@ -238,7 +271,7 @@ extension ShowNotesVC {
     func getNotesData(id: Int)
     {
         if reachability.isConnectedToNetwork() == false{
-            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return
         }
         let progressHUD = ProgressHUD()
@@ -279,6 +312,12 @@ extension ShowNotesVC {
                                 }
                                 self.exist.append(isImageEmpty)
                             }
+                            
+                            if self.notesdetails.count < 1{
+                                self.topView.isHidden = false
+                            }else{
+                                self.topView.isHidden = true
+                            }
                             progressHUD.hide()
                             DispatchQueue.main.async {
                                 self.showNotesTV.delegate = self
@@ -288,29 +327,29 @@ extension ShowNotesVC {
                             
                         } else {
                             print("Error decoding JSON")
-                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             progressHUD.hide()
                         }
-                    }else if self.status == 403{
+                    }else if self.status == 502{
                         progressHUD.hide()
                         if let appDomain = Bundle.main.bundleIdentifier {
                             UserDefaults.standard.removePersistentDomain(forName: appDomain)
                         }
                         NotificationCenter.default.removeObserver(self)
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                             if isOtherButton == true {
                                 ksceneDelegate?.logout()
                             }
                         }
                     }else if self.status == 202{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }else if self.status == 201{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
                     }else{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }
                     
                     
@@ -325,11 +364,11 @@ extension ShowNotesVC {
                             }
                             if let message = JSON?["message"] as? String {
                                 print(message)
-                                _ = SweetAlert().showAlert("Failure", subTitle:  message, style: AlertStyle.error,buttonTitle:"OK")
+                                _ = SweetAlert().showAlert("Failure".localizeString(string: lang), subTitle:  message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             }
                         } catch {
                             // Your handling code
-                            _ = SweetAlert().showAlert("Oops..", subTitle:  "Something went wrong ", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("Oops..".localizeString(string: lang), subTitle:  "Something went wrong".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             
                         }
                     }
@@ -341,7 +380,7 @@ extension ShowNotesVC {
     func getNotes(id: Int)
     {
         if reachability.isConnectedToNetwork() == false{
-            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return
         }
         let progressHUD = ProgressHUD()
@@ -373,7 +412,7 @@ extension ShowNotesVC {
                             
                             for i in 0..<loginResponse.timeCards[0].notes.count{
                                 self.notesdetails.append(showNotes.init(nsdate: loginResponse.timeCards[0].notes[i].date ?? "", nstime: loginResponse.timeCards[0].notes[i].time ?? "", ntitle: loginResponse.timeCards[0].notes[i].note_title ?? "", nid: loginResponse.timeCards[0].notes[i].id ?? 0, nImageId: loginResponse.timeCards[0].notes[i].image, url: loginResponse.timeCards[0].notes[i].url ?? "", npimage: loginResponse.timeCards[0].notes[i].uploaded_by_profile ?? "", npname: loginResponse.timeCards[0].notes[i].uploaded_by ?? "", roleId: loginResponse.timeCards[0].notes[i].role ?? 0))
-                                
+                                self.projectType = loginResponse.timeCards[0].approve
                                 
                                 let note = loginResponse.timeCards[0].notes[i]
                                 var isImageEmpty = true
@@ -386,6 +425,11 @@ extension ShowNotesVC {
                                 self.exist.append(isImageEmpty)
                             }
                             progressHUD.hide()
+                            if self.notesdetails.count < 1{
+                                self.topView.isHidden = false
+                            }else{
+                                self.topView.isHidden = true
+                            }
                             DispatchQueue.main.async {
                                 self.showNotesTV.delegate = self
                                 self.showNotesTV.dataSource = self
@@ -394,29 +438,29 @@ extension ShowNotesVC {
                             
                         } else {
                             print("Error decoding JSON")
-                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             progressHUD.hide()
                         }
-                    }else if self.status == 403{
+                    }else if self.status == 502{
                         progressHUD.hide()
                         if let appDomain = Bundle.main.bundleIdentifier {
                             UserDefaults.standard.removePersistentDomain(forName: appDomain)
                         }
                         NotificationCenter.default.removeObserver(self)
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                             if isOtherButton == true {
                                 ksceneDelegate?.logout()
                             }
                         }
                     }else if self.status == 202{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }else if self.status == 201{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
                     }else{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }
                     
                     
@@ -431,11 +475,11 @@ extension ShowNotesVC {
                             }
                             if let message = JSON?["message"] as? String {
                                 print(message)
-                                _ = SweetAlert().showAlert("Failure", subTitle:  message, style: AlertStyle.error,buttonTitle:"OK")
+                                _ = SweetAlert().showAlert("Failure".localizeString(string: lang), subTitle:  message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             }
                         } catch {
                             // Your handling code
-                            _ = SweetAlert().showAlert("Oops..", subTitle:  "Something went wrong ", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("Oops..".localizeString(string: lang), subTitle:  "Something went wrong".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             
                         }
                     }
@@ -448,7 +492,7 @@ extension ShowNotesVC {
     func getTaskAdmin(id: Int)
     {
         if reachability.isConnectedToNetwork() == false{
-            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return
         }
         let progressHUD = ProgressHUD()
@@ -492,6 +536,11 @@ extension ShowNotesVC {
                                 self.exist.append(isImageEmpty)
                             }
                             progressHUD.hide()
+                            if self.notesdetails.count < 1{
+                                self.topView.isHidden = false
+                            }else{
+                                self.topView.isHidden = true
+                            }
                             DispatchQueue.main.async {
                                 self.showNotesTV.delegate = self
                                 self.showNotesTV.dataSource = self
@@ -500,29 +549,29 @@ extension ShowNotesVC {
                             
                         } else {
                             print("Error decoding JSON")
-                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             progressHUD.hide()
                         }
-                    }else if self.status == 403{
+                    }else if self.status == 502{
                         progressHUD.hide()
                         if let appDomain = Bundle.main.bundleIdentifier {
                             UserDefaults.standard.removePersistentDomain(forName: appDomain)
                         }
                         NotificationCenter.default.removeObserver(self)
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                             if isOtherButton == true {
                                 ksceneDelegate?.logout()
                             }
                         }
                     }else if self.status == 202{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }else if self.status == 201{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
                     }else{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }
                     
                     
@@ -537,11 +586,11 @@ extension ShowNotesVC {
                             }
                             if let message = JSON?["message"] as? String {
                                 print(message)
-                                _ = SweetAlert().showAlert("Failure", subTitle:  message, style: AlertStyle.error,buttonTitle:"OK")
+                                _ = SweetAlert().showAlert("Failure".localizeString(string: lang), subTitle:  message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             }
                         } catch {
                             // Your handling code
-                            _ = SweetAlert().showAlert("Oops..", subTitle:  "Something went wrong ", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("Oops..".localizeString(string: lang), subTitle:  "Something went wrong".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             
                         }
                     }

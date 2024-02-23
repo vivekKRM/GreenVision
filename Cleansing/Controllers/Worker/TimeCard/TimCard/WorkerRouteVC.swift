@@ -16,9 +16,12 @@ class WorkerRouteVC: UIViewController , CLLocationManagerDelegate {
     @IBOutlet weak var journeySV: UIStackView!
     @IBOutlet weak var startView: UIView!
     @IBOutlet weak var endView: UIView!
+    @IBOutlet weak var startLabel: UILabel!
+    @IBOutlet weak var endLabel: UILabel!
+    
     
     //Prompt View
-    
+    @IBOutlet weak var topDesc: UILabel!
     @IBOutlet weak var topView: UIView!
     @IBOutlet weak var traveldistance: UILabel!
     @IBOutlet weak var traveltime: UILabel!
@@ -48,8 +51,9 @@ class WorkerRouteVC: UIViewController , CLLocationManagerDelegate {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        timer?.invalidate()
+        timer = nil
         locationManager.stopUpdatingLocation()//added on 30 Nov
-        self.tabBarController?.tabBar.isHidden = false
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -83,9 +87,13 @@ class WorkerRouteVC: UIViewController , CLLocationManagerDelegate {
         checkDetails(latitude: startLat, longitude: startLng, status: 1)
     }
     @objc func endviewTapped() {
-        locationManager.stopUpdatingLocation()//added on 30 Nov
-        self.topView.isHidden = false
-        checkDetails(latitude: startLat, longitude: startLng, status: 2)
+        _ = SweetAlert().showAlert("", subTitle:  "Are you sure, you want to END JOURNEY?".localizeString(string: lang), style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
+            if isOtherButton == true {
+                self.locationManager.stopUpdatingLocation()//added on 30 Nov
+                self.topView.isHidden = false
+                self.checkDetails(latitude: self.startLat, longitude: self.startLng, status: 2)
+            }
+        }
     }
     
     
@@ -102,8 +110,13 @@ extension WorkerRouteVC: MKMapViewDelegate {
     
     func firstCall()
     {
-        self.title = "Path Route"
-       
+        self.title = "Path Route".localizeString(string: lang)
+        okBtn.setTitle("OK".localizeString(string: lang), for: .normal)
+        topDesc.text = "As your journey has been finished, you can see your journey data below".localizeString(string: lang)
+        startLabel.text = "Start Journey".localizeString(string: lang)
+        endLabel.text = "End Journey".localizeString(string: lang)
+        
+        ksceneDelegate?.popOut = true
         okBtn.roundedButton()
         topView.dropShadowWithBlackColor()
         startView.dropShadowWithBlackColor()
@@ -231,11 +244,11 @@ extension WorkerRouteVC: MKMapViewDelegate {
         
         self.sourceAnnotation = MKPointAnnotation()
         self.sourceAnnotation.coordinate = sourceCoordinate
-        self.sourceAnnotation.subtitle = "Start"
+        self.sourceAnnotation.subtitle = "Start".localizeString(string: lang)
 
         self.destinationAnnotation = MKPointAnnotation()
         self.destinationAnnotation.coordinate = destinationCoordinate
-        self.destinationAnnotation.subtitle = "End"
+        self.destinationAnnotation.subtitle = "End".localizeString(string: lang)
         
             mapView.addAnnotations([sourceAnnotation, destinationAnnotation])
             
@@ -298,7 +311,7 @@ extension WorkerRouteVC: MKMapViewDelegate {
             let annotation = MKPointAnnotation()
             annotation.coordinate = coordinate
             annotation.title = pTitle//"Home Cleaning"
-            annotation.subtitle = "Service Location"
+        annotation.subtitle = "Service Location".localizeString(string: lang)
             
             mapView.addAnnotation(annotation)
             
@@ -389,7 +402,7 @@ extension WorkerRouteVC {
     func getLocation(latitude: Double, longitude: Double )
         {
             if reachability.isConnectedToNetwork() == false{
-                _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK")
+                _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
                 return
             }
             let progressHUD = ProgressHUD()
@@ -414,8 +427,8 @@ extension WorkerRouteVC {
                         {
                             if let jsonData = try? JSONSerialization.data(withJSONObject: value),
                                let loginResponse = try? JSONDecoder().decode(RouteData.self, from: jsonData) {
-                                self.distance.text = "\(loginResponse.data.distanceInMiles) Miles"
-                                self.time.text = loginResponse.data.duration == "" || loginResponse.data.duration == "0" ? "0 Min" : loginResponse.data.duration
+                                self.distance.text = "\(loginResponse.data.distanceInMiles) " + "Miles".localizeString(string: lang)
+                                self.time.text = loginResponse.data.duration == "" || loginResponse.data.duration == "0" ? "0 Min".localizeString(string: lang) : loginResponse.data.duration
                                 self.reachStatus = loginResponse.data.status
                                 if loginResponse.data.status == 1{
                                     self.startView.isHidden = true
@@ -423,35 +436,35 @@ extension WorkerRouteVC {
                                     self.mapView.removeFromSuperview()
                                     self.journeySV.isHidden = true
                                     self.topView.isHidden = false
-                                    self.traveldistance.text = "Travel Distance Covered is: " + "\(loginResponse.data.distanceInMiles) Miles"
-                                    self.traveltime.text = "Travel time is: " +  (self.time.text ?? "")
+                                    self.traveldistance.text = "Travelled Distance: ".localizeString(string: lang) + "\(loginResponse.data.distanceInMiles) " + "Miles".localizeString(string: lang)
+                                    self.traveltime.text = "Travelled Time: ".localizeString(string: lang) +  (self.time.text ?? "")
                                 }
                                 progressHUD.hide()
                                 self.showRouteOnMap(stalat: latitude, stalng: longitude, endlat: self.endLat, endlng: self.endLng)
                                 
                             } else {
                                 print("Error decoding JSON")
-                                _ = SweetAlert().showAlert("", subTitle: "Error Decoding", style: AlertStyle.error,buttonTitle:"OK")
+                                _ = SweetAlert().showAlert("", subTitle: "Error Decoding".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                                 progressHUD.hide()
                             }
                             
-                        }else if self.status == 403{
+                        }else if self.status == 502{
                             progressHUD.hide()
                             if let appDomain = Bundle.main.bundleIdentifier {
                                 UserDefaults.standard.removePersistentDomain(forName: appDomain)
                             }
                             NotificationCenter.default.removeObserver(self)
-                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                                 if isOtherButton == true {
                                     ksceneDelegate?.logout()
                                 }
                             }
                         }else if self.status == 202{
                             progressHUD.hide()
-                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                         }else if self.status == 201{
                             progressHUD.hide()
-                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                                 if isOtherButton == true {
                                     self.startView.isHidden = true
                                     self.endView.isHidden = true
@@ -462,7 +475,7 @@ extension WorkerRouteVC {
                             }
                         }else{
                             progressHUD.hide()
-                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                         }
                     case .failure(_):
                         progressHUD.hide()
@@ -475,11 +488,11 @@ extension WorkerRouteVC {
                                 }
                                 if let message = JSON?["message"] as? String {
                                     print(message)
-                                    _ = SweetAlert().showAlert("Failure", subTitle:  message, style: AlertStyle.error,buttonTitle:"OK")
+                                    _ = SweetAlert().showAlert("Failure".localizeString(string: lang), subTitle:  message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                                 }
                             } catch {
                                 // Your handling code
-                                _ = SweetAlert().showAlert("Oops..", subTitle:  "Something went wrong ", style: AlertStyle.error,buttonTitle:"OK")
+                                _ = SweetAlert().showAlert("Oops..".localizeString(string: lang), subTitle:  "Something went wrong".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                                 
                             }
                         }
@@ -490,7 +503,7 @@ extension WorkerRouteVC {
     func checkDetails(latitude: Double, longitude: Double, status: Int )
     {
         if reachability.isConnectedToNetwork() == false{
-            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return
         }
         let progressHUD = ProgressHUD()
@@ -524,40 +537,41 @@ extension WorkerRouteVC {
                             }else if loginResponse.data.status == 2{
                                 self.journeySV.isHidden = true
                                 self.locationManager.stopUpdatingLocation()
+                                self.navigationController?.popViewController(animated: true)
                             }
                             
-                            self.traveldistance.text = "Travel Distance Covered is: " + "\(loginResponse.data.distanceInMiles) Miles"
-                            self.traveltime.text = "Travel time is: " +  (self.time.text ?? "")
+                            self.traveldistance.text = "Travel Distance Covered is: ".localizeString(string: lang) + "\(loginResponse.data.distanceInMiles) " + "Miles".localizeString(string: lang)
+                            self.traveltime.text = "Travel time is: ".localizeString(string: lang) +  (self.time.text ?? "")
 
                             progressHUD.hide()
                             self.showRouteOnMap(stalat: latitude, stalng: longitude, endlat: self.endLat, endlng: self.endLng)
                 
                         } else {
                             print("Error decoding JSON")
-                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             progressHUD.hide()
                         }
                         
-                    }else if self.status == 403{
+                    }else if self.status == 502{
                         progressHUD.hide()
                         if let appDomain = Bundle.main.bundleIdentifier {
                             UserDefaults.standard.removePersistentDomain(forName: appDomain)
                         }
                         NotificationCenter.default.removeObserver(self)
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                             if isOtherButton == true {
                                 ksceneDelegate?.logout()
                             }
                         }
                     }else if self.status == 202{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }else if self.status == 201{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
                     }else{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }
                 case .failure(_):
                     progressHUD.hide()
@@ -570,11 +584,11 @@ extension WorkerRouteVC {
                             }
                             if let message = JSON?["message"] as? String {
                                 print(message)
-                                _ = SweetAlert().showAlert("Failure", subTitle:  message, style: AlertStyle.error,buttonTitle:"OK")
+                                _ = SweetAlert().showAlert("Failure".localizeString(string: lang), subTitle:  message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             }
                         } catch {
                             // Your handling code
-                            _ = SweetAlert().showAlert("Oops..", subTitle:  "Something went wrong ", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("Oops..".localizeString(string: lang), subTitle:  "Something went wrong".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             
                         }
                     }
@@ -586,7 +600,7 @@ extension WorkerRouteVC {
     func getTimeCard(id : Int)
     {
         if reachability.isConnectedToNetwork() == false{
-            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return
         }
         let progressHUD = ProgressHUD()
@@ -632,30 +646,30 @@ extension WorkerRouteVC {
                             progressHUD.hide()
                         } else {
                             print("Error decoding JSON")
-                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             progressHUD.hide()
                         }
                         
-                    }else if self.status == 403{
+                    }else if self.status == 502{
                         progressHUD.hide()
                         if let appDomain = Bundle.main.bundleIdentifier {
                             UserDefaults.standard.removePersistentDomain(forName: appDomain)
                         }
                         NotificationCenter.default.removeObserver(self)
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                             if isOtherButton == true {
                                 ksceneDelegate?.logout()
                             }
                         }
                     }else if self.status == 202{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }else if self.status == 201{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
                     }else{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }
                 case .failure(_):
                     progressHUD.hide()
@@ -668,11 +682,11 @@ extension WorkerRouteVC {
                             }
                             if let message = JSON?["message"] as? String {
                                 print(message)
-                                _ = SweetAlert().showAlert("Failure", subTitle:  message, style: AlertStyle.error,buttonTitle:"OK")
+                                _ = SweetAlert().showAlert("Failure".localizeString(string: lang), subTitle:  message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             }
                         } catch {
                             // Your handling code
-                            _ = SweetAlert().showAlert("Oops..", subTitle:  "Something went wrong ", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("Oops..".localizeString(string: lang), subTitle:  "Something went wrong".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             
                         }
                     }

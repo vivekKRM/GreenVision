@@ -20,7 +20,7 @@ class LocationVC: UIViewController {
 //        locationManager = CLLocationManager()
 //        locationManager?.delegate = self
 //        locationManager?.requestAlwaysAuthorization()
-        GMSPlacesClient.provideAPIKey("AIzaSyBS5nIuVZFyJHD18sgBgk25roDshPpVci0")
+        GMSPlacesClient.provideAPIKey("AIzaSyCrCGPXfswRFDdMzSdEaGBnZiz9LQNFTCA")
         title = ""
         resultsViewController = GMSAutocompleteResultsViewController()
         resultsViewController.delegate = self
@@ -61,7 +61,8 @@ extension LocationVC: GMSAutocompleteResultsViewControllerDelegate//, CLLocation
             UserDefaults.standard.removeObject(forKey: "PlaceName")
             searchController.searchBar.searchTextField.text = name
             print(name)
-            UserDefaults.standard.setValue(name, forKey: "PlaceName")
+            UserDefaults.standard.setValue(place.formattedAddress, forKey: "PlaceName")
+            
             NotificationCenter.default.post(name: Notification.Name(rawValue: "disconnectPaxiSocketss"), object: nil)
             self.dismiss(animated: true, completion: nil)
             

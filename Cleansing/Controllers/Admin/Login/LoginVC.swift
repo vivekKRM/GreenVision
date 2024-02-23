@@ -17,10 +17,11 @@ class LoginVC: UIViewController {
     @IBOutlet weak var signInBtn: UIButton!
     @IBOutlet weak var iconImage: UIImageView!
     @IBOutlet weak var eyeBtn: UIButton!
+    @IBOutlet weak var loginNow: UILabel!
+    @IBOutlet weak var enterCredentials: UILabel!
     
-    
-   
     var status:Int = 0
+    var langer:String = ""
     var message: String = ""
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,13 +31,22 @@ class LoginVC: UIViewController {
         addBlackBorder(to: mobileTF)
         addBlackBorder(to: passwordTF)
         passwordTF.setRightPaddingPoints(60)
+        passwordTF.tintColor = UIColor.init(hexString: "528E4A")
+        mobileTF.tintColor = UIColor.init(hexString: "528E4A")
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.isNavigationBarHidden = true
+        lang = UserDefaults.standard.string(forKey: "Lang") ?? "en"
+        forgotBtn.setTitle("Forgot Password ?".localizeString(string: lang), for: .normal)
+        signInBtn.setTitle("Login".localizeString(string: lang), for: .normal)
+        loginNow.text = "Login Now".localizeString(string: lang)
+        enterCredentials.text = "Please enter your credentials to continue.".localizeString(string: lang)
+        mobileTF.placeholder = "Enter Email Address".localizeString(string: lang)
+        passwordTF.placeholder = "Enter Your Password".localizeString(string: lang)
+        self.navigationController?.isNavigationBarHidden = false
         if reachability.isConnectedToNetwork() == false{
-            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
         }
     }
     
@@ -61,7 +71,7 @@ class LoginVC: UIViewController {
  
     @IBAction func signInBtnTap(_ sender: UIButton) {
         if checkAll(){
-            workerLogin(email: mobileTF.text ?? "", password: passwordTF.text ?? "", fcmToken: "")
+            workerLogin(email: mobileTF.text ?? "", password: passwordTF.text ?? "")
         }
     }
     
@@ -89,10 +99,10 @@ extension LoginVC : UITextFieldDelegate{
     func checkAll() -> Bool{
         self.view.endEditing(true)
         if mobileTF.text == "" || isValidEmailAddress(emailAddressString: mobileTF.text ?? "") == false{
-            _ = SweetAlert().showAlert("", subTitle:  "Please enter valid E-mail address", style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle:  "Please enter valid E-mail address".localizeString(string: lang), style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return false
         }else if passwordTF.text == "" || passwordTF.text == " "  {
-            _ = SweetAlert().showAlert("", subTitle:  "Password field cannot be empty", style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle:  "Password field cannot be empty".localizeString(string: lang), style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return false
         }else{
             return true
@@ -112,7 +122,7 @@ extension LoginVC : UITextFieldDelegate{
         let viewController = storyboard.instantiateViewController(withIdentifier: "BottomDrawerVC") as! BottomDrawerVC
                 
                 if let presentationController = viewController.presentationController as? UISheetPresentationController {
-                    presentationController.detents = [.medium(), .large()]
+                    presentationController.detents = [ .large()]
                     presentationController.preferredCornerRadius = 40
                 }
         self.present(viewController, animated: true)
@@ -123,19 +133,19 @@ extension LoginVC : UITextFieldDelegate{
 extension LoginVC {
     
     //MARK: Login API
-    func workerLogin(email: String, password: String, fcmToken: String)
+    func workerLogin(email: String, password: String)
     {
         if reachability.isConnectedToNetwork() == false{
-            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return
         }
         let progressHUD = ProgressHUD()
         self.view.addSubview(progressHUD)
         progressHUD.show()
-      
+        let fcmToken:String = UserDefaults.standard.string(forKey: "fcm") ?? ""
         var param: Parameters = ["":""]
         let url = "\(ApiLink.HOST_URL)/login"
-        param = ["email": email, "password": password ,"fcm_token": fcmToken, "device_type": "ios"]
+        param = ["email": email, "password": password ,"fcm_token": fcmToken, "device_type": "ios", "lang": self.langer]
         print(param)
         AF.request(url, method: .post, parameters: param, encoding: URLEncoding.default, headers: nil)
             .validate(statusCode: 200..<300)
@@ -154,6 +164,7 @@ extension LoginVC {
                             print(loginResponse.user.fullname)
                             UserDefaults.standard.set(loginResponse.user.id, forKey: "userId")
                             UserDefaults.standard.set(loginResponse.token, forKey: "token")
+                            progressHUD.hide()
                             if loginResponse.user.role == 1{
                                 //1. Admin
                                 UserDefaults.standard.setValue("Admin", forKey: "userType")
@@ -173,35 +184,31 @@ extension LoginVC {
                                 ksceneDelegate!.window?.rootViewController = obj
                                 ksceneDelegate!.window?.makeKeyAndVisible()
                             }
-                        
-                            progressHUD.hide()
-                            
                         } else {
-                            print("Error decoding JSON")
-                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             progressHUD.hide()
                         }
-                       
-                    }else if self.status == 403{
+                        
+                    }else if self.status == 502{
                         progressHUD.hide()
                         if let appDomain = Bundle.main.bundleIdentifier {
                             UserDefaults.standard.removePersistentDomain(forName: appDomain)
                         }
                         NotificationCenter.default.removeObserver(self)
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                             if isOtherButton == true {
                                 ksceneDelegate?.logout()
                             }
                         }
                     }else if self.status == 202{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }else if self.status == 201{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
                     }else{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }
                     
                 case .failure(_):
@@ -215,13 +222,14 @@ extension LoginVC {
                             }
                             if let message = JSON?["message"] as? String {
                                 print(message)
-                                _ = SweetAlert().showAlert("Failure", subTitle:  message, style: AlertStyle.error,buttonTitle:"OK")
+                                _ = SweetAlert().showAlert("Failure".localizeString(string: lang), subTitle:  message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             }
                         } catch {
-                            _ = SweetAlert().showAlert("Oops..", subTitle:  "Something went wrong ", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("Oops..".localizeString(string: lang), subTitle:  "Something went wrong".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                         }
                     }
                 }
             }
     }
+    
 }

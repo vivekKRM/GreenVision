@@ -14,6 +14,9 @@ class ProfileTVC: UITableViewCell {
     @IBOutlet weak var settingImage: UIImageView!
     @IBOutlet weak var settingText: UILabel!
     
+    @IBOutlet weak var langugaeBtn: UIButton!
+    
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()

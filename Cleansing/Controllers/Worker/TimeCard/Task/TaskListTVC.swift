@@ -20,8 +20,15 @@ class TaskListTVC: UITableViewCell {
     @IBOutlet weak var breakDuration: UILabel!
     @IBOutlet weak var headNameView: UIView!
     @IBOutlet weak var headName: UILabel!
+    @IBOutlet weak var unlacHeight: NSLayoutConstraint!
+    @IBOutlet weak var unalloc: UIButton!
+    @IBOutlet weak var taskName: UILabel!
+    @IBOutlet weak var firstLabel: UILabel!
+    @IBOutlet weak var midLabel: UILabel!
+    @IBOutlet weak var lastLabel: UILabel!
+    @IBOutlet weak var hourMinuteLabel: UILabel!
     
-
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         topView.dropShadowWithBlackColor()
@@ -32,6 +39,10 @@ class TaskListTVC: UITableViewCell {
         // Apply the corner radius to make it circular
         headNameView.layer.cornerRadius = cornerRadius
         headNameView.layer.masksToBounds = true
+        firstLabel.text = "Start Work".localizeString(string: lang)
+        midLabel.text = "Break".localizeString(string: lang)
+        lastLabel.text = "Finish Work".localizeString(string: lang)
+        unalloc.setTitle("Unallocated".localizeString(string: lang), for: .normal)
 
     }
 

@@ -14,9 +14,11 @@ class CleansingTBC: UITabBarController {
         let tabBarAppearance = tabBar.standardAppearance
         tabBarAppearance.selectionIndicatorTintColor =  UIColor.init(hexString: "004080")
         tabBar.standardAppearance = tabBarAppearance
+        tabBar.addTopBorder(color: UIColor.lightGray, height: 0.5)
     }
     
     override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
+        
         let yourView = self.viewControllers![self.selectedIndex] as! UINavigationController
         yourView.popToRootViewController(animated: false)
     }

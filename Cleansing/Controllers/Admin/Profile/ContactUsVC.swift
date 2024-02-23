@@ -73,16 +73,16 @@ extension ContactUsVC{
     func checkAll() -> Bool {
         
         if nameTF.text == " " || nameTF.text?.count ?? 0 < 3{
-            _ = SweetAlert().showAlert("", subTitle: "Please enter the name", style: AlertStyle.warning,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle: "Please enter the name", style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
             return false
         }else if emailTF.text == " "{
-            _ = SweetAlert().showAlert("", subTitle: "Please enter the email address", style: AlertStyle.warning,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle: "Please enter the email address", style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
             return false
         }else if isValidEmailAddress(emailAddressString: emailTF.text ?? "") == false{
-            _ = SweetAlert().showAlert("", subTitle: "Please enter the valid email address", style: AlertStyle.warning,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle: "Please enter the valid email address", style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
             return false
         }else  if messageTV.text == " " || messageTV.text == "Enter Message*"{
-            _ = SweetAlert().showAlert("", subTitle: "Please enter the message", style: AlertStyle.warning,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle: "Please enter the message", style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
             return false
         }else{
             return true

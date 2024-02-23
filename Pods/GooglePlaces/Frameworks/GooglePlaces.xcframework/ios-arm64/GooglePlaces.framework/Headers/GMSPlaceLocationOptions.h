@@ -11,6 +11,7 @@
 
 #import <CoreLocation/CoreLocation.h>
 
+
 NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Protocols
@@ -42,5 +43,6 @@ NS_ASSUME_NONNULL_BEGIN
 FOUNDATION_EXTERN id<GMSPlaceLocationBias, GMSPlaceLocationRestriction>
 GMSPlaceRectangularLocationOption(CLLocationCoordinate2D northEastBounds,
                                   CLLocationCoordinate2D southWestBounds);
+
 
 NS_ASSUME_NONNULL_END

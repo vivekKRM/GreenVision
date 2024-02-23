@@ -19,6 +19,11 @@ class TimeCardTVC: UITableViewCell {
     @IBOutlet weak var routeBtn: UIButton!
     @IBOutlet weak var carImage: UIImageView!
     @IBOutlet weak var carLabel: UILabel!
+    @IBOutlet weak var startLabel: UILabel!
+    @IBOutlet weak var finishLabel: UILabel!
+    
+    
+    
     
     
     override func awakeFromNib() {

@@ -216,7 +216,7 @@ open class SweetAlert: UIViewController {
     }
 
     open func showAlert(_ title: String, subTitle: String?, style: AlertStyle,buttonTitle: String, action: ((_ isOtherButton: Bool) -> Void)? = nil) -> SweetAlert {
-        _ = showAlert(title, subTitle: subTitle, style: style, buttonTitle: buttonTitle,buttonColor: UIColor(hexString: "004080"))
+        _ = showAlert(title, subTitle: subTitle, style: style, buttonTitle: buttonTitle,buttonColor: UIColor(hexString: "528E4A"))
         userAction = action
         return self
     }

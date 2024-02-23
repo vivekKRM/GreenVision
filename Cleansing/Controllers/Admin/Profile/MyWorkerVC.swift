@@ -73,6 +73,7 @@ extension MyWorkerVC: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print(indexPath.row)
         if let VC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ProjectDetailVC") as? ProjectDetailVC{
+            VC.hidesBottomBarWhenPushed = true
             self.navigationController?.pushViewController(VC, animated: true)
         }
     }

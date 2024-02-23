@@ -32,27 +32,48 @@ class AdminTimeCardVC: UIViewController {
     var alertController: UIAlertController!
     var searchData = [search]()
     var showData = [showProject]()
+    var worker = ""
+    var statusF = "all"
+    var approver = ""
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Time Card"
+        self.title = "Time Cards".localizeString(string: lang)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = false
+        lang = UserDefaults.standard.string(forKey: "Lang") ?? "en"
         self.tabBarController?.tabBar.isHidden = false
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
         locationManager.delegate = self
         firstCall()
     }
-//    
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.isNavigationBarHidden = false
+    }
     @IBAction func changeDateBtnTap(_ sender: UIButton) {
         chooseDate()
     }
     
     
     @IBAction func filterBtnTap(_ sender: UIButton) {
-        present(alertController, animated: true)
+        if let VC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "TimeCardFilterVC") as? TimeCardFilterVC{
+            VC.hidesBottomBarWhenPushed = true
+            VC.dataCompletion = { [weak self] data in
+                       print("Received data:", data)
+                self?.worker = data[2] == "" ? "" : data[2]
+                self?.statusF = data[0] == "" ? "all" : data[0]
+                self?.approver = data[1] == "" ? "" : data[1]
+//                UserDefaults.standard.setValue( self?.worker, forKey: "workerT")
+//                UserDefaults.standard.setValue( self?.statusF, forKey: "statusT")
+//                self?.getTask(filter: "",workers:data[2] == "" ? "all" : data[2], status: data[0] == "" ? "all" : data[0])
+                   }
+            self.navigationController?.pushViewController(VC, animated: true)
+        }
     }
     
     
@@ -87,20 +108,27 @@ extension AdminTimeCardVC {
 //        segmentControl.setTitleTextAttributes(selectedTextAttributes, for: .selected)
         changeDateView.layer.masksToBounds = true
         changeDateView.layer.cornerRadius = 5
+        filterBtn.setTitle("Filters".localizeString(string: lang), for: .normal)
         floatingBtn()
         projectPicker()
-        getTask(filter: "")
+        
+        let filters = UserDefaults.standard.string(forKey: "dfilter") ?? ""
+        worker = UserDefaults.standard.string(forKey: "workerT") ?? ""
+        statusF = UserDefaults.standard.string(forKey: "statusT") ?? ""
+        approver = UserDefaults.standard.string(forKey: "approverT") ?? ""
+        getTask(filter: filters, workers: worker, status: statusF, approver: approver)
+        self.navigationController?.isNavigationBarHidden = true
         
     }
     //MARK: Add Floating Button
     func floatingBtn(){
         let floatingButton = UIButton(type: .system)
         floatingButton.frame = CGRect(x: UIScreen.main.bounds.width * 0.8, y: UIScreen.main.bounds.height * 0.8, width: 60, height: 60)
-        floatingButton.backgroundColor = UIColor.init(hexString: "004080")
+        floatingButton.backgroundColor =  UIColor.init(hexString: "5FB8EE")
         floatingButton.layer.cornerRadius = 30 // Half of the width
         floatingButton.setTitle("+", for: .normal)
         floatingButton.titleLabel?.font = UIFont.systemFont(ofSize: 30)
-        floatingButton.setTitleColor(UIColor.white, for: .normal)
+        floatingButton.setTitleColor(UIColor.black, for: .normal)
         // Add a tap action to the button
         floatingButton.addTarget(self, action: #selector(floatingButtonTapped), for: .touchUpInside)
         // Add the floating button to the view
@@ -111,6 +139,7 @@ extension AdminTimeCardVC {
         // Handle the button tap action
         print("Floating button tapped!")
         if let VC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AddAdminTimeCardVC") as? AddAdminTimeCardVC{
+            VC.hidesBottomBarWhenPushed = true
             self.navigationController?.pushViewController(VC, animated: true)
         }
     }
@@ -122,16 +151,16 @@ extension AdminTimeCardVC {
         pickerView.delegate = self
         pickerView.dataSource = self
         // Create a UIAlertController with a UIPickerView
-        alertController = UIAlertController(title: "Select an Option", message: "\n\n\n\n\n\n", preferredStyle: .actionSheet)
+        alertController = UIAlertController(title: "Select an Option".localizeString(string: lang), message: "\n\n\n\n\n\n", preferredStyle: .actionSheet)
         // Add the UIPickerView to the UIAlertController
         alertController.view.addSubview(pickerView)
         // Define actions for the UIAlertController
         //                let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        let selectAction = UIAlertAction(title: "Submit", style: .default) { [weak self] (action) in
+        let selectAction = UIAlertAction(title: "Submit".localizeString(string: lang), style: .default) { [weak self] (action) in
             if let selectedRow = self?.pickerView.selectedRow(inComponent: 0) {
                 let selectedOption = self?.showData[selectedRow].name ?? ""
                 self?.filterBtn.setTitle(selectedOption, for: .normal)
-                print(selectedOption ?? "" + "Hello")
+                print(selectedOption ?? "" + "Hello".localizeString(string: lang))
                 self?.project_id = self?.showData[selectedRow].id ?? 0
 //                self?.getTask(id: self?.project_id ?? 0, filter: self?.date_selection ?? "", workingStatus: self?.workingStatu ?? "")
             }
@@ -149,16 +178,18 @@ extension AdminTimeCardVC {
     //MARK: Choose Date
     func chooseDate() {
         let fastisController = FastisController(mode: .range)
-        fastisController.title = "Choose range"
+        fastisController.title = "Choose range".localizeString(string: lang)
         //        fastisController.maximumDate = Date()
         fastisController.allowToChooseNilDate = true
         fastisController.allowDateRangeChanges = true
         fastisController.shortcuts = [.today, .lastWeek]
         fastisController.doneHandler = { resultRange in
             print(resultRange)
-            let todata = resultRange?.toDate
-            let fromdata = resultRange?.fromDate
-            self.changeDate(toDate: todata!, fromDate: fromdata!)
+            if resultRange != nil{
+                let todata = resultRange?.toDate
+                let fromdata = resultRange?.fromDate
+                self.changeDate(toDate: todata!, fromDate: fromdata!)
+            }
             
         }
         fastisController.present(above: self)
@@ -177,7 +208,11 @@ extension AdminTimeCardVC {
         let finals = fromstring + " - " + tostring
         changeDateBtn.setTitle(finals, for: .normal)
         date_selection = finals
-        getTask(filter: finals)
+        UserDefaults.standard.set(finals, forKey: "dfilter")
+        worker = UserDefaults.standard.string(forKey: "workerT") ?? ""
+        statusF = UserDefaults.standard.string(forKey: "statusT") ?? ""
+        approver = UserDefaults.standard.string(forKey: "approverT") ?? ""
+        getTask(filter: finals, workers: worker, status: statusF, approver: approver)
         
     }
     
@@ -199,17 +234,31 @@ extension AdminTimeCardVC: UITableViewDelegate, UITableViewDataSource{
         cell.headName.text = searchData[indexPath.row].taskTitle
         cell.startTime.text = searchData[indexPath.row].startTime
         cell.endTime.text = searchData[indexPath.row].endTime
+        cell.taskName.text = searchData[indexPath.row].taskName
         cell.breakDuration.text = searchData[indexPath.row].breakTime + "m"
         cell.manualgpsBtn.setTitle(searchData[indexPath.row].type, for: .normal)
-        if searchData[indexPath.row].workingType == "0"{
-            cell.checkTypeView.backgroundColor = .systemYellow
-            cell.checkType.text = "CLOCKED IN"
-        }else if searchData[indexPath.row].workingType == "1"{
-            cell.checkTypeView.backgroundColor = .systemOrange
-            cell.checkType.text = "CLOCKED OUT"
+        if searchData[indexPath.row].timeCardType == 1{
+            cell.unlacHeight.constant = 30
+            cell.unalloc.isHidden = false
         }else{
-            cell.checkTypeView.backgroundColor = .systemGreen
-            cell.checkType.text = "APPROVED"
+            cell.unlacHeight.constant = 0
+            cell.unalloc.isHidden = true
+        }
+        if searchData[indexPath.row].workingType == "0"{
+            cell.checkTypeView.backgroundColor = UIColor.init(hexString: "3CDACA")
+            cell.checkType.text = "CLOCKED IN".localizeString(string: lang)
+            cell.hourMinuteLabel.text = "(Working from:- " + searchData[indexPath.row].hours + "h:" +  searchData[indexPath.row].minutes + "m)"
+            cell.hourMinuteLabel.textColor = UIColor.init(hexString: "3CDACA")
+        }else if searchData[indexPath.row].workingType == "1"{
+            cell.checkTypeView.backgroundColor = UIColor.init(hexString: "004080")
+            cell.checkType.text = "CLOCKED OUT".localizeString(string: lang)
+            cell.hourMinuteLabel.text = "(Total time:- " + searchData[indexPath.row].hours + "h:" +  searchData[indexPath.row].minutes + "m)"
+            cell.hourMinuteLabel.textColor =  UIColor.init(hexString: "004080")
+        }else{
+            cell.checkTypeView.backgroundColor = UIColor.init(hexString: "F37290")
+            cell.checkType.text = "APPROVED".localizeString(string: lang)
+            cell.hourMinuteLabel.text = "(Total time:- " + searchData[indexPath.row].hours + "h:" +  searchData[indexPath.row].minutes + "m)"
+            cell.hourMinuteLabel.textColor = UIColor.init(hexString: "F37290")
         }
 //        }else if cell.checkType.text == "Completed"{
 //            cell.checkTypeView.backgroundColor = .systemGreen
@@ -230,13 +279,24 @@ extension AdminTimeCardVC: UITableViewDelegate, UITableViewDataSource{
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print(indexPath.row)
-        if searchData[indexPath.row].workingType == "0" {
-            _ = SweetAlert().showAlert("", subTitle: "You can not view or edit your working time card!", style: AlertStyle.warning,buttonTitle:"OK")
-        }else{
+        
+        if searchData[indexPath.row].createBy == 3{
             if let VC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AdminDetailTimeCardMainVC") as? AdminDetailTimeCardMainVC{
+                VC.hidesBottomBarWhenPushed = true
                 VC.taskID = searchData[indexPath.row].id
                 self.navigationController?.pushViewController(VC, animated: true)
             }
+        }else{
+            
+//            if searchData[indexPath.row].workingType == "0" {
+//                _ = SweetAlert().showAlert("", subTitle: "You can not view or edit your working time card!".localizeString(string: lang), style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
+//            }else{
+                if let VC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AdminDetailTimeCardMainVC") as? AdminDetailTimeCardMainVC{
+                    VC.hidesBottomBarWhenPushed = true
+                    VC.taskID = searchData[indexPath.row].id
+                    self.navigationController?.pushViewController(VC, animated: true)
+                }
+//            }
         }
         
     }
@@ -352,7 +412,7 @@ extension AdminTimeCardVC: CLLocationManagerDelegate {
         let customFont = UIFont(name: "Poppins-Medium", size: 17)
         
         let attributedString = NSAttributedString(
-            string: "Location access denied. Please enable location services from iPhone settings",
+            string: "Location access denied. Please enable location services from iPhone settings".localizeString(string: lang),
             attributes: [NSAttributedString.Key.font: customFont as Any]
         )
         let alertController = UIAlertController(
@@ -377,10 +437,10 @@ extension AdminTimeCardVC {
     
 
     //MARK: Get TimeCard API
-    func getTask(filter: String)
+    func getTask(filter: String, workers:String, status: String, approver: String)
     {
         if reachability.isConnectedToNetwork() == false{
-            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return
         }
         let progressHUD = ProgressHUD()
@@ -389,7 +449,7 @@ extension AdminTimeCardVC {
         
         var param: Parameters = ["":""]
         let url = "\(ApiLink.HOST_URL)/get_time_card"
-        param = ["date_filter": filter]
+        param = ["date_filter": filter,"workers": workers, "status": status, "approver": approver]
         print(param)
         let accessToken = UserDefaults.standard.string(forKey: "token") ?? ""
         print("Access Token: \(accessToken)")
@@ -409,7 +469,7 @@ extension AdminTimeCardVC {
                             self.searchData.removeAll()
                             self.changeDateBtn.setTitle(loginResponse.filter, for: .normal)
                             for i in 0..<loginResponse.timeCards.count{
-                                self.searchData.append(search.init(workingType: "\(loginResponse.timeCards[i].approve)", name: loginResponse.timeCards[i].name, taskTitle: loginResponse.timeCards[i].short_name ,dateRange: loginResponse.timeCards[i].date, startTime: loginResponse.timeCards[i].start_time, id: loginResponse.timeCards[i].id, endTime: loginResponse.timeCards[i].end_time, breakTime: "\(loginResponse.timeCards[i].break)", servicelat: loginResponse.timeCards[i].site_latitude, servicelong: loginResponse.timeCards[i].site_longitude, type: loginResponse.timeCards[i].type))
+                                self.searchData.append(search.init(workingType: "\(loginResponse.timeCards[i].approve)", name: loginResponse.timeCards[i].name, taskTitle: loginResponse.timeCards[i].short_name ,dateRange: loginResponse.timeCards[i].date, startTime: loginResponse.timeCards[i].start_time, id: loginResponse.timeCards[i].id, endTime: loginResponse.timeCards[i].end_time, breakTime: "\(loginResponse.timeCards[i].break)", servicelat: loginResponse.timeCards[i].site_latitude, servicelong: loginResponse.timeCards[i].site_longitude, type: loginResponse.timeCards[i].type, timeCardType: loginResponse.timeCards[i].timecard_type, createBy: loginResponse.timeCards[i].created_by, taskName: loginResponse.timeCards[i].task_name, hours: loginResponse.timeCards[i].hours, minutes: loginResponse.timeCards[i].minutes))
                             }
                             progressHUD.hide()
                             DispatchQueue.main.async {
@@ -419,38 +479,40 @@ extension AdminTimeCardVC {
                             }
                         } else {
                             print("Error decoding JSON")
-                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             progressHUD.hide()
                         }
                         
-                    }else if self.status == 403{
+                    }else if self.status == 502{
                         progressHUD.hide()
                         if let appDomain = Bundle.main.bundleIdentifier {
                             UserDefaults.standard.removePersistentDomain(forName: appDomain)
                         }
                         NotificationCenter.default.removeObserver(self)
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                             if isOtherButton == true {
                                 ksceneDelegate?.logout()
                             }
                         }
                     }else if self.status == 202{
                         progressHUD.hide()
+                        self.changeDateBtn.setTitle("Change Date".localizeString(string: lang), for: .normal)
                         self.searchData.removeAll()
                         self.taskListTV.reloadData()
                         
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }else if self.status == 201{
                         progressHUD.hide()
+                        self.changeDateBtn.setTitle("Change Date".localizeString(string: lang), for: .normal)
                         self.searchData.removeAll()
-                        self.changeDateBtn.setTitle( dict["filter"] as? String, for: .normal)
                         self.taskListTV.reloadData()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
                     }else{
                         progressHUD.hide()
+                        self.changeDateBtn.setTitle("Change Date".localizeString(string: lang), for: .normal)
                         self.searchData.removeAll()
                         self.taskListTV.reloadData()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }
                     
                     
@@ -465,11 +527,11 @@ extension AdminTimeCardVC {
                             }
                             if let message = JSON?["message"] as? String {
                                 print(message)
-                                _ = SweetAlert().showAlert("Failure", subTitle:  message, style: AlertStyle.error,buttonTitle:"OK")
+                                _ = SweetAlert().showAlert("Failure".localizeString(string: lang), subTitle:  message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             }
                         } catch {
                             // Your handling code
-                            _ = SweetAlert().showAlert("Oops..", subTitle:  "Something went wrong ", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("Oops..".localizeString(string: lang), subTitle:  "Something went wrong".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             
                         }
                     }
@@ -482,7 +544,7 @@ extension AdminTimeCardVC {
     func deleteTimeCard(id : Int)
     {
         if reachability.isConnectedToNetwork() == false{
-            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return
         }
         let progressHUD = ProgressHUD()
@@ -510,9 +572,13 @@ extension AdminTimeCardVC {
                         if let jsonData = try? JSONSerialization.data(withJSONObject: value),
                            let loginResponse = try? JSONDecoder().decode(DefaultInfo.self, from: jsonData) {
                             progressHUD.hide()
-                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.success,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.success,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                                 if isOtherButton == true {
-                                    self.getTask(filter: "")
+                                    let filter = UserDefaults.standard.string(forKey: "dfilter") ?? ""
+                                    self.worker = UserDefaults.standard.string(forKey: "workerT") ?? ""
+                                    self.statusF = UserDefaults.standard.string(forKey: "statusT") ?? ""
+                                    self.approver = UserDefaults.standard.string(forKey: "approverT") ?? ""
+                                    self.getTask(filter: filter, workers: self.worker, status: self.statusF, approver: self.approver)
                                 }
                             }
                             
@@ -520,30 +586,30 @@ extension AdminTimeCardVC {
                          
                         } else {
                             print("Error decoding JSON")
-                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             progressHUD.hide()
                         }
                         
-                    }else if self.status == 403{
+                    }else if self.status == 502{
                         progressHUD.hide()
                         if let appDomain = Bundle.main.bundleIdentifier {
                             UserDefaults.standard.removePersistentDomain(forName: appDomain)
                         }
                         NotificationCenter.default.removeObserver(self)
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                             if isOtherButton == true {
                                 ksceneDelegate?.logout()
                             }
                         }
                     }else if self.status == 202{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }else if self.status == 201{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
                     }else{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }
                 case .failure(_):
                     progressHUD.hide()
@@ -556,11 +622,11 @@ extension AdminTimeCardVC {
                             }
                             if let message = JSON?["message"] as? String {
                                 print(message)
-                                _ = SweetAlert().showAlert("Failure", subTitle:  message, style: AlertStyle.error,buttonTitle:"OK")
+                                _ = SweetAlert().showAlert("Failure".localizeString(string: lang), subTitle:  message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             }
                         } catch {
                             // Your handling code
-                            _ = SweetAlert().showAlert("Oops..", subTitle:  "Something went wrong ", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("Oops..".localizeString(string: lang), subTitle:  "Something went wrong".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             
                         }
                     }

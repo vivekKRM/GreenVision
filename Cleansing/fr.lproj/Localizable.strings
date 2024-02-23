@@ -1,0 +1,438 @@
+/* 
+  Localizable.strings
+  Cleansing
+
+ Created by Vivek Kumar on 30/01/24.
+  
+*/
+//MARK: Worker Module
+
+//MARK: Login
+"Login Now" = "Connecte-toi maintenant";
+"Please enter your credentials to continue." = "Veuillez saisir vos informations d'identification pour continuer.";
+"Enter Email Address" = "Entrer l'adresse e-mail";
+"Enter Your Password" = "Tapez votre mot de passe";
+"Forgot Password ?" = "Mot de passe oublié ?";
+"Login" = "Se connecter";
+"Please enter valid E-mail address" = "Veuillez saisir une adresse e-mail valide";
+"Password field cannot be empty" = "Le champ du mot de passe ne peut pas être vide";
+"Error Decoding" = "Erreur de décodage";
+"OK" = "D'accord";
+"Failure" = "Échec";
+"Oops.." = "Oups..";
+"Something went wrong" = "Quelque chose s'est mal passé";
+
+//MARK: Forgot Password
+"Forgot Password" = "Mot de passe oublié";
+"Request Now" = "Demander maintenant";
+"Please enter registered Email Id and click the 'Request Now' button below to contact the Admin for password reset request." = "Veuillez saisir votre identifiant de messagerie enregistré et cliquez sur le bouton 'Demander maintenant' ci-dessous pour contacter l'administrateur pour une demande de réinitialisation du mot de passe.";
+
+//MARK: ClockIn
+"Finish Time" = "Heure de fin";
+"Start Time" = "Heure de début";
+"Start Break" = "Début Break";
+"End Break" = "Fin de pause";
+"Break" = "Pause";
+"Break is in progress, you cannot mark as dayEnd/finish task." = "La pause est en cours, vous ne pouvez pas marquer comme tâche DayEnd/finish.";
+"Delete clock in" = "Supprimer l'horloge d'entrée";
+"Deleting your clock in will remove your live timecard." = "La suppression de votre pointage entraînera la suppression de votre carte de pointage en direct.";
+"Cancel" = "Annuler";
+"Delete" = "Supprimer";
+"DASHBOARD" = "TABLEAU DE BORD";
+"Location access denied. Please enable location services from iPhone settings" = "Accès à la localisation refusé. Veuillez activer les services de localisation à partir des paramètres de l'iPhone";
+"Enter Description" = "Entrer la description";
+"START" = "DEBUT";
+"WORKING" = "TRAVAIL";
+"ON BREAK" = "EN PAUSE";
+"DAY END" = "FIN DU JOUR";
+"FINISHED" = "TERMINÉ";
+"Start" = "Démarrer";
+"Click start time button to see data here.."= "Cliquez sur le bouton Heure de début pour voir les données ici...";
+"Clock" = "Horloge";
+"Tasks" = "Tâche";
+"Time Cards" = "Carte de temps";
+"Start Time:" = "Heure de début:";
+"Finish Time:" = "Heure de fin:";
+"ClockIn" = "HorlogeIn";
+"ClockOut" = "Horloge";
+"Breaks" = "Pauses";
+
+//MARK: My Profile
+"My Profile" = "Mon profil";
+"English" = "Anglais";
+"Worker" = "Travailleur";
+"Edit My Profile" = "Modifier mon profil";
+"Update Language" = "Mettre à jour la langue";
+"Contact Us" = "Contactez-nous";
+"LogOut" = "Déconnexion";
+"App Version: " = "Version de l'application: ";
+"Do you want to Logout ?" = "Voulez-vous vous déconnecter ?";
+"LogOut" = "Déconnexion";
+"Contact Us" = "Contactez-nous";
+"Dismiss" = "Rejeter";
+"Select Language" = "Sélectionner la langue";
+"French" = "Français";
+"Spanish" = "Espagnol";
+"English" = "Anglais";
+
+//MARK: Update Language
+"SUBMIT" = "SOUMETTRE";
+"Update your language" = "Mettez à jour votre langue";
+"Please select the language to proceed." = "Veuillez sélectionner la langue pour continuer.";
+"Select your preferred language to use Green Vision Cleansing App easily." = "Sélectionnez votre langue préférée pour utiliser facilement l'application Green Vision Cleansing.";
+"CONTINUE" = "CONTINUER";
+"Choose your language" = "Choisissez votre langue";
+
+//MARK: Edit Profile Worker
+"Edit Profile" = "Modifier le profil";
+"Please enter your name" = "Veuillez entrer votre nom";
+"Take Photo" = "Prendre une photo";
+"Choose Photo" = "Choisir une photo";
+"You have denied choosing the photos from camera, please allow access from your phone's settings." = "Vous avez refusé de choisir les photos de l'appareil photo, veuillez autoriser l'accès depuis les paramètres de votre téléphone.";
+"Warning" = "Avertissement";
+"You don't have camera." = "Vous n'avez pas de caméra.";
+"You don't have permission to access gallery." = "Vous n'êtes pas autorisé à accéder à la galerie.";
+"You have denied choosing the photos from library, please allow access from your phone's settings." = "Vous avez refusé de choisir les photos de la bibliothèque, veuillez autoriser l'accès depuis les paramètres de votre téléphone.";
+"Update" = "Mise à jour";
+"Update Profile Pic" = "Mettre à jour la photo de profil";
+"Enter your name" = "Entrez votre nom";
+"Enter your email address" = "Entrez votre adresse email";
+"Enter your mobile number" = "Entrez votre numéro de portable";
+"Name" = "Nom";
+"Email" = "E-mail";
+"Mobile Number" = "Numéro de mobile";
+
+//MARK: Dashboard Worker
+"Location Access Denied" = "Accès à la localisation refusé";
+"Hello, " = "Bonjour, ";
+"All Projects" = "Tous les projets";
+"Completed Projects" = "Projets terminés";
+"OnGoing Projects" = "Projets en cours";
+"Upcoming Projects" = "Projets à venir";
+"Location access denied. Please enable location services from iPhone settings" = "Accès à la localisation refusé. Veuillez activer les services de localisation à partir des paramètres de l'iPhone";
+"Current Location" = "Emplacement actuel";
+"Dashboard" = "Tableau de bord";
+"Total Earning" = "Gain total";
+"Total Hrs Spent" = "Total des heures dépensées";
+"Project Overview" = "Aperçu du projet";
+
+//MARK: Select Project
+"Select Project & Task" = "Sélectionner un projet et une tâche";
+"Select an Option" = "Sélectionner une option";
+"Submit" = "Soumettre";
+"Hello" = "Bonjour";
+
+//MARK: Task List
+"Choose range" = "Choisir une plage";
+"CLOCKED IN" = "HORLOGÉ";
+"CLOCKED OUT" = "HORLOGÉ";
+"APPROVED" = "APPROUVÉ";
+"You can not view or edit your working time card!" = "Vous ne pouvez pas consulter ou modifier votre carte de temps de travail!";
+"Unallocated" = "Non alloué";
+
+//MARK: Worker Time Card
+"Tasks" = "Tâches";
+"Ongoing" = "En cours";
+"Upcoming" = "À venir";
+"Completed" = "Terminé";
+"Details" = "Détails";
+"Route" = "Itinéraire";
+"All Tasks" = "Toutes les tâches";
+"All" = "Tous";
+"OnGoing" = "En cours";
+"UpComing" = "À venir";
+"Completed" = "Terminé";
+"Start Work" = "DémarrerTravail";
+"Finish Work" = "Terminer le travail";
+
+//MARK: Google Path
+"Path Route" = "Chemin Route";
+"Current Service" = "Service actuel";
+"Start" = "Démarrer";
+"End" = "Fin";
+"Service Location" = "Emplacement du service";
+"0 Min" = "0 Min";
+"Travel Distance Covered is: " = "La distance parcourue est: ";
+"Travel time is: " = "Le temps de trajet est: ";
+"Miles" = "Des kilomètres";
+"As your journey has been finished, you can see your journey data below" = "Une fois votre voyage terminé, vous pouvez voir vos données de voyage ci-dessous";
+"Start Journey" = "Démarre le voyage";
+"End Journey" = "Fin du voyage";
+"Are you sure, you want to END JOURNEY?" = "Etes-vous sûr de vouloir TERMINER LE VOYAGE?";
+
+//MARK: Worker Project Details
+"Break Start" = "Pause Départ";
+"Work Started" = "Travail commencé";
+"Break Started" = "Pause démarrée";
+"Break End" = "Fin de pause";
+"Work Finished" = "Travail terminé";
+"Break is in progress, you cannot mark as dayEnd/finish task." = "La pause est en cours, vous ne pouvez pas marquer comme tâche DayEnd/finish.";
+"No checklist found" = "Aucune liste de contrôle trouvée";
+"Project Details" = "Détails du projet";
+"See Breaks" = "Voir les pauses";
+"See Checklists" = "Voir les listes de contrôle";
+"Time Details" = "Détails de l'heure";
+"View Full Data" = "Afficher les données complètes";
+"Break Times & Check Lists" = "Temps de pause et listes de contrôle";
+"Site Details" = "Détails du site";
+"Location" = "Emplacement";
+"Notes" = "Remarques";
+"My Notes" = "Mes notes";
+
+//MARK: Show Notes
+"View Notes" = "Afficher les notes";
+"Add Notes" = "Ajouter des notes";
+"Approved time cards notes cannot be added" = "Les notes des fiches de pointage approuvées ne peuvent pas être ajoutées";
+"ADD NOTES" = "AJOUTER DES NOTES";
+"No data found for notes of this task at this moment!" = "Aucune donnée trouvée pour les notes de cette tâche pour le moment!";
+"View" = "Voir";
+
+//MARK: Add Notes
+"Add Notes" = "Ajouter des notes";
+"Show Notes" = "Afficher les notes";
+"Save Notes" = "Enregistrer les notes";
+"Enter Description(Optional)" = "Entrez la Description (Facultatif)";
+"Do you want to delete the selected image ?" = "Voulez-vous supprimer l'image sélectionnée ?";
+"Please enter notes title" = "Veuillez saisir le titre des notes";
+"Notes Title" = "Titre des notes";
+"Notes Description" = "Description des notes";
+"Enter your notes title" = "Entrez le titre de vos notes";
+"Add Notes" = "Ajouter des notes";
+"Add Images (Click Here)" = "Ajouter des images (Cliquez ici)";
+
+//MARK: New TimeCard
+"Green Vision Cleansing" = "Nettoyage de la vision verte";
+"Time Approver" = "Approbateur de temps";
+"Break Start 1" = "Pause Départ 1";
+"Break End 1" = "Fin de pause 1";
+"Break Start " = "Pause Départ ";
+"Break End " = "Fin de pause ";
+"Select Approver" = "Sélectionner un approbateur";
+"Select Date and Time" = "Sélectionner la date et l'heure";
+"Done" = "Terminé";
+"Please select the project first before entering start/finish date time." = "Veuillez sélectionner le projet avant de saisir la date et l'heure de début/fin.";
+"Select" = "Sélectionner";
+"The finish time should be greater than start time" = "L'heure de fin doit être supérieure à l'heure de début";
+"Time cards can not be created with future dates or times." = "Les fiches de pointage ne peuvent pas être créées avec des dates ou heures futures.";
+"ADD BREAK" = "AJOUTER UNE PAUSE";
+"ADD" = "AJOUTER";
+"BREAKS" = "PAUSES";
+"Finish" = "Terminer";
+"Project" = "Projet";
+
+//MARK: Show Task List
+"Approved time cards cannot be edited" = "Les fiches de pointage approuvées ne peuvent pas être modifiées";
+"Please contact admin to update your project/task." = "Veuillez contacter l'administrateur pour mettre à jour votre projet/tâche.";
+"Edit TimeCard" = "Modifier TimeCard";
+"Approved/ClockedIn timecard cannot be deleted" = "La carte de pointage Approved/ClockedIn ne peut pas être supprimée";
+"Do you want to delete this timecard ?" = "Voulez-vous supprimer cette feuille de pointage ?";
+"Time Card" = "Carte de pointage";
+"Sites" = "Sites";
+"View Notes" = "Afficher les notes";
+"Save Changes" = "Enregistrer les modifications";
+"Organization" = "Organisation";
+"Time" = "Heure";
+"Notes" = "Remarques";
+"Logs" = "Journaux";
+"Features Coming  Soon..." = "Fonctionnalités à venir...";
+
+
+//MARK: CheckList
+"Add Customer" = "Ajouter un client";
+"Enter customer name" = "Entrez le nom du client";
+"Add" = "Ajouter";
+"Edit Customer" = "Modifier le client";
+"Enter customer name" = "Entrez le nom du client";
+"Save" = "Enregistrer";
+"CheckList for " = "CheckList pour ";
+"Select customer name" = "Sélectionner le nom du client";
+"Select manager name" = "Sélectionner le nom du responsable";
+"Submit" = "Soumettre";
+
+//MARK: Break
+"All breaks with duration, start time and stop time" = "Toutes les pauses avec durée, heure de début et heure de fin";
+"Duration" = "Durée";
+
+//MARK: Day Wise
+"Day Wise Data" = "Données journalières";
+" Min" = " Min";
+"Break Duration:-" = "Durée de la pause :-";
+"Start Work" = "Démarrer le travail";
+"Finish Work" = "Terminer le travail";
+
+//MARK: ADMIN Languagae
+
+//MARK: Clock In
+"Projects" = "Projets";
+"Crew" = "Équipage";
+
+//MARK: Show Admin Task
+"Filter Task" = "Tâche de filtrage";
+"Complete" = "Complet";
+"Incomplete" = "Incomplet";
+
+//MARK: Crew
+"Crew" = "Équipage";
+"Active" = "Actif";
+"InActive" = "Inactif";
+"Invited" = "Invité";
+"Active/In-Active Crew" = "Équipage actif/in-actif";
+"Invited Crew" = "Équipage invité";
+"Crew Listing" = "Liste d'équipage";
+
+//MARK: Dashboard
+"Here are your project/task overview" = "Voici un aperçu de votre projet/tâche";
+"Here are your employee overview" = "Voici l'aperçu de vos employés";
+
+//MARK: Profile
+"My Dashboard" = "Mon tableau de bord";
+"My Invites" = "Mes invitations";
+"Manager" = "Gérant";
+
+//MARK: Add Admin TimeCard
+"Add TimeCard" = "Ajouter une TimeCard";
+"Select a team member" = "Sélectionnez un membre de l'équipe";
+"CANCEL" = "ANNULER";
+"SELECT" = "SÉLECTIONNER";
+
+//MARK: Admin Detail TimeCard
+"Team Member" = "Membre de l'équipe";
+
+//MARK: Show Admin Task Detail
+"Complete Task" = "Tâche terminée";
+"Do you want to complete this task ?" = "Voulez-vous terminer cette tâche ?";
+"View Task" = "Afficher la tâche";
+"Delete Task" =  "Supprimer la tâche";
+"Deleting the task will remove all your task data, do you want to delete ?" = "La suppression de la tâche supprimera toutes vos données de tâche, souhaitez-vous supprimer ?";
+"Delete Checklist" = "Supprimer la liste de contrôle";
+"Do you want to delete this task checklist ?" = "Voulez-vous supprimer cette liste de contrôle des tâches ?";
+"STATUS" = "STATUT";
+"START DATE" = "DATE DE DÉBUT";
+"DUE DATE" = "DATE D'ÉCHÉANCE";
+"PROJECT" = "PROJET";
+"NAVIGATE" = "NAVIGUER";
+"ASSIGNS" = "ATTRIBUER";
+"WATCHERS" = "OBSERVATEURS";
+"CHECK LIST" = "LISTE DE CONTRÔLE";
+"Edit Task" = "Modifier la tâche";
+"ADD NEW NOTES" = "AJOUTER DE NOUVELLES NOTES";
+"MARK AS COMPLETE" = "MARQUER COMME COMPLET";
+"COMPLETE" = "COMPLÈTE";
+"TASK COMPLETED" = "TÂCHE TERMINÉE";
+
+//MARK: Create Task Admin
+"View Task" = "Afficher la tâche";
+"Create Task" = "Créer une tâche";
+"Save Task" = "Enregistrer la tâche";
+"Please enter task title" = "Veuillez saisir le titre de la tâche";
+"Please enter task member" = "Veuillez saisir un membre de la tâche";
+"Please select date time for task" = "Veuillez sélectionner la date et l'heure pour la tâche";
+"Please select due date time for task" = "Veuillez sélectionner la date d'échéance pour la tâche";
+"Please select timezone for task" = "Veuillez sélectionner le fuseau horaire pour la tâche";
+"Please select project for task" = "Veuillez sélectionner le projet pour la tâche";
+"Please select taskwatcher/manager for task" = "Veuillez sélectionner un observateur/gestionnaire de tâches pour la tâche";
+"Add CheckList" = "Ajouter une liste de contrôle";
+"You can create check list for this task from hereand if you want to check/uncheck the check list item, you can do from task detail screen" = "Vous pouvez créer une liste de contrôle pour cette tâche à partir d'ici et si vous souhaitez cocher/décocher l'élément de la liste de contrôle, vous pouvez le faire à partir de l'écran de détail de la tâche";
+"Enter Checklist" = "Entrer la liste de contrôle";
+"Add" = "Ajouter";
+"Enter a task title" = "Entrez un titre de tâche";
+"Team Members" = "Membres de l'équipe";
+"Select Date & Time" = "Sélectionner la date et l'heure";
+"Select Due Date" = "Sélectionner la date d'échéance";
+"Select Task Watcher" = "Sélectionner Task Watcher";
+"Project" = "Projet";
+"Check Lists" = "Liste de contrôle";
+"Add CheckList Item" = "Ajouter un élément de liste de contrôle";
+"CREATE TASK" = "CRÉER UNE TÂCHE";
+
+
+//MARK: Selection
+"Paid" = "Payé";
+"Exempt" = "Exempté";
+"UnPaid" = "Non payé";
+"Non Exempt" = "Non exempté";
+"Select an exemption status" = "Sélectionner un statut d'exemption";
+"Exempt Status" = "Statut d'exemption";
+"Choose Meal Type" = "Choisir le type de repas";
+"Select a meal break policy" = "Sélectionner une politique de pause-repas";
+"Select timezone" = "Sélectionner le fuseau horaire";
+"Select project name" = "Sélectionner le nom du projet";
+"Select member name" = "Sélectionner le nom du membre";
+"Select manager name" = "Sélectionner le nom du responsable";
+
+//MARK: Detail Admin Project
+"Total" = "Total";
+"Project Details" = "Détails du projet";
+"Person & Total" = "Personne & Total";
+"Geofence" = "Géoclôture";
+"This is the geofence area" = "Voici la zone de géo-clôture";
+"Total Miles" = "Total des milles";
+"Travel Time" = "Temps de voyage";
+"Spent Time" = "Temps passé";
+"Total Cost" = "Coût total";
+"Employee Listing" = "Liste des employés";
+"Choose Option" = "Choisir une option";
+
+//MARK: Add Admin Proj
+"Create Project" = "Créer un projet";
+"Edit Project" = "Modifier le projet";
+"Enter Street" = "Entrez la rue";
+"Delete Project" = "Supprimer le projet";
+"Deleting project will delete all your tasks,time cards data, related to this project" = "La suppression du projet supprimera toutes vos tâches et données de cartes de pointage liées à ce projet";
+"Please enter project name" = "Veuillez saisir le nom du projet";
+"Please choose workers" = "Veuillez choisir des travailleurs";
+"Please enter street" = "Veuillez entrer la rue";
+"Please choose location of project" = "Veuillez choisir l'emplacement du projet";
+"Please choose manager for project" = "Veuillez choisir le responsable du projet";
+"Save Project" = "Enregistrer le projet";
+"Enter a project name" = "Entrez un nom de projet";
+"Choose a project location" = "Choisir un emplacement de projet";
+"PROJECT DETAILS" = "DÉTAILS DU PROJET";
+"PROJECT LOCATION" = "EMPLACEMENT DU PROJET";
+"ASSIGN MANAGERS" = "AFFECTER DES MANAGERS";
+"Add Customer" = "Ajouter un client";
+"Enter Street No." = "Entrez le numéro de rue.";
+
+
+
+
+//MARK: Admin Invite
+"Track time and location for hourly, salaried or 1099 staff" = "Suivre l'heure et le lieu pour le personnel horaire, salarié ou 1099";
+"Monitor and approve time and cost codes submitted by your team" = "Surveiller et approuver les codes de temps et de coûts soumis par votre équipe";
+"Manage time, projects, job cost reports and export payroll" = "Gérer le temps, les projets, les rapports sur les coûts des travaux et la paie à l'exportation";
+"WORKER" = "TRAVAILLEUR";
+"MANAGER" = "GESTIONNAIRE";
+"ADMINISTRATOR" = "ADMINISTRATEUR";
+"Invite" = "Inviter";
+"Select a role to invite" = "Sélectionner un rôle à inviter";
+
+//MARK: Add Invite
+"Invite Worker" = "Inviter un travailleur";
+"Invite Manager" = "Gestionnaire d'invitations";
+"Invite Administrator" = "Inviter l'administrateur";
+"Name field cannot be empty" = "Le champ de nom ne peut pas être vide";
+"Please enter a mobile number with 10 or more characters" = "Veuillez saisir un numéro de mobile comportant 10 caractères ou plus";
+"Personal Details" = "Détails personnels";
+"Time Settings" = "Paramètres d'heure";
+"Time approver" = "Approbateur de temps";
+"Overtime exempt status" = "Statut d'exonération des heures supplémentaires";
+"Meal break policy" = "Politique des pauses-repas";
+"SEND INVITE" = "ENVOYER UNE INVITATION";
+"Profile" = "Profil";
+"Edit" = "Modifier"; 
+"Select Time Approver" = "Sélectionner l'approbateur de temps";
+"Select Project" = "Sélectionner un projet";
+"My Dashboard" = "Mon tableau de bord";
+"Approved timecard cannot be deleted" = "La feuille de pointage approuvée ne peut pas être supprimée";
+"Work Completed" = "Travaux achevés";
+"TASK COMPLETED" = "TÂCHE TERMINÉE";
+
+//MARK: Extra
+"Filter" = "Filtre";
+"Filters" = "Filtres";
+"APPLY" = "APPLIQUER";
+"Status" = "Statut";
+"Select an status" = "Sélectionner un statut";
+"Select worker" = "Sélectionner un travailleur";
+"Select time approver" = "Sélectionner l'approbateur de temps";
+"RESET TO DEAFULT" = "RÉINITIALISER SUR SOURD";

@@ -11,11 +11,11 @@ class AdminCrewVC: UIViewController {
 
     
     @IBOutlet weak var crewTV: UITableView!
-    
+    @IBOutlet weak var topLabel: UILabel!
     
     var status: Int = 0
-    var clockedInData = [crewClockedIn]()
-    var clockedOutData = [crewClockedOut]()
+    var crewList = [crewListing]()
+    var registerList = [registerListing]()
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -24,7 +24,12 @@ class AdminCrewVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationController?.isNavigationBarHidden = true
         firstCall()
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.isNavigationBarHidden = false
     }
 
   
@@ -35,14 +40,46 @@ extension AdminCrewVC{
     
     func firstCall()
     {
-        self.title = "Crew"
-        let rightBarButton = UIBarButtonItem(title: "+ Invite", style: .plain, target: self, action: #selector(inviteBtnTap))
-        navigationItem.rightBarButtonItem = rightBarButton
-        getCrew()
+        self.title = "Crew".localizeString(string: lang)
+        self.topLabel.text = "Crew Listing".localizeString(string: lang)
+        UserDefaults.standard.set("", forKey: "dfilter")
+        UserDefaults.standard.setValue( "", forKey: "workerT")
+        UserDefaults.standard.setValue( "all", forKey: "statusT")
+        UserDefaults.standard.setValue("", forKey: "workerV")
+        UserDefaults.standard.setValue("", forKey: "statusV")
+        UserDefaults.standard.setValue("", forKey: "approverV")
+        UserDefaults.standard.setValue("", forKey: "approverT")
+        floatingBtn()
+        getInvite()
     }
     
     @objc func inviteBtnTap(){
         if let VC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AdminInviteVC") as? AdminInviteVC{
+            VC.hidesBottomBarWhenPushed = true
+            self.navigationController?.pushViewController(VC, animated: true)
+        }
+    }
+    
+    //MARK: Add Floating Button
+    func floatingBtn(){
+        let floatingButton = UIButton(type: .system)
+        floatingButton.frame = CGRect(x: UIScreen.main.bounds.width * 0.8, y: UIScreen.main.bounds.height * 0.8, width: 60, height: 60)
+        floatingButton.backgroundColor =  UIColor.init(hexString: "5FB8EE")
+        floatingButton.layer.cornerRadius = 30 // Half of the width
+        floatingButton.setTitle("+", for: .normal)
+        floatingButton.titleLabel?.font = UIFont.systemFont(ofSize: 30)
+        floatingButton.setTitleColor(UIColor.black, for: .normal)
+        // Add a tap action to the button
+        floatingButton.addTarget(self, action: #selector(floatingButtonTapped), for: .touchUpInside)
+        // Add the floating button to the view
+        view.addSubview(floatingButton)
+    }
+    
+    @objc func floatingButtonTapped() {
+        // Handle the button tap action
+        print("Floating button tapped!")
+        if let VC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AdminInviteVC") as? AdminInviteVC{
+            VC.hidesBottomBarWhenPushed = true
             self.navigationController?.pushViewController(VC, animated: true)
         }
     }
@@ -57,33 +94,33 @@ extension AdminCrewVC: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0{
-            return clockedInData.count
+            return registerList.count
         }else{
-            return clockedOutData.count
+            return crewList.count
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "acCell", for: indexPath) as! AdminCrewTVC
         if indexPath.section == 0{
-            cell.nameLabel.text = clockedInData[indexPath.row].name
-            cell.dateLabel.text = clockedInData[indexPath.row].date
-            if clockedInData[indexPath.row].isSelected {
-                cell.selectBtn.setImage(UIImage(systemName: "checkmark.square.fill"), for: .normal)
-            }else{
-                cell.selectBtn.setImage(UIImage(systemName: "square"), for: .normal)
-            }
+            cell.nameLabel.text = registerList[indexPath.row].name
+            cell.emailLabel.text = registerList[indexPath.row].email
+            cell.mobileLabel.text = registerList[indexPath.row].mobile
+            cell.activeView.isHidden = true
         }else{
-            cell.nameLabel.text = clockedOutData[indexPath.row].name
-            cell.dateLabel.text = clockedOutData[indexPath.row].date
-            if clockedOutData[indexPath.row].isSelected {
-                cell.selectBtn.setImage(UIImage(systemName: "checkmark.square.fill"), for: .normal)
+            cell.activeView.isHidden = false
+            cell.nameLabel.text = crewList[indexPath.row].name
+            cell.emailLabel.text = crewList[indexPath.row].email
+            cell.mobileLabel.text = crewList[indexPath.row].phone
+            if crewList[indexPath.row].status == "1"{
+                cell.activeLabel.text = "Active".localizeString(string: lang)
             }else{
-                cell.selectBtn.setImage(UIImage(systemName: "square"), for: .normal)
+                cell.activeLabel.text = "InActive".localizeString(string: lang)
             }
+            
         }
-        cell.selectBtn.tag = indexPath.section * 1000 + indexPath.row
-        cell.selectBtn.addTarget(self, action: #selector(editBtnTap(_:)), for: .touchUpInside)
+//        cell.selectBtn.tag = indexPath.section * 1000 + indexPath.row
+//        cell.selectBtn.addTarget(self, action: #selector(editBtnTap(_:)), for: .touchUpInside)
        
         return cell
     }
@@ -106,13 +143,13 @@ extension AdminCrewVC: UITableViewDelegate, UITableViewDataSource{
         viewHeader.backgroundColor = UIColor.init(hexString: "f5f5f5")
         if section == 0{
             let label1 = UILabel(frame: CGRect(x: 15, y: 10, width: 150, height: 24))
-            label1.text = "Clocked-In"
+            label1.text = "Invited Crew".localizeString(string: lang)
             label1.textColor = .black
             label1.font = UIFont(name: "Poppins-Medium", size: 16)
             viewHeader.addSubview(label1)
         }else{
-            let label1 = UILabel(frame: CGRect(x: 15, y: 10, width: 150, height: 24))
-            label1.text = "Clocked-Out"
+            let label1 = UILabel(frame: CGRect(x: 15, y: 10, width: 300, height: 24))
+            label1.text = "Active/In-Active Crew".localizeString(string: lang)
             label1.textColor = .black
             label1.font = UIFont(name: "Poppins-Medium", size: 16)
             viewHeader.addSubview(label1)
@@ -146,12 +183,12 @@ extension AdminCrewVC: UITableViewDelegate, UITableViewDataSource{
 }
 //MARK: API Integartion
 extension AdminCrewVC{
-    
-    //MARK: Get Crew API
-    func getCrew()
+
+    //MARK: Get Invite API
+    func getInvite()
     {
         if reachability.isConnectedToNetwork() == false{
-            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return
         }
         let progressHUD = ProgressHUD()
@@ -159,7 +196,7 @@ extension AdminCrewVC{
         progressHUD.show()
         
         let param: Parameters = ["":""]
-        let url = "\(ApiLink.HOST_URL)/get_crew"//get_invite
+        let url = "\(ApiLink.HOST_URL)/get_activeInactive_user"
         print(param)
         let accessToken = UserDefaults.standard.string(forKey: "token") ?? ""
         print("Access Token: \(accessToken)")
@@ -175,15 +212,18 @@ extension AdminCrewVC{
                     if self.status == 200
                     {
                         if let jsonData = try? JSONSerialization.data(withJSONObject: value),
-                           let loginResponse = try? JSONDecoder().decode(CrewResponse.self, from: jsonData) {
-                            self.clockedInData.removeAll()
-                            self.clockedOutData.removeAll()
-                            for i in 0..<loginResponse.clockIn.count{
-                                self.clockedInData.append(crewClockedIn.init(isSelected: false, name: loginResponse.clockIn[i].name, date: loginResponse.clockIn[i].time, ids: loginResponse.clockIn[i].id))
+                           let loginResponse = try? JSONDecoder().decode(EmployeeResponse.self, from: jsonData) {
+                           
+                            self.crewList.removeAll()
+                            for i in 0..<loginResponse.emp_data.count{
+                                self.crewList.append(crewListing.init(email: loginResponse.emp_data[i].email, name: loginResponse.emp_data[i].name, phone: loginResponse.emp_data[i].phone, profile_image: loginResponse.emp_data[i].profile_image, status: loginResponse.emp_data[i].status))
                             }
-                            for i in 0..<loginResponse.clockOut.count{
-                                self.clockedOutData.append(crewClockedOut.init(isSelected: false, name: loginResponse.clockOut[i].name, date: loginResponse.clockOut[i].time, ids: loginResponse.clockOut[i].id))
+                            
+                            self.registerList.removeAll()
+                            for i in 0..<loginResponse.invite_data.count{
+                                self.registerList.append(registerListing.init(role: loginResponse.invite_data[i].role, name: loginResponse.invite_data[i].name, email: loginResponse.invite_data[i].email, mobile: loginResponse.invite_data[i].mobile, status: loginResponse.invite_data[i].status, time_tracking: loginResponse.invite_data[i].time_tracking, time_approver: loginResponse.invite_data[i].time_approver, overtime_status: loginResponse.invite_data[i].overtime_status, mealbreak_policy: loginResponse.invite_data[i].mealbreak_policy))
                             }
+                            
                             progressHUD.hide()
                             DispatchQueue.main.async {
                                 self.crewTV.delegate = self
@@ -192,30 +232,30 @@ extension AdminCrewVC{
                             }
                         } else {
                             print("Error decoding JSON")
-                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             progressHUD.hide()
                         }
                         
-                    }else if self.status == 403{
+                    }else if self.status == 502{
                         progressHUD.hide()
                         if let appDomain = Bundle.main.bundleIdentifier {
                             UserDefaults.standard.removePersistentDomain(forName: appDomain)
                         }
                         NotificationCenter.default.removeObserver(self)
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                             if isOtherButton == true {
                                 ksceneDelegate?.logout()
                             }
                         }
                     }else if self.status == 202{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }else if self.status == 201{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
                     }else{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }
                     
                     
@@ -230,15 +270,17 @@ extension AdminCrewVC{
                             }
                             if let message = JSON?["message"] as? String {
                                 print(message)
-                                _ = SweetAlert().showAlert("Failure", subTitle:  message, style: AlertStyle.error,buttonTitle:"OK")
+                                _ = SweetAlert().showAlert("Failure".localizeString(string: lang), subTitle:  message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             }
                         } catch {
                             // Your handling code
-                            _ = SweetAlert().showAlert("Oops..", subTitle:  "Something went wrong ", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("Oops..".localizeString(string: lang), subTitle:  "Something went wrong".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             
                         }
                     }
                 }
             }
     }
+    
+    
 }

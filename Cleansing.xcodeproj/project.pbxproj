@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		073BE0520C3AC1FEEED734F9 /* Pods_Cleansing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F1E814F5625362DED47811B /* Pods_Cleansing.framework */; };
+		5D04F0432B830BFD00FA90A9 /* TimeCardFilterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D04F0422B830BFD00FA90A9 /* TimeCardFilterVC.swift */; };
+		5D04F0452B83179D00FA90A9 /* TimeCardSelectionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D04F0442B83179D00FA90A9 /* TimeCardSelectionVC.swift */; };
 		5D18A65A2B01E28400897597 /* CreateCheckListTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D18A6592B01E28400897597 /* CreateCheckListTVC.swift */; };
 		5D19A8002AFB8B30005949CC /* AdminCrewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D19A7FF2AFB8B30005949CC /* AdminCrewVC.swift */; };
 		5D19A8022AFB8FB5005949CC /* ShowAdminTaskVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D19A8012AFB8FB5005949CC /* ShowAdminTaskVC.swift */; };
@@ -16,23 +18,33 @@
 		5D1AA7CF2B061DBA0058637D /* AdminInviteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D1AA7CE2B061DBA0058637D /* AdminInviteVC.swift */; };
 		5D1AA7D12B061E630058637D /* AdminInviteTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D1AA7D02B061E630058637D /* AdminInviteTVC.swift */; };
 		5D1AA7D32B0629200058637D /* AddInviteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D1AA7D22B0629200058637D /* AddInviteVC.swift */; };
+		5D1E2F492B57BC300001782B /* LanguageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D1E2F482B57BC300001782B /* LanguageVC.swift */; };
+		5D3BDF4D2B68AC48007CD6E2 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5D3BDF4F2B68AC48007CD6E2 /* Localizable.strings */; };
 		5D420D072AFB4C66008B60A5 /* CreateTaskAdminVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D420D062AFB4C66008B60A5 /* CreateTaskAdminVC.swift */; };
+		5D4C1AC82B676AC300C40F49 /* ShowTaskAdminCVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4C1AC72B676AC300C40F49 /* ShowTaskAdminCVC.swift */; };
+		5D4EA1E12B4E65970068DE9A /* AdminDashTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4EA1E02B4E65970068DE9A /* AdminDashTVC.swift */; };
 		5D5E1A542B0228D8008433B7 /* ShowAdminTaskDetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D5E1A532B0228D8008433B7 /* ShowAdminTaskDetailsVC.swift */; };
 		5D63A3DA2B19B71000B0930E /* AdminTimeCardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D63A3D92B19B71000B0930E /* AdminTimeCardVC.swift */; };
 		5D65506B2AFDDB8E0086CCA1 /* SelectionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D65506A2AFDDB8E0086CCA1 /* SelectionVC.swift */; };
+		5D65E81C2B7CB58B00063DAB /* TimeCardCheckListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D65E81B2B7CB58B00063DAB /* TimeCardCheckListVC.swift */; };
 		5D6985B62AF3B401002E2C3D /* LogsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D6985B52AF3B401002E2C3D /* LogsVC.swift */; };
 		5D73B83C2AF89D4C005E94F5 /* LocationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D73B83B2AF89D4C005E94F5 /* LocationVC.swift */; };
 		5D73B83E2AF8C16F005E94F5 /* ShowAdminProjTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D73B83D2AF8C16F005E94F5 /* ShowAdminProjTVC.swift */; };
 		5D7DCB032B29CAE100B24567 /* ViewFullDataVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D7DCB022B29CAE000B24567 /* ViewFullDataVC.swift */; };
 		5D7DCB052B29CB0200B24567 /* ViewFullDataTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D7DCB042B29CB0200B24567 /* ViewFullDataTVC.swift */; };
+		5D862AC72B4BD78600CFEF95 /* WorkerClockInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D862AC62B4BD78600CFEF95 /* WorkerClockInVC.swift */; };
+		5D8ADC8F2B591159000B5405 /* LanguageTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D8ADC8E2B591159000B5405 /* LanguageTVC.swift */; };
 		5DB5ED912B3590C800B736D0 /* WorkerRouteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB5ED902B3590C800B736D0 /* WorkerRouteVC.swift */; };
+		5DC0FB902B5534CF0065D773 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5DC0FB8F2B5534CF0065D773 /* GoogleService-Info.plist */; };
+		5DC4C2A62B4D4A1F00F713BE /* WorkerClockInMapVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC4C2A52B4D4A1F00F713BE /* WorkerClockInMapVC.swift */; };
+		5DCF62EB2B3ED9F2005B7546 /* ShowNotesAdminVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCF62EA2B3ED9F2005B7546 /* ShowNotesAdminVC.swift */; };
+		5DCF62EE2B3EE1B5005B7546 /* AdminClockInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCF62ED2B3EE1B5005B7546 /* AdminClockInVC.swift */; };
 		5DDDD2B62B21BF0500A77C18 /* AdminDetailTimeCardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDDD2B52B21BF0500A77C18 /* AdminDetailTimeCardVC.swift */; };
 		5DDDD2B82B21BF7300A77C18 /* AdminDetailTimeCardMainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDDD2B72B21BF7300A77C18 /* AdminDetailTimeCardMainVC.swift */; };
 		5DDEFFA52AF4EE9D00C34CD3 /* ShowAdminNotesTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDEFFA42AF4EE9D00C34CD3 /* ShowAdminNotesTVC.swift */; };
 		5DDEFFA72AF5065D00C34CD3 /* AddAdminProjVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDEFFA62AF5065D00C34CD3 /* AddAdminProjVC.swift */; };
 		5DE7485B2B1F1D3800C05BA4 /* AddAdminTimeCardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE7485A2B1F1D3800C05BA4 /* AddAdminTimeCardVC.swift */; };
 		5DF20C6F2AFA0B71000B50A5 /* DetailAdminProjVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF20C6E2AFA0B71000B50A5 /* DetailAdminProjVC.swift */; };
-		5DF20C712AFA332C000B50A5 /* ProjectHoursVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF20C702AFA332C000B50A5 /* ProjectHoursVC.swift */; };
 		5DF20C732AFA355F000B50A5 /* ProjectHourTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF20C722AFA355F000B50A5 /* ProjectHourTVC.swift */; };
 		89038BCB2AD69B13003DAAD8 /* ShowNotesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89038BCA2AD69B13003DAAD8 /* ShowNotesVC.swift */; };
 		890C95282AB31C93000E466C /* BottomDrawerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890C95272AB31C93000E466C /* BottomDrawerVC.swift */; };
@@ -92,7 +104,6 @@
 		89AAB47C2A934AA200A073AA /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AAB47B2A934AA200A073AA /* ProfileVC.swift */; };
 		89AAB47F2A935EAE00A073AA /* SearchTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AAB47E2A935EAE00A073AA /* SearchTVC.swift */; };
 		89ADCA662A936C3700B15E05 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89ADCA652A936C3700B15E05 /* Model.swift */; };
-		89ADCA682A936E0700B15E05 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 89ADCA672A936E0700B15E05 /* GoogleService-Info.plist */; };
 		89B2F3542AE8F07200F15E97 /* AproverOrganizationTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B2F3532AE8F07200F15E97 /* AproverOrganizationTVC.swift */; };
 		89B410362AA19D9400026E52 /* WorkerTBC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B410352AA19D9400026E52 /* WorkerTBC.swift */; };
 		89B4103C2AA1A14D00026E52 /* WorkerProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B4103B2AA1A14D00026E52 /* WorkerProfileVC.swift */; };
@@ -110,6 +121,8 @@
 		0F1E814F5625362DED47811B /* Pods_Cleansing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Cleansing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3976FB3C946552ACFAD42DE7 /* Pods-Cleansing.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Cleansing.release.xcconfig"; path = "Target Support Files/Pods-Cleansing/Pods-Cleansing.release.xcconfig"; sourceTree = "<group>"; };
 		401CAD7A36D3FDDBB46B75DB /* Pods-surfers.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-surfers.release.xcconfig"; path = "Target Support Files/Pods-surfers/Pods-surfers.release.xcconfig"; sourceTree = "<group>"; };
+		5D04F0422B830BFD00FA90A9 /* TimeCardFilterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeCardFilterVC.swift; sourceTree = "<group>"; };
+		5D04F0442B83179D00FA90A9 /* TimeCardSelectionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeCardSelectionVC.swift; sourceTree = "<group>"; };
 		5D18A6592B01E28400897597 /* CreateCheckListTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCheckListTVC.swift; sourceTree = "<group>"; };
 		5D19A7FF2AFB8B30005949CC /* AdminCrewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminCrewVC.swift; sourceTree = "<group>"; };
 		5D19A8012AFB8FB5005949CC /* ShowAdminTaskVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowAdminTaskVC.swift; sourceTree = "<group>"; };
@@ -118,23 +131,40 @@
 		5D1AA7CE2B061DBA0058637D /* AdminInviteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminInviteVC.swift; sourceTree = "<group>"; };
 		5D1AA7D02B061E630058637D /* AdminInviteTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminInviteTVC.swift; sourceTree = "<group>"; };
 		5D1AA7D22B0629200058637D /* AddInviteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddInviteVC.swift; sourceTree = "<group>"; };
+		5D1E2F482B57BC300001782B /* LanguageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageVC.swift; sourceTree = "<group>"; };
+		5D3BDF472B68AA5A007CD6E2 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Main.strings; sourceTree = "<group>"; };
+		5D3BDF482B68AA5A007CD6E2 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		5D3BDF492B68AA66007CD6E2 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Main.strings; sourceTree = "<group>"; };
+		5D3BDF4A2B68AA66007CD6E2 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		5D3BDF4E2B68AC48007CD6E2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5D3BDF502B68AC4D007CD6E2 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5D3BDF512B68AC4F007CD6E2 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5D420D062AFB4C66008B60A5 /* CreateTaskAdminVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTaskAdminVC.swift; sourceTree = "<group>"; };
+		5D4C1AC72B676AC300C40F49 /* ShowTaskAdminCVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowTaskAdminCVC.swift; sourceTree = "<group>"; };
+		5D4EA1E02B4E65970068DE9A /* AdminDashTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminDashTVC.swift; sourceTree = "<group>"; };
 		5D5E1A532B0228D8008433B7 /* ShowAdminTaskDetailsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowAdminTaskDetailsVC.swift; sourceTree = "<group>"; };
 		5D63A3D92B19B71000B0930E /* AdminTimeCardVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminTimeCardVC.swift; sourceTree = "<group>"; };
 		5D65506A2AFDDB8E0086CCA1 /* SelectionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionVC.swift; sourceTree = "<group>"; };
+		5D65E81B2B7CB58B00063DAB /* TimeCardCheckListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeCardCheckListVC.swift; sourceTree = "<group>"; };
 		5D6985B52AF3B401002E2C3D /* LogsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsVC.swift; sourceTree = "<group>"; };
 		5D73B83B2AF89D4C005E94F5 /* LocationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationVC.swift; sourceTree = "<group>"; };
 		5D73B83D2AF8C16F005E94F5 /* ShowAdminProjTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowAdminProjTVC.swift; sourceTree = "<group>"; };
 		5D7DCB022B29CAE000B24567 /* ViewFullDataVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewFullDataVC.swift; sourceTree = "<group>"; };
 		5D7DCB042B29CB0200B24567 /* ViewFullDataTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewFullDataTVC.swift; sourceTree = "<group>"; };
+		5D862AC62B4BD78600CFEF95 /* WorkerClockInVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkerClockInVC.swift; sourceTree = "<group>"; };
+		5D8ADC8E2B591159000B5405 /* LanguageTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageTVC.swift; sourceTree = "<group>"; };
 		5DB5ED902B3590C800B736D0 /* WorkerRouteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkerRouteVC.swift; sourceTree = "<group>"; };
+		5DC0FB8F2B5534CF0065D773 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		5DC0FB912B553BB70065D773 /* Cleansing.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Cleansing.entitlements; sourceTree = "<group>"; };
+		5DC4C2A52B4D4A1F00F713BE /* WorkerClockInMapVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkerClockInMapVC.swift; sourceTree = "<group>"; };
+		5DCF62EA2B3ED9F2005B7546 /* ShowNotesAdminVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowNotesAdminVC.swift; sourceTree = "<group>"; };
+		5DCF62ED2B3EE1B5005B7546 /* AdminClockInVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminClockInVC.swift; sourceTree = "<group>"; };
 		5DDDD2B52B21BF0500A77C18 /* AdminDetailTimeCardVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminDetailTimeCardVC.swift; sourceTree = "<group>"; };
 		5DDDD2B72B21BF7300A77C18 /* AdminDetailTimeCardMainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminDetailTimeCardMainVC.swift; sourceTree = "<group>"; };
 		5DDEFFA42AF4EE9D00C34CD3 /* ShowAdminNotesTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowAdminNotesTVC.swift; sourceTree = "<group>"; };
 		5DDEFFA62AF5065D00C34CD3 /* AddAdminProjVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAdminProjVC.swift; sourceTree = "<group>"; };
 		5DE7485A2B1F1D3800C05BA4 /* AddAdminTimeCardVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAdminTimeCardVC.swift; sourceTree = "<group>"; };
 		5DF20C6E2AFA0B71000B50A5 /* DetailAdminProjVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailAdminProjVC.swift; sourceTree = "<group>"; };
-		5DF20C702AFA332C000B50A5 /* ProjectHoursVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectHoursVC.swift; sourceTree = "<group>"; };
 		5DF20C722AFA355F000B50A5 /* ProjectHourTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectHourTVC.swift; sourceTree = "<group>"; };
 		89038BCA2AD69B13003DAAD8 /* ShowNotesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowNotesVC.swift; sourceTree = "<group>"; };
 		890C95272AB31C93000E466C /* BottomDrawerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomDrawerVC.swift; sourceTree = "<group>"; };
@@ -196,7 +226,6 @@
 		89AAB47B2A934AA200A073AA /* ProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileVC.swift; sourceTree = "<group>"; };
 		89AAB47E2A935EAE00A073AA /* SearchTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTVC.swift; sourceTree = "<group>"; };
 		89ADCA652A936C3700B15E05 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
-		89ADCA672A936E0700B15E05 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		89B2F3532AE8F07200F15E97 /* AproverOrganizationTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AproverOrganizationTVC.swift; sourceTree = "<group>"; };
 		89B410352AA19D9400026E52 /* WorkerTBC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkerTBC.swift; sourceTree = "<group>"; };
 		89B4103B2AA1A14D00026E52 /* WorkerProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkerProfileVC.swift; sourceTree = "<group>"; };
@@ -271,6 +300,7 @@
 				5D65506A2AFDDB8E0086CCA1 /* SelectionVC.swift */,
 				5D18A6592B01E28400897597 /* CreateCheckListTVC.swift */,
 				5D5E1A532B0228D8008433B7 /* ShowAdminTaskDetailsVC.swift */,
+				5D4C1AC72B676AC300C40F49 /* ShowTaskAdminCVC.swift */,
 			);
 			path = CreateTask;
 			sourceTree = "<group>";
@@ -283,6 +313,15 @@
 			path = Logs;
 			sourceTree = "<group>";
 		};
+		5D862AC52B4BD76400CFEF95 /* ClockIn */ = {
+			isa = PBXGroup;
+			children = (
+				5D862AC62B4BD78600CFEF95 /* WorkerClockInVC.swift */,
+				5DC4C2A52B4D4A1F00F713BE /* WorkerClockInMapVC.swift */,
+			);
+			path = ClockIn;
+			sourceTree = "<group>";
+		};
 		5D9FE1A52B19B5610003F500 /* TimeCardAdmin */ = {
 			isa = PBXGroup;
 			children = (
@@ -290,15 +329,25 @@
 				5DE7485A2B1F1D3800C05BA4 /* AddAdminTimeCardVC.swift */,
 				5DDDD2B52B21BF0500A77C18 /* AdminDetailTimeCardVC.swift */,
 				5DDDD2B72B21BF7300A77C18 /* AdminDetailTimeCardMainVC.swift */,
+				5DCF62EA2B3ED9F2005B7546 /* ShowNotesAdminVC.swift */,
+				5D04F0422B830BFD00FA90A9 /* TimeCardFilterVC.swift */,
+				5D04F0442B83179D00FA90A9 /* TimeCardSelectionVC.swift */,
 			);
 			path = TimeCardAdmin;
+			sourceTree = "<group>";
+		};
+		5DCF62EC2B3EE19C005B7546 /* ClockIn */ = {
+			isa = PBXGroup;
+			children = (
+				5DCF62ED2B3EE1B5005B7546 /* AdminClockInVC.swift */,
+			);
+			path = ClockIn;
 			sourceTree = "<group>";
 		};
 		5DF20C6B2AFA0B37000B50A5 /* ProjAdmin */ = {
 			isa = PBXGroup;
 			children = (
 				5DF20C6E2AFA0B71000B50A5 /* DetailAdminProjVC.swift */,
-				5DF20C702AFA332C000B50A5 /* ProjectHoursVC.swift */,
 				5DF20C722AFA355F000B50A5 /* ProjectHourTVC.swift */,
 			);
 			path = ProjAdmin;
@@ -374,6 +423,7 @@
 				5D7DCB022B29CAE000B24567 /* ViewFullDataVC.swift */,
 				5D7DCB042B29CB0200B24567 /* ViewFullDataTVC.swift */,
 				5DB5ED902B3590C800B736D0 /* WorkerRouteVC.swift */,
+				5D65E81B2B7CB58B00063DAB /* TimeCardCheckListVC.swift */,
 			);
 			path = TimCard;
 			sourceTree = "<group>";
@@ -393,6 +443,7 @@
 			isa = PBXGroup;
 			children = (
 				899B2D472A94916200AE8711 /* DashboardTVC.swift */,
+				5D4EA1E02B4E65970068DE9A /* AdminDashTVC.swift */,
 			);
 			path = Dashboard;
 			sourceTree = "<group>";
@@ -422,6 +473,7 @@
 		89AAB4372A8F6BC000A073AA /* Cleansing */ = {
 			isa = PBXGroup;
 			children = (
+				5DC0FB912B553BB70065D773 /* Cleansing.entitlements */,
 				89ADCA642A936C2D00B15E05 /* Model */,
 				89AAB4382A8F6BC000A073AA /* AppDelegate.swift */,
 				89AAB43A2A8F6BC000A073AA /* SceneDelegate.swift */,
@@ -429,10 +481,11 @@
 				89AAB43E2A8F6BC000A073AA /* Main.storyboard */,
 				89AAB4412A8F6BC200A073AA /* Assets.xcassets */,
 				89AAB4432A8F6BC200A073AA /* LaunchScreen.storyboard */,
+				5DC0FB8F2B5534CF0065D773 /* GoogleService-Info.plist */,
 				89AAB4462A8F6BC200A073AA /* Info.plist */,
-				89ADCA672A936E0700B15E05 /* GoogleService-Info.plist */,
 				89AAB4592A8F771800A073AA /* Controllers */,
 				89AAB44C2A8F711C00A073AA /* Extensions */,
+				5D3BDF4F2B68AC48007CD6E2 /* Localizable.strings */,
 			);
 			path = Cleansing;
 			sourceTree = "<group>";
@@ -468,6 +521,8 @@
 				89AAB4612A8F77BF00A073AA /* UserTypeVC.swift */,
 				89AAB4662A8F803100A073AA /* ForgotPasswordVC.swift */,
 				890C95272AB31C93000E466C /* BottomDrawerVC.swift */,
+				5D1E2F482B57BC300001782B /* LanguageVC.swift */,
+				5D8ADC8E2B591159000B5405 /* LanguageTVC.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -512,6 +567,7 @@
 		89B410312AA19D4000026E52 /* Admin */ = {
 			isa = PBXGroup;
 			children = (
+				5DCF62EC2B3EE19C005B7546 /* ClockIn */,
 				5D9FE1A52B19B5610003F500 /* TimeCardAdmin */,
 				5D1AA7CD2B061D9A0058637D /* Invite */,
 				5D19A7FE2AFB8B1D005949CC /* Crew */,
@@ -530,6 +586,7 @@
 		89B410322AA19D4F00026E52 /* Worker */ = {
 			isa = PBXGroup;
 			children = (
+				5D862AC52B4BD76400CFEF95 /* ClockIn */,
 				89B410382AA1A10800026E52 /* TimeCard */,
 				89B410372AA1A0FA00026E52 /* Profile */,
 				89B410342AA19D6D00026E52 /* TabBar */,
@@ -626,6 +683,8 @@
 			knownRegions = (
 				en,
 				Base,
+				fr,
+				es,
 			);
 			mainGroup = 89AAB42C2A8F6BC000A073AA;
 			productRefGroup = 89AAB4362A8F6BC000A073AA /* Products */;
@@ -643,9 +702,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				89AAB4452A8F6BC200A073AA /* LaunchScreen.storyboard in Resources */,
-				89ADCA682A936E0700B15E05 /* GoogleService-Info.plist in Resources */,
+				5DC0FB902B5534CF0065D773 /* GoogleService-Info.plist in Resources */,
 				89AAB4422A8F6BC200A073AA /* Assets.xcassets in Resources */,
 				89AAB46F2A8F88E400A073AA /* Poppins-Regular.ttf in Resources */,
+				5D3BDF4D2B68AC48007CD6E2 /* Localizable.strings in Resources */,
 				89AAB46D2A8F88DE00A073AA /* Poppins-Medium.ttf in Resources */,
 				89AAB4712A8F88E900A073AA /* Poppins-SemiBold.ttf in Resources */,
 				89AAB46B2A8F88D800A073AA /* Poppins-Bold.ttf in Resources */,
@@ -720,7 +780,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				5DB5ED912B3590C800B736D0 /* WorkerRouteVC.swift in Sources */,
-				5DF20C712AFA332C000B50A5 /* ProjectHoursVC.swift in Sources */,
 				5DDEFFA72AF5065D00C34CD3 /* AddAdminProjVC.swift in Sources */,
 				89B2F3542AE8F07200F15E97 /* AproverOrganizationTVC.swift in Sources */,
 				89ADCA662A936C3700B15E05 /* Model.swift in Sources */,
@@ -735,6 +794,8 @@
 				89AAB4762A934A4500A073AA /* DashboardVC.swift in Sources */,
 				89AAB4542A8F71CA00A073AA /* GeneralExtensions.swift in Sources */,
 				5D1AA7CF2B061DBA0058637D /* AdminInviteVC.swift in Sources */,
+				5D862AC72B4BD78600CFEF95 /* WorkerClockInVC.swift in Sources */,
+				5D65E81C2B7CB58B00063DAB /* TimeCardCheckListVC.swift in Sources */,
 				891D3D3B2AB1B8F900AB5274 /* LoginInfo.swift in Sources */,
 				89B4103C2AA1A14D00026E52 /* WorkerProfileVC.swift in Sources */,
 				5D19A8002AFB8B30005949CC /* AdminCrewVC.swift in Sources */,
@@ -752,6 +813,7 @@
 				5D6985B62AF3B401002E2C3D /* LogsVC.swift in Sources */,
 				89AAB4602A8F779200A073AA /* SetLocationVC.swift in Sources */,
 				89AAB47F2A935EAE00A073AA /* SearchTVC.swift in Sources */,
+				5D8ADC8F2B591159000B5405 /* LanguageTVC.swift in Sources */,
 				89CAA7252AE8DFF000CA0D22 /* NewTimeCardVC.swift in Sources */,
 				89B4103E2AA1A16100026E52 /* WorkerDashVC.swift in Sources */,
 				5D7DCB032B29CAE100B24567 /* ViewFullDataVC.swift in Sources */,
@@ -767,15 +829,20 @@
 				5D420D072AFB4C66008B60A5 /* CreateTaskAdminVC.swift in Sources */,
 				5D5E1A542B0228D8008433B7 /* ShowAdminTaskDetailsVC.swift in Sources */,
 				5DE7485B2B1F1D3800C05BA4 /* AddAdminTimeCardVC.swift in Sources */,
+				5D04F0452B83179D00FA90A9 /* TimeCardSelectionVC.swift in Sources */,
 				891BB4F82AA597B300FC80CB /* ShowNotesTVC.swift in Sources */,
 				5D65506B2AFDDB8E0086CCA1 /* SelectionVC.swift in Sources */,
+				5D04F0432B830BFD00FA90A9 /* TimeCardFilterVC.swift in Sources */,
 				5DDDD2B82B21BF7300A77C18 /* AdminDetailTimeCardMainVC.swift in Sources */,
+				5DC4C2A62B4D4A1F00F713BE /* WorkerClockInMapVC.swift in Sources */,
 				5DDDD2B62B21BF0500A77C18 /* AdminDetailTimeCardVC.swift in Sources */,
 				898935802AEA75A90075556D /* TaskListTVC.swift in Sources */,
 				5D1AA7CC2B05F4950058637D /* AdminCrewTVC.swift in Sources */,
+				5D4EA1E12B4E65970068DE9A /* AdminDashTVC.swift in Sources */,
 				5DF20C6F2AFA0B71000B50A5 /* DetailAdminProjVC.swift in Sources */,
 				89038BCB2AD69B13003DAAD8 /* ShowNotesVC.swift in Sources */,
 				898CFE182AA1E21700663A4C /* WorkerProjectDetailsVC.swift in Sources */,
+				5D1E2F492B57BC300001782B /* LanguageVC.swift in Sources */,
 				8912BB102A94B088005C2289 /* ContactUsVC.swift in Sources */,
 				89CAA7272AE8E04D00CA0D22 /* NewBreakTVC.swift in Sources */,
 				89B410442AA1A41C00026E52 /* WorkerEditProfileVC.swift in Sources */,
@@ -789,11 +856,13 @@
 				896BE2872AEB745B007ED432 /* SelectProjectVC.swift in Sources */,
 				89AAB47C2A934AA200A073AA /* ProfileVC.swift in Sources */,
 				89AAB47A2A934A7C00A073AA /* AddWorkerVC.swift in Sources */,
+				5DCF62EE2B3EE1B5005B7546 /* AdminClockInVC.swift in Sources */,
 				5DDEFFA52AF4EE9D00C34CD3 /* ShowAdminNotesTVC.swift in Sources */,
 				89AAB4392A8F6BC000A073AA /* AppDelegate.swift in Sources */,
 				5D73B83C2AF89D4C005E94F5 /* LocationVC.swift in Sources */,
 				895D3AD22AC1989600315A7B /* BreakTVC.swift in Sources */,
 				5D7DCB052B29CB0200B24567 /* ViewFullDataTVC.swift in Sources */,
+				5D4C1AC82B676AC300C40F49 /* ShowTaskAdminCVC.swift in Sources */,
 				5D19A8022AFB8FB5005949CC /* ShowAdminTaskVC.swift in Sources */,
 				89C94F842AEBDF350022B015 /* ShowTaskListVC.swift in Sources */,
 				5D19A8042AFBA00A005949CC /* ShowTaskAdminTVC.swift in Sources */,
@@ -803,6 +872,7 @@
 				899B2D482A94916200AE8711 /* DashboardTVC.swift in Sources */,
 				891D3D3D2AB1D51900AB5274 /* APIService.swift in Sources */,
 				891D3D392AB1A1F000AB5274 /* ShowImageVC.swift in Sources */,
+				5DCF62EB2B3ED9F2005B7546 /* ShowNotesAdminVC.swift in Sources */,
 				89761B092A9F87B40006BEF1 /* MyWorkerTVC.swift in Sources */,
 				89AAB43B2A8F6BC000A073AA /* SceneDelegate.swift in Sources */,
 				8986343F2A94B7C4004FC971 /* EditProfileVC.swift in Sources */,
@@ -813,10 +883,22 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		5D3BDF4F2B68AC48007CD6E2 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5D3BDF4E2B68AC48007CD6E2 /* en */,
+				5D3BDF502B68AC4D007CD6E2 /* fr */,
+				5D3BDF512B68AC4F007CD6E2 /* es */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		89AAB43E2A8F6BC000A073AA /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				89AAB43F2A8F6BC000A073AA /* Base */,
+				5D3BDF472B68AA5A007CD6E2 /* fr */,
+				5D3BDF492B68AA66007CD6E2 /* es */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -825,6 +907,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				89AAB4442A8F6BC200A073AA /* Base */,
+				5D3BDF482B68AA5A007CD6E2 /* fr */,
+				5D3BDF4A2B68AA66007CD6E2 /* es */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -836,6 +920,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -896,6 +981,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -952,16 +1038,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Cleansing/Cleansing.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = LJ5AU73XU8;
+				DEVELOPMENT_TEAM = S8N62LF7GP;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Cleansing/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Cleansing;
+				INFOPLIST_KEY_CFBundleDisplayName = "Green Vision Cleansing";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Cleansing wants to access your camera to capture a photo to update profile picture add  and send image messages.";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Cleansing requires user’s location for getting current location and track of user and better user experience.";
-				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Cleansing requires user’s location for getting current location and track of user and better user experience.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Cleansing requires user’s location for getting current location of user and better user experience.";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "To enhance user experience and provide location-based services, Green Vision Cleansing utilizes location data to offer features such as obtaining the current location and tracking movements. This data is used solely to optimize user experience and deliver personalized services.";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "To enhance user experience and provide location-based services, Green Vision Cleansing utilizes location data to offer features such as obtaining the current location and tracking movements. This data is used solely to optimize user experience and deliver personalized services.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "To enhance user experience and provide location-based services, Green Vision Cleansing utilizes location data to offer features such as obtaining the current location and tracking movements. This data is used solely to optimize user experience and deliver personalized services.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Cleansing wants to access Photo Library to select images to update profile picture and send image messages.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -973,12 +1061,14 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.cleansing;
+				MARKETING_VERSION = 1.2.6;
+				PRODUCT_BUNDLE_IDENTIFIER = com.greenvison.cleansing;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -991,16 +1081,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Cleansing/Cleansing.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = LJ5AU73XU8;
+				DEVELOPMENT_TEAM = S8N62LF7GP;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Cleansing/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Cleansing;
+				INFOPLIST_KEY_CFBundleDisplayName = "Green Vision Cleansing";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Cleansing wants to access your camera to capture a photo to update profile picture add  and send image messages.";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Cleansing requires user’s location for getting current location and track of user and better user experience.";
-				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Cleansing requires user’s location for getting current location and track of user and better user experience.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Cleansing requires user’s location for getting current location of user and better user experience.";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "To enhance user experience and provide location-based services, Green Vision Cleansing utilizes location data to offer features such as obtaining the current location and tracking movements. This data is used solely to optimize user experience and deliver personalized services.";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "To enhance user experience and provide location-based services, Green Vision Cleansing utilizes location data to offer features such as obtaining the current location and tracking movements. This data is used solely to optimize user experience and deliver personalized services.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "To enhance user experience and provide location-based services, Green Vision Cleansing utilizes location data to offer features such as obtaining the current location and tracking movements. This data is used solely to optimize user experience and deliver personalized services.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Cleansing wants to access Photo Library to select images to update profile picture and send image messages.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -1012,12 +1104,14 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.cleansing;
+				MARKETING_VERSION = 1.2.6;
+				PRODUCT_BUNDLE_IDENTIFIER = com.greenvison.cleansing;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;

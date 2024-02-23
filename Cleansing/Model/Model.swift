@@ -20,8 +20,13 @@ struct search: Codable {
     var servicelong:String
     var type:String
     var id: Int
+    var timeCardType:Int
+    var createBy:Int
+    var taskName:String
+    var hours: String
+    var minutes:String
     
-    init( workingType: String, name: String,taskTitle:String, dateRange:String, startTime:String, id: Int, endTime:String, breakTime:String, servicelat: String, servicelong: String, type:String) {
+    init( workingType: String, name: String,taskTitle:String, dateRange:String, startTime:String, id: Int, endTime:String, breakTime:String, servicelat: String, servicelong: String, type:String,timeCardType:Int, createBy:Int, taskName: String, hours:String, minutes:String) {
         self.workingType = workingType
         self.name = name
         self.taskTitle = taskTitle
@@ -33,6 +38,11 @@ struct search: Codable {
         self.type = type
         self.id = id
         self.breakTime = breakTime
+        self.timeCardType = timeCardType
+        self.createBy = createBy
+        self.taskName = taskName
+        self.hours = hours
+        self.minutes = minutes
     }
     
 }
@@ -364,3 +374,66 @@ struct dayWiseData: Codable {
     }
     
 }
+
+
+struct projectDetailAdmin: Codable {
+    var name: String
+    var total_miles: String
+    var total_travel_time: String
+    var total_spendtime: String
+    var total_cost:String
+    
+    init( total_miles: String, name: String, total_travel_time: String, total_spendtime: String, total_cost:String) {
+        self.name = name
+        self.total_miles = total_miles
+        self.total_travel_time = total_travel_time
+        self.total_spendtime = total_spendtime
+        self.total_cost = total_cost
+    }
+    
+}
+
+
+struct crewListing: Codable {
+    var name: String
+    var email: String
+    var phone: String
+    var profile_image: String
+    var status:String
+    
+    init( email: String, name: String, phone: String, profile_image: String, status:String) {
+        self.name = name
+        self.email = email
+        self.phone = phone
+        self.profile_image = profile_image
+        self.status = status
+    }
+    
+}
+
+struct registerListing: Codable {
+    var role: Int
+    var name: String
+    var email: String
+    var mobile: String
+    var time_tracking:String
+    var time_approver: String
+    var overtime_status: String
+    var mealbreak_policy:String
+    var status:Int
+
+    init( role: Int, name: String, email: String, mobile: String, status:Int, time_tracking:String,time_approver: String, overtime_status: String, mealbreak_policy:String ) {
+        self.role = role
+        self.name = name
+        self.email = email
+        self.mobile = mobile
+        self.time_tracking = time_tracking
+        self.time_approver = time_approver
+        self.overtime_status = overtime_status
+        self.mealbreak_policy = mealbreak_policy
+        self.status = status
+    }
+    
+}
+
+

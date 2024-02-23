@@ -32,6 +32,7 @@ class ProjectDetailVC: UIViewController {
     
     @IBAction func showMapBtnTap(_ sender: UIButton) {
         if let VC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "GooglePathVC") as? GooglePathVC{
+            VC.hidesBottomBarWhenPushed = true
             self.navigationController?.pushViewController(VC, animated: true)
         }
     }

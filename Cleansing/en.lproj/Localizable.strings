@@ -1,0 +1,441 @@
+/* 
+  Localizable.strings
+  Cleansing
+
+ Created by Vivek Kumar on 30/01/24.
+  
+*/
+
+//MARK: Worker Module
+
+//MARK: Login
+"Login Now" = "Login Now";
+"Please enter your credentials to continue." = "Please enter your credentials to continue.";
+"Enter Email Address" = "Enter Email Address";
+"Enter Your Password" = "Enter Your Password";
+"Forgot Password ?" = "Forgot Password ?";
+"Login" = "Login";
+"Please enter valid E-mail address" = "Please enter valid E-mail address";
+"Password field cannot be empty" = "Password field cannot be empty";
+"Error Decoding" = "Error Decoding";
+"OK" = "OK";
+"Failure" = "Failure";
+"Oops.." = "Oops..";
+"Something went wrong" = "Something went wrong";
+
+//MARK: Forgot Password
+"Forgot Password" = "Forgot Password";
+"Request Now" = "Request Now";
+"Please enter registered Email Id and click the 'Request Now' button below to contact the Admin for password reset request." = "Please enter registered Email Id and click the 'Request Now' button below to contact the Admin for password reset request.";
+
+//MARK: ClockIn Worker
+"Finish Time" = "Finish Time";
+"Start Time" = "Start Time";
+"Start Break" = "Start Break";
+"End Break" = "End Break";
+"Break" = "Break";
+"Break is in progress, you cannot mark as dayEnd/finish task." = "Break is in progress, you cannot mark as dayEnd/finish task.";
+"Delete clock in" = "Delete clock in";
+"Deleting your clock in will remove your live timecard." = "Deleting your clock in will remove your live timecard.";
+"Cancel" = "Cancel";
+"Delete" = "Delete";
+"DASHBOARD" = "DASHBOARD";
+"Location access denied. Please enable location services from iPhone settings" = "Location access denied. Please enable location services from iPhone settings";
+"Enter Description" = "Enter Description";
+"START" = "START";
+"WORKING" = "WORKING";
+"ON BREAK" = "ON BREAK";
+"DAY END" = "DAY END";
+"FINISHED" = "FINISHED";
+"Click start time button to see data here.."= "Click start time button to see data here..";
+"Clock" = "Clock";
+"Tasks" = "Tasks";
+"Time Cards" = "Time Cards";
+"Start Time:" = "Start Time:";
+"Finish Time:" = "Finish Time:";
+"ClockIn" = "ClockIn";
+"ClockOut" = "ClockOut";
+"Breaks" = "Breaks";
+
+//MARK: My Profile Worker
+"My Profile" = "My Profile";
+"English" = "English";
+"Worker" = "Worker";
+"Edit My Profile" = "Edit My Profile";
+"Update Language" = "Update Language";
+"Contact Us" = "Contact Us";
+"LogOut" = "LogOut";
+"App Version: " = "App Version: ";
+"Do you want to Logout ?" = "Do you want to Logout ?";
+"LogOut" = "LogOut";
+"Contact Us" = "Contact Us";
+"Dismiss" = "Dismiss";
+"Select Language" = "Select Language";
+"French" = "French";
+"Spanish" = "Spanish";
+"English" = "English";
+
+//MARK: Update Language
+"SUBMIT" = "SUBMIT";
+"Update your language" = "Update your language";
+"Please select the language to proceed." = "Please select the language to proceed.";
+"Select your preferred language to use Green Vision Cleansing App easily." = "Select your preferred language to use Green Vision Cleansing App easily.";
+"CONTINUE" = "CONTINUE";
+"Choose your language" = "Choose your language";
+
+//MARK: Edit Profile Worker
+"Edit Profile" = "Edit Profile";
+"Please enter your name" = "Please enter your name";
+"Take Photo" = "Take Photo";
+"Choose Photo" = "Choose Photo";
+"You have denied choosing the photos from camera, please allow access from your phone's settings." = "You have denied choosing the photos from camera, please allow access from your phone's settings.";
+"Warning" = "Warning";
+"You don't have camera." = "You don't have camera.";
+"You don't have permission to access gallery." = "You don't have permission to access gallery.";
+"You have denied choosing the photos from library, please allow access from your phone's settings." = "You have denied choosing the photos from library, please allow access from your phone's settings.";
+"Update" = "Update";
+"Update Profile Pic" = "Update Profile Pic";
+"Enter your name" = "Enter your name";
+"Enter your email address" = "Enter your email address";
+"Enter your mobile number" = "Enter your mobile number";
+"Name" = "Name";
+"Email" = "Email";
+"Mobile Number" = "Mobile Number";
+
+//MARK: Dashboard Worker
+"Location Access Denied" = "Location Access Denied";
+"Hello, " = "Hello, ";
+"All Projects" = "All Projects";
+"Completed Projects" = "Completed Projects";
+"OnGoing Projects" = "OnGoing Projects";
+"Upcoming Projects" = "Upcoming Projects";
+"Location access denied. Please enable location services from iPhone settings" = "Location access denied. Please enable location services from iPhone settings";
+"Current Location" = "Current Location";
+"Dashboard" = "Dashboard";
+"Total Earning" = "Total Earning";
+"Total Hrs Spent" = "Total Hrs Spent";
+"Project Overview" = "Project Overview";
+
+//MARK: Select Project
+"Select Project & Task" = "Select Project & Task";
+"Select an Option" = "Select an Option";
+"Submit" = "Submit";
+"Hello" = "Hello";
+
+//MARK: Task List
+"Choose range" = "Choose range";
+"CLOCKED IN" = "CLOCKED IN";
+"CLOCKED OUT" = "CLOCKED OUT";
+"APPROVED" = "APPROVED";
+"You can not view or edit your working time card!" = "You can not view or edit your working time card!";
+"Unallocated" = "Unallocated";
+
+
+
+//MARK: Worker Time Card
+"Tasks" = "Tasks";
+"Ongoing" = "Ongoing";
+"Upcoming" = "Upcoming";
+"Completed" = "Completed";
+"Details" = "Details";
+"Route" = "Route";
+"All Tasks" = "All Tasks";
+"All" = "All";
+"OnGoing" = "OnGoing";
+"UpComing" = "UpComing";
+"Completed" = "Completed";
+"Start Work" = "Start Work";
+"Finish Work" = "Finish Work";
+
+//MARK: Google Path
+"Path Route" = "Path Route";
+"Current Service" = "Current Service";
+"Start" = "Start";
+"End" = "End";
+"Service Location" = "Service Location";
+"0 Min" = "0 Min";
+"Travel Distance Covered is: " = "Travel Distance Covered is: ";
+"Travel time is: " = "Travel time is: ";
+"Miles" = "Miles";
+"As your journey has been finished, you can see your journey data below" = "As your journey has been finished, you can see your journey data below";
+"Start Journey" = "Start Journey";
+"End Journey" = "End Journey";
+"Are you sure, you want to END JOURNEY?" = "Are you sure, you want to END JOURNEY?";
+
+//MARK: Worker Project Details
+"Break Start" = "Break Start";
+"Work Started" = "Work Started";
+"Break Started" = "Break Started";
+"Break End" = "Break End";
+"Work Finished" = "Work Finished";
+"Break is in progress, you cannot mark as dayEnd/finish task." = "Break is in progress, you cannot mark as dayEnd/finish task.";
+"No checklist found" = "No checklist found";
+"Project Details" = "Project Details";
+"See Breaks" = "See Breaks";
+"See Checklists" = "See Checklists";
+"Time Details" = "Time Details";
+"View Full Data" = "View Full Data";
+"Break Times & Check Lists" = "Break Times & Check Lists";
+"Site Details" = "Site Details";
+"Location" = "Location";
+"Notes" = "Notes";
+"My Notes" = "My Notes";
+
+//MARK: Show Notes
+"View Notes" = "View Notes";
+"Add Notes" = "Add Notes";
+"Approved time cards notes cannot be added" = "Approved time cards notes cannot be added";
+"ADD NOTES" = "ADD NOTES";
+"No data found for notes of this task at this moment!" = "No data found for notes of this task at this moment!";
+"View" = "View";
+
+//MARK: Add Notes
+"Add Notes" = "Add Notes";
+"Show Notes" = "Show Notes";
+"Save Notes" = "Save Notes";
+"Enter Description(Optional)" = "Enter Description(Optional)";
+"Do you want to delete the selected image ?" = "Do you want to delete the selected image ?";
+"Please enter notes title" = "Please enter notes title";
+"Notes Title" = "Notes Title";
+"Notes Description" = "Notes Description";
+"Enter your notes title" = "Enter your notes title";
+"Add Notes" = "Add Notes";
+"Add Images (Click Here)" = "Add Images (Click Here)";
+
+//MARK: New TimeCard
+"Green Vision Cleansing" = "Green Vision Cleansing";
+"Time Approver" = "Time Approver";
+"Break Start 1" = "Break Start 1";
+"Break End 1" = "Break End 1";
+"Break Start " = "Break Start ";
+"Break End " = "Break End ";
+"Select Approver" = "Select Approver";
+"Select Date and Time" = "Select Date and Time";
+"Done" = "Done";
+"Please select the project first before entering start/finish date time." = "Please select the project first before entering start/finish date time.";
+"Select" = "Select";
+"The finish time should be greater than start time" = "The finish time should be greater than start time";
+"Time cards can not be created with future dates or times." = "Time cards can not be created with future dates or times.";
+"ADD BREAK" = "ADD BREAK";
+"ADD" = "ADD";
+"BREAKS" = "BREAKS";
+"Finish" = "Finish";
+"Project" = "Project";
+
+//MARK: Show Task List
+"Approved time cards cannot be edited" = "Approved time cards cannot be edited";
+"Please contact admin to update your project/task." = "Please contact admin to update your project/task.";
+"Edit TimeCard" = "Edit TimeCard";
+"Approved/ClockedIn timecard cannot be deleted" = "Approved/ClockedIn timecard cannot be deleted";
+"Do you want to delete this timecard ?" = "Do you want to delete this timecard ?";
+"Time Card" ="Time Card";
+"Sites" = "Sites";
+"View Notes" = "View Notes";
+"Save Changes" = "Save Changes";
+"Organization" = "Organization";
+"Time" = "Time";
+"Notes" = "Notes";
+"Logs" = "Logs";
+"Features Coming  Soon..." = "Features Coming  Soon...";
+
+//MARK: CheckList
+"Add Customer" = "Add Customer";
+"Enter customer name" = "Enter customer name";
+"Add" = "Add";
+"Edit Customer" = "Edit Customer";
+"Enter customer name" = "Enter customer name";
+"Save" = "Save";
+"CheckList for " = "CheckList for ";
+"Select customer name" = "Select customer name";
+"Select manager name" = "Select manager name";
+"Submit" = "Submit";
+
+//MARK: Break
+"All breaks with duration, start time and stop time" = "All breaks with duration, start time and stop time";
+"Duration" = "Duration";
+
+//MARK: Day Wise
+"Day Wise Data" = "Day Wise Data";
+" Min" = " Min";
+"Break Duration:-" = "Break Duration:-";
+"Start Work" = "Start Work";
+"Finish Work" = "Finish Work";
+
+
+//MARK: ADMIN Languagae
+
+//MARK: Clock In
+"Projects" = "Projects";
+"Crew" = "Crew";
+
+//MARK: Show Admin Task
+"Filter Task" = "Filter Task";
+"Complete" = "Complete";
+"Incomplete" = "Incomplete";
+
+
+//MARK: Crew
+"Crew" = "Crew";
+"Active" = "Active";
+"InActive" = "InActive";
+"Invited" = "Invited";
+"Active/In-Active Crew" = "Active/In-Active Crew";
+"Invited Crew" = "Invited Crew";
+"Crew Listing" = "Crew Listing";
+
+
+//MARK: Dashboard
+"Here are your project/task overview" = "Here are your project/task overview";
+"Here are your employee overview" = "Here are your employee overview";
+
+//MARK: Profile
+"My Dashboard" = "My Dashboard";
+"My Invites" = "My Invites";
+"Manager" = "Manager";
+
+//MARK: Add Admin TimeCard
+"Add TimeCard" = "Add TimeCard";
+"Select a team member" = "Select a team member";
+"CANCEL" = "CANCEL";
+"SELECT" = "SELECT";
+
+//MARK: Admin Detail TimeCard
+"Team Member" = "Team Member";
+
+//MARK: Show Admin Task Detail
+"Complete Task" = "Complete Task";
+"Do you want to complete this task ?" = "Do you want to complete this task ?";
+"View Task" = "View Task";
+"Delete Task" =  "Delete Task";
+"Deleting the task will remove all your task data, do you want to delete ?" = "Deleting the task will remove all your task data, do you want to delete ?";
+"Delete Checklist" = "Delete Checklist";
+"Do you want to delete this task checklist ?" = "Do you want to delete this task checklist ?";
+"STATUS" = "STATUS";
+"START DATE" = "START DATE";
+"DUE DATE" = "DUE DATE";
+"PROJECT" = "PROJECT";
+"NAVIGATE" = "NAVIGATE";
+"ASSIGNS" = "ASSIGNS";
+"WATCHERS" = "WATCHERS";
+"CHECK LIST" = "CHECK LIST";
+"Edit Task" = "Edit Task";
+"ADD NEW NOTES" = "ADD NEW NOTES";
+"MARK AS COMPLETE" = "MARK AS COMPLETE";
+"COMPLETE" = "COMPLETE";
+"TASK COMPLETED" = "TASK COMPLETED";
+
+//MARK: Create Task Admin
+"View Task" = "View Task";
+"Create Task" = "Create Task";
+"Save Task" = "Save Task";
+"Please enter task title" = "Please enter task title";
+"Please enter task member" = "Please enter task member";
+"Please select date time for task" = "Please select date time for task";
+"Please select due date time for task" = "Please select due date time for task";
+"Please select timezone for task" = "Please select timezone for task";
+"Please select project for task" = "Please select project for task";
+"Please select taskwatcher/manager for task" = "Please select taskwatcher/manager for task";
+"Add CheckList" = "Add CheckList";
+"You can create check list for this task from hereand if you want to check/uncheck the check list item, you can do from task detail screen" = "You can create check list for this task from hereand if you want to check/uncheck the check list item, you can do from task detail screen";
+"Enter Checklist" = "Enter Checklist";
+"Add" = "Add";
+"Enter a task title" = "Enter a task title";
+"Team Members" = "Team Members";
+"Select Date & Time" = "Select Date & Time";
+"Select Due Date" = "Select Due Date";
+"Select Task Watcher" = "Select Task Watcher";
+"Project" = "Project";
+"Check Lists" = "Check Lists";
+"Add CheckList Item" = "Add CheckList Item";
+"CREATE TASK" = "CREATE TASK";
+
+//MARK: Selection
+"Paid" = "Paid";
+"Exempt" = "Exempt";
+"UnPaid" = "UnPaid";
+"Non Exempt" = "Non Exempt";
+"Select an exemption status" = "Select an exemption status";
+"Exempt Status" = "Exempt Status";
+"Choose Meal Type" = "Choose Meal Type";
+"Select a meal break policy" = "Select a meal break policy";
+"Select timezone" = "Select timezone";
+"Select project name" = "Select project name";
+"Select member name" = "Select member name";
+"Select manager name" = "Select manager name";
+
+//MARK: Detail Admin Project
+"Total" = "Total";
+"Project Details" = "Project Details";
+"Person & Total" = "Person & Total";
+"Geofence" = "Geofence";
+"This is the geofence area" = "This is the geofence area";
+"Total Miles" = "Total Miles";
+"Travel Time" = "Travel Time";
+"Spent Time" = "Spent Time";
+"Total Cost" = "Total Cost";
+"Employee Listing" = "Employee Listing";
+"Choose Option" = "Choose Option";
+
+//MARK: Add Admin Proj
+"Create Project" = "Create Project";
+"Edit Project" = "Edit Project";
+"Enter Street" = "Enter Street";
+"Delete Project" = "Delete Project";
+"Deleting project will delete all your tasks,time cards data, related to this project" = "Deleting project will delete all your tasks,time cards data, related to this project";
+"Please enter project name" = "Please enter project name";
+"Please choose workers" = "Please choose workers";
+"Please enter street" = "Please enter street";
+"Please choose location of project" = "Please choose location of project";
+"Please choose manager for project" = "Please choose manager for project";
+"Save Project" = "Save Project";
+"Enter a project name" = "Enter a project name";
+"Choose a project location" = "Choose a project location";
+"PROJECT DETAILS" = "PROJECT DETAILS";
+"PROJECT LOCATION" = "PROJECT LOCATION";
+"ASSIGN MANAGERS" = "ASSIGN MANAGERS";
+"Add Customer" = "Add Customer";
+"Enter Street No." = "Enter Street No.";
+
+
+
+
+//MARK: Admin Invite
+"Track time and location for hourly, salaried or 1099 staff" = "Track time and location for hourly, salaried or 1099 staff";
+"Monitor and approve time and cost codes submitted by your team" = "Monitor and approve time and cost codes submitted by your team";
+"Manage time, projects, job cost reports and export payroll" = "Manage time, projects, job cost reports and export payroll";
+"WORKER" = "WORKER";
+"MANAGER" = "MANAGER";
+"ADMINISTRATOR" = "ADMINISTRATOR";
+"Invite" = "Invite";
+"Select a role to invite" = "Select a role to invite";
+
+//MARK: Add Invite
+"Invite Worker" = "Invite Worker";
+"Invite Manager" = "Invite Manager";
+"Invite Administrator" = "Invite Administrator";
+"Name field cannot be empty" = "Name field cannot be empty";
+"Please enter a mobile number with 10 or more characters" = "Please enter a mobile number with 10 or more characters";
+"Personal Details" = "Personal Details";
+"Time Settings" = "Time Settings";
+"Time approver" = "Time approver";
+"Overtime exempt status" = "Overtime exempt status";
+"Meal break policy" = "Meal break policy";
+"SEND INVITE" = "SEND INVITE";
+"Profile" = "Profile";
+"Edit" = "Edit";
+"Select Time Approver" = "Select Time Approver";
+"Select Project" = "Select Project";
+"My Dashboard" = "My Dashboard";
+
+//MARK: EXTRA
+"Approved timecard cannot be deleted" = "Approved timecard cannot be deleted";
+"Work Completed" = "Work Completed";
+"TASK COMPLETED" = "TASK COMPLETED";
+"Filter" = "Filter";
+"Filters" = "Filters";
+"APPLY" = "APPLY";
+"Status" = "Status";
+"Select an status" = "Select an status";
+"Select worker" = "Select worker";
+"Select time approver" = "Select time approver";
+"RESET TO DEAFULT" = "RESET TO DEAFULT";

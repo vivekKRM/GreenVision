@@ -14,14 +14,14 @@ target 'Cleansing' do
   pod 'lottie-ios'
   pod 'LabelSwitch'
   pod 'GooglePlaces'
+  pod 'UIAlertDateTimePicker'
   pod 'Fastis'
   pod 'GoogleMaps'
-  
+  pod 'Firebase/Messaging'
   
 #  pod 'Firebase/Auth'
 #  pod 'Firebase/Core'
 #  pod 'Firebase/Analytics'
-#  pod 'Firebase/Messaging'
 #  pod 'Charts'
 
 end

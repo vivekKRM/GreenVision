@@ -11,11 +11,15 @@ class ForgotPasswordVC: UIViewController {
     
     @IBOutlet weak var emailTF: UITextField!
     @IBOutlet weak var submitBtn: UIButton!
+    @IBOutlet weak var infoLabel: UILabel!
     var email: String = ""
     override func viewDidLoad() {
         super.viewDidLoad()
-        firstCall()
         
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        firstCall()
     }
     
     @IBAction func submitBtnTap(_ sender: UIButton) {
@@ -31,14 +35,17 @@ extension ForgotPasswordVC: UITextFieldDelegate
     func firstCall()
     {
         submitBtn.roundedButton()
-        self.title = "Forgot Password"
+        self.title = "Forgot Password".localizeString(string: lang)
+        emailTF.placeholder = "Enter Email Address".localizeString(string: lang)
+        submitBtn.setTitle("Request Now".localizeString(string: lang), for: .normal)
+        infoLabel.text = "Please enter registered Email Id and click the 'Request Now' button below to contact the Admin for password reset request.".localizeString(string: lang)
         addBlackBorder(to: emailTF)
         emailTF.text = email
     }
     func checkAll() -> Bool{
         self.view.endEditing(true)
         if emailTF.text == "" || isValidEmailAddress(emailAddressString: emailTF.text ?? "") == false{
-            _ = SweetAlert().showAlert("", subTitle:  "Please enter valid E-mail address", style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle:  "Please enter valid E-mail address".localizeString(string: lang), style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return false
         }else{
             return true
@@ -52,7 +59,7 @@ extension ForgotPasswordVC {
     func workerForgetPassword(email: String)
     {
         if reachability.isConnectedToNetwork() == false{
-            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return
         }
         let progressHUD = ProgressHUD()
@@ -85,24 +92,24 @@ extension ForgotPasswordVC {
                                 UserDefaults.standard.removePersistentDomain(forName: appDomain)
                             }
                             NotificationCenter.default.removeObserver(self)
-                            _ = SweetAlert().showAlert("", subTitle:  loginResponse.message, style: AlertStyle.error,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                            _ = SweetAlert().showAlert("", subTitle:  loginResponse.message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                                 if isOtherButton == true {
                                     ksceneDelegate?.logout()
                                 }
                             }
                         }else if loginResponse.status == 202{
                             progressHUD.hide()
-                            _ = SweetAlert().showAlert("", subTitle:  loginResponse.message, style: AlertStyle.warning,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle:  loginResponse.message, style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
                         }else if loginResponse.status == 201{
                             progressHUD.hide()
-                            _ = SweetAlert().showAlert("", subTitle:  loginResponse.message, style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle:  loginResponse.message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                         }else{
-                            _ = SweetAlert().showAlert("", subTitle:  loginResponse.message, style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle:  loginResponse.message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                         }
                             
                         } else {
                             print("Error decoding JSON")
-                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             progressHUD.hide()
                         }
                     
@@ -118,11 +125,11 @@ extension ForgotPasswordVC {
                             }
                             if let message = JSON?["message"] as? String {
                                 print(message)
-                                _ = SweetAlert().showAlert("Failure", subTitle:  message, style: AlertStyle.error,buttonTitle:"OK")
+                                _ = SweetAlert().showAlert("Failure".localizeString(string: lang), subTitle:  message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             }
                         } catch {
                             // Your handling code
-                            _ = SweetAlert().showAlert("Oops..", subTitle:  "Something went wrong ", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("Oops..".localizeString(string: lang), subTitle:  "Something went wrong".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
 
                         }
                     }

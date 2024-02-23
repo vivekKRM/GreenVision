@@ -169,61 +169,61 @@ extension AddWorkerVC{
     func checkAll() -> Bool
     {
         if fNameTF.text == "" || fNameTF.text?.count ?? 0 < 3{
-            _ = SweetAlert().showAlert("", subTitle:  "Please enter your first name", style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle:  "Please enter your first name", style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return false
         }else  if lNameTF.text == "" || lNameTF.text?.count ?? 0 < 3{
-            _ = SweetAlert().showAlert("", subTitle:  "Please enter your last name", style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle:  "Please enter your last name", style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return false
         }else if emailTF.text == "" || isValidEmailAddress(emailAddressString: emailTF.text ?? "") == false{
-            _ = SweetAlert().showAlert("", subTitle:  "Please enter valid E-mail address", style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle:  "Please enter valid E-mail address", style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return false
         }else if mobileNumberTF.text == "" || mobileNumberTF.text?.count ?? 0 < 10{
-            _ = SweetAlert().showAlert("", subTitle:  "Please enter valid mobile number", style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle:  "Please enter valid mobile number", style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return false
         }else if serviceTF.text == "" || serviceTF.text?.count ?? 0 < 10{
-            _ = SweetAlert().showAlert("", subTitle:  "Please choose the services", style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle:  "Please choose the services", style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return false
         }else if subserviceTF.text == "" || subserviceTF.text?.count ?? 0 < 10{
-            _ = SweetAlert().showAlert("", subTitle:  "Please choose the sub-services", style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle:  "Please choose the sub-services", style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return false
         }else if dobTF.text == "" || dobTF.text?.count ?? 0 < 12{
-            _ = SweetAlert().showAlert("", subTitle:  "Please select the date of birth", style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle:  "Please select the date of birth", style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return false
         }else if passwordTF.text == "" || passwordTF.text?.count ?? 0 < 6 {
-            _ = SweetAlert().showAlert("", subTitle:  "Please enter valid password", style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle:  "Please enter valid password", style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return false
         }else if confirmPasswordTF.text == "" || confirmPasswordTF.text?.count ?? 0 < 6 {
-            _ = SweetAlert().showAlert("", subTitle:  "Please enter valid confirm password", style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle:  "Please enter valid confirm password", style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return false
         }else if passwordTF.text != confirmPasswordTF.text {
-            _ = SweetAlert().showAlert("", subTitle:  "Password and confirm password doesnot match", style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle:  "Password and confirm password doesnot match", style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return false
         }else if countryTF.text == "" || countryTF.text?.count ?? 0 < 5 {
-            _ = SweetAlert().showAlert("", subTitle:  "Please select country", style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle:  "Please select country", style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return false
         }else if stateTF.text == "" || stateTF.text?.count ?? 0 < 3 {
-            _ = SweetAlert().showAlert("", subTitle:  "Please select state", style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle:  "Please select state", style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return false
         }else if cityTF.text == "" || cityTF.text?.count ?? 0 < 3 {
-            _ = SweetAlert().showAlert("", subTitle:  "Please select city", style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle:  "Please select city", style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return false
         }else if zipTF.text == "" || zipTF.text?.count ?? 0 < 8 {
-            _ = SweetAlert().showAlert("", subTitle:  "Please enter zip code", style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle:  "Please enter zip code", style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return false
         }else if accountTF.text == "" || accountTF.text?.count ?? 0 < 15 {
-            _ = SweetAlert().showAlert("", subTitle:  "Please enter your account number", style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle:  "Please enter your account number", style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return false
         }else if bankNameTF.text == "" || bankNameTF.text?.count ?? 0 < 3 {
-            _ = SweetAlert().showAlert("", subTitle:  "Please select country", style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle:  "Please select country", style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return false
         }else if ifscTF.text == "" || ifscTF.text?.count ?? 0 < 7 {
-            _ = SweetAlert().showAlert("", subTitle:  "Please enter your bank account IFSC code", style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle:  "Please enter your bank account IFSC code", style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return false
         }else if ssnTF.text == "" || ssnTF.text?.count ?? 0 < 15 {
-            _ = SweetAlert().showAlert("", subTitle:  "Please enter your SSN number", style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle:  "Please enter your SSN number", style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return false
         }else if dlTF.text == "" || dlTF.text?.count ?? 0 < 10 {
-            _ = SweetAlert().showAlert("", subTitle:  "Please enter your vehicle driving licence", style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle:  "Please enter your vehicle driving licence", style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return false
         }else{
             return true
@@ -321,8 +321,8 @@ extension AddWorkerVC: CLLocationManagerDelegate {
             }
             
             if let placemark = placemarks?.first {
-                if let locality = placemark.locality, let country = placemark.country {
-                    self.currentlocation.text = "\(locality), \(country)"
+                if let country = placemark.country ,let locality = placemark.locality, let location = placemark.subLocality, let state = placemark.administrativeArea{
+//                    self.locationLabel.text = "\(location),\(locality),\(state),\(country)"
                 }
             }
         }
@@ -337,7 +337,7 @@ extension AddWorkerVC: CLLocationManagerDelegate {
                case .authorizedWhenInUse, .authorizedAlways:
                    break
                case .denied, .restricted:
-                openAppSettings()
+//                openAppSettings()//commenetd for App Upload
             self.currentlocation.text = "Location Access Denied"
                case .notDetermined:
                    break // Handle the case where the user hasn't made a decision yet
@@ -398,7 +398,7 @@ extension AddWorkerVC: UIImagePickerControllerDelegate , UINavigationControllerD
                     }
                 }
             case .denied: // The user has previously denied access.
-            _ = SweetAlert().showAlert("", subTitle:  "You have denied choosing the photos from camera, please allow access from your phone's settings.", style: AlertStyle.warning,buttonTitle:"OK"){ (isOtherButton) -> Void in
+            _ = SweetAlert().showAlert("", subTitle:  "You have denied choosing the photos from camera, please allow access from your phone's settings.", style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                 if isOtherButton == true {
                     if let appSettingsURL = NSURL(string: UIApplication.openSettingsURLString) {
                         UIApplication.shared.openURL(appSettingsURL as URL)
@@ -447,7 +447,7 @@ extension AddWorkerVC: UIImagePickerControllerDelegate , UINavigationControllerD
                 self.present(alert, animated: true, completion: nil)
             }
             if status == .denied{
-                _ = SweetAlert().showAlert("", subTitle:  "You have denied choosing the photos from library, please allow access from your phone's settings.", style: AlertStyle.warning,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                _ = SweetAlert().showAlert("", subTitle:  "You have denied choosing the photos from library, please allow access from your phone's settings.", style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                     if isOtherButton == true {
                         if let appSettingsURL = NSURL(string: UIApplication.openSettingsURLString) {
                             UIApplication.shared.openURL(appSettingsURL as URL)

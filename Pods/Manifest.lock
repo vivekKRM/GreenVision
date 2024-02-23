@@ -5,28 +5,83 @@ PODS:
   - Fastis (2.3.0):
     - JTAppleCalendar (~> 8.0.0)
     - PrettyCards (~> 1.0.0)
+  - Firebase/CoreOnly (10.19.0):
+    - FirebaseCore (= 10.19.0)
+  - Firebase/Messaging (10.19.0):
+    - Firebase/CoreOnly
+    - FirebaseMessaging (~> 10.19.0)
+  - FirebaseCore (10.19.0):
+    - FirebaseCoreInternal (~> 10.0)
+    - GoogleUtilities/Environment (~> 7.12)
+    - GoogleUtilities/Logger (~> 7.12)
+  - FirebaseCoreInternal (10.19.0):
+    - "GoogleUtilities/NSData+zlib (~> 7.8)"
+  - FirebaseInstallations (10.19.0):
+    - FirebaseCore (~> 10.0)
+    - GoogleUtilities/Environment (~> 7.8)
+    - GoogleUtilities/UserDefaults (~> 7.8)
+    - PromisesObjC (~> 2.1)
+  - FirebaseMessaging (10.19.0):
+    - FirebaseCore (~> 10.0)
+    - FirebaseInstallations (~> 10.0)
+    - GoogleDataTransport (~> 9.3)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
+    - GoogleUtilities/Environment (~> 7.8)
+    - GoogleUtilities/Reachability (~> 7.8)
+    - GoogleUtilities/UserDefaults (~> 7.8)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+  - GoogleDataTransport (9.3.0):
+    - GoogleUtilities/Environment (~> 7.7)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+    - PromisesObjC (< 3.0, >= 1.2)
   - GoogleMaps (8.1.0):
     - GoogleMaps/Maps (= 8.1.0)
   - GoogleMaps/Base (8.1.0)
   - GoogleMaps/Maps (8.1.0):
     - GoogleMaps/Base
-  - GooglePlaces (8.1.0)
+  - GooglePlaces (8.3.0)
+  - GoogleUtilities/AppDelegateSwizzler (7.12.0):
+    - GoogleUtilities/Environment
+    - GoogleUtilities/Logger
+    - GoogleUtilities/Network
+  - GoogleUtilities/Environment (7.12.0):
+    - PromisesObjC (< 3.0, >= 1.2)
+  - GoogleUtilities/Logger (7.12.0):
+    - GoogleUtilities/Environment
+  - GoogleUtilities/Network (7.12.0):
+    - GoogleUtilities/Logger
+    - "GoogleUtilities/NSData+zlib"
+    - GoogleUtilities/Reachability
+  - "GoogleUtilities/NSData+zlib (7.12.0)"
+  - GoogleUtilities/Reachability (7.12.0):
+    - GoogleUtilities/Logger
+  - GoogleUtilities/UserDefaults (7.12.0):
+    - GoogleUtilities/Logger
   - IQKeyboardManagerSwift (6.5.12)
   - JTAppleCalendar (8.0.5)
   - LabelSwitch (0.1.7)
   - lottie-ios (4.2.0)
+  - nanopb (2.30909.1):
+    - nanopb/decode (= 2.30909.1)
+    - nanopb/encode (= 2.30909.1)
+  - nanopb/decode (2.30909.1)
+  - nanopb/encode (2.30909.1)
   - PrettyCards (1.0.5)
+  - PromisesObjC (2.3.1)
+  - UIAlertDateTimePicker (1.0.5)
 
 DEPENDENCIES:
   - Alamofire
   - BSImagePicker
   - Cosmos
   - Fastis
+  - Firebase/Messaging
   - GoogleMaps
   - GooglePlaces
   - IQKeyboardManagerSwift
   - LabelSwitch
   - lottie-ios
+  - UIAlertDateTimePicker
 
 SPEC REPOS:
   trunk:
@@ -34,27 +89,47 @@ SPEC REPOS:
     - BSImagePicker
     - Cosmos
     - Fastis
+    - Firebase
+    - FirebaseCore
+    - FirebaseCoreInternal
+    - FirebaseInstallations
+    - FirebaseMessaging
+    - GoogleDataTransport
     - GoogleMaps
     - GooglePlaces
+    - GoogleUtilities
     - IQKeyboardManagerSwift
     - JTAppleCalendar
     - LabelSwitch
     - lottie-ios
+    - nanopb
     - PrettyCards
+    - PromisesObjC
+    - UIAlertDateTimePicker
 
 SPEC CHECKSUMS:
   Alamofire: 0e92e751b3e9e66d7982db43919d01f313b8eb91
   BSImagePicker: 0fe04b574d4d6b81093785d2af6c26227efc8428
   Cosmos: b5c6a9a637e28a061b54c8f8b1d8529d7d4db73f
   Fastis: 842bc586c7c6639cc3ce16903e67bd7cae689157
+  Firebase: 63ce8ece0d43743dc28eacac0c6867a2d7fd5a9d
+  FirebaseCore: dc5c7badf99d47613c52b2e3a57a64cd187f8554
+  FirebaseCoreInternal: b444828ea7cfd594fca83046b95db98a2be4f290
+  FirebaseInstallations: 033d199474164db20c8350736842a94fe717b960
+  FirebaseMessaging: d322bd030a0e97398bf134746e087b88e6ba0074
+  GoogleDataTransport: 57c22343ab29bc686febbf7cbb13bad167c2d8fe
   GoogleMaps: 97300a4b89a3641563782c52228c4530f5fe0d89
-  GooglePlaces: 6a219644272d9c0f40d0b9ef2f111bfb2043bafc
+  GooglePlaces: b922e192c50994436900ef14d19f84971950250b
+  GoogleUtilities: 0759d1a57ebb953965c2dfe0ba4c82e95ccc2e34
   IQKeyboardManagerSwift: 371b08cb39664fb56030f5345c815a4ffc74bbc0
   JTAppleCalendar: 16c6501b22cb27520372c28b0a2e0b12c8d0cd73
   LabelSwitch: 97b19eb5e11b27854559374357375134d40c744f
   lottie-ios: 809ecf2d460ed650a6aed7aa88b2ec45fab4779c
+  nanopb: d4d75c12cd1316f4a64e3c6963f879ecd4b5e0d5
   PrettyCards: 2b078f2396a42f7f0c4d6624b875149dcb49d3ed
+  PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
+  UIAlertDateTimePicker: c730e54bea3895213f3d0c8464c0aeb4efd1ee05
 
-PODFILE CHECKSUM: 9390c46050eb1f1bd0b75d67a908f616f3433104
+PODFILE CHECKSUM: 0709b98d2c1f81921e20339b1daca364c11147d3
 
 COCOAPODS: 1.14.3

@@ -17,6 +17,8 @@ class ShowTaskAdminTVC: UITableViewCell {
     @IBOutlet weak var editBtn: UIButton!
     @IBOutlet weak var checkListCount: UILabel!
     @IBOutlet weak var notesCount: UILabel!
+    @IBOutlet weak var shortNameCV: UICollectionView!
+    
     
     
     override func awakeFromNib() {

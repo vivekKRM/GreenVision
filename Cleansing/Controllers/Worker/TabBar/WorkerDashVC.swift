@@ -11,7 +11,7 @@ import Alamofire
 class WorkerDashVC: UIViewController {
 
     
-    
+    @IBOutlet weak var locationView: UIView!
     @IBOutlet weak var workerDashTV: UITableView!
     @IBOutlet weak var firstView: UIView!
     @IBOutlet weak var userImage: UIImageView!
@@ -20,6 +20,11 @@ class WorkerDashVC: UIViewController {
     @IBOutlet weak var emailLabel: UILabel!
     @IBOutlet weak var earningLabel: UILabel!
     @IBOutlet weak var totalHrs: UILabel!
+    
+    @IBOutlet weak var overview: UILabel!
+    @IBOutlet weak var dashboardLabel: UILabel!
+    @IBOutlet weak var totalLabel: UILabel!
+    @IBOutlet weak var totalHrLabel: UILabel!
     
     var count = 0
     var status:Int = 0
@@ -32,10 +37,19 @@ class WorkerDashVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         callFirst()
-        if locationLabel.text == "Location Access Denied"{
-            locationAlert()
-        }
+       
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.isNavigationBarHidden  = false
+    }
+    
+    
+    @IBAction func backBtnTap(_ sender: UIButton) {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
     
 }
 
@@ -43,25 +57,31 @@ extension WorkerDashVC {
     
     func callFirst()
     {
+        lang = UserDefaults.standard.string(forKey: "Lang") ?? "en"
         self.navigationController?.isNavigationBarHidden  = true
+        locationLabel.text = "Current Location".localizeString(string: lang)
+        dashboardLabel.text = "Dashboard".localizeString(string: lang)
+        totalLabel.text = "Total Earning".localizeString(string: lang)
+        totalHrLabel.text = "Total Hrs Spent".localizeString(string: lang)
+        overview.text = "Project Overview".localizeString(string: lang)
+        
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
         locationManager.delegate = self
         checkLocationServices()
-        UserDefaults.standard.setValue(true, forKey: "signed")
-        
         firstView.dropShadowWithBlackColor()
-//        firstView.backgroundColor = UIColor(hexString: "b4eeb4")
-//        firstView.applyGradient(colours: [UIColor(red: 130/255, green: 223/255, blue: 72/255, alpha: 1.0),UIColor(red: 68/255, green: 198/255, blue: 92/255, alpha: 1.0)])
-        
-        
-        userImage.layer.cornerRadius = 10
+        userImage.layer.cornerRadius = 30
         userImage.layer.masksToBounds = true
         let gesture2:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(userViewTapped(_:)))
         gesture2.numberOfTapsRequired = 1
         firstView?.isUserInteractionEnabled = true
         firstView?.addGestureRecognizer(gesture2)
+        if locationLabel.text == "Location Access Denied".localizeString(string: lang){
+//            locationAlert()//commented for app upload
+        }
     }
+    
+    
     
     @objc func userViewTapped(_ sender: UITapGestureRecognizer)
     {
@@ -123,7 +143,7 @@ extension WorkerDashVC: CLLocationManagerDelegate {
                 print("Latitude: \(latitude), Longitude: \(longitude)")
 //            if count < 1{
 //                count+=1
-                workerDashboard(latitude: latitude, longitude: longitude, fcmToken: 1)
+                workerDashboard(latitude: latitude, longitude: longitude)
             
 //                saveLatLng(latitude: latitude, longitude: longitude)
                 
@@ -140,8 +160,8 @@ extension WorkerDashVC: CLLocationManagerDelegate {
             }
             
             if let placemark = placemarks?.first {
-                if let locality = placemark.locality, let country = placemark.country {
-                    self.locationLabel.text = "\(locality), \(country)"
+                if let country = placemark.country ,let locality = placemark.locality, let location = placemark.subLocality, let state = placemark.administrativeArea{
+                    self.locationLabel.text = "\(location),\(locality),\(state),\(country)"
                 }
             }
         }
@@ -156,8 +176,9 @@ extension WorkerDashVC: CLLocationManagerDelegate {
                case .authorizedWhenInUse, .authorizedAlways:
                    break
                case .denied, .restricted:
-                locationAlert()
-                   locationLabel.text = "Location Access Denied"
+            //            locationAlert()//commented for app upload
+                        break;//added for app upload
+            locationLabel.text = "Location Access Denied".localizeString(string: lang)
                case .notDetermined:
                    break // Handle the case where the user hasn't made a decision yet
                @unknown default:
@@ -169,7 +190,7 @@ extension WorkerDashVC: CLLocationManagerDelegate {
             if CLLocationManager.locationServicesEnabled() {
                 locationManager.startUpdatingLocation()
             } else {
-                locationLabel.text = "Location Services Disabled"
+                locationLabel.text = "Location Services Disabled".localizeString(string: lang)
             }
         }
 }
@@ -177,16 +198,16 @@ extension WorkerDashVC: CLLocationManagerDelegate {
 extension WorkerDashVC {
     
     //MARK: Dashboard API
-    func workerDashboard(latitude: Double, longitude: Double, fcmToken: Int)
+    func workerDashboard(latitude: Double, longitude: Double)
     {
         if reachability.isConnectedToNetwork() == false{
-            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return
         }
         let progressHUD = ProgressHUD()
         self.view.addSubview(progressHUD)
         progressHUD.show()
-      
+        let fcmToken:String = UserDefaults.standard.string(forKey: "fcm") ?? ""
         var param: Parameters = ["":""]
         let url = "\(ApiLink.HOST_URL)/dashboard"
         let accessToken = UserDefaults.standard.string(forKey: "token") ?? ""
@@ -205,48 +226,49 @@ extension WorkerDashVC {
                         if self.status == 200
                         {
                             if let jsonData = try? JSONSerialization.data(withJSONObject: value),
-                               let loginResponse = try? JSONDecoder().decode(DashboardInfo.self, from: jsonData) {
+                               let loginResponse = try? JSONDecoder().decode(WorkDashInfo.self, from: jsonData) {
                                 self.dashboardData.removeAll()
-                                self.nameLabel.text = loginResponse.data.name
+                                self.nameLabel.text = "Hello, ".localizeString(string: lang) + loginResponse.data.name
                                 self.emailLabel.text = loginResponse.data.email
-                                self.earningLabel.text = "$ " + "\(loginResponse.data.total_earning)"
+                                self.earningLabel.text = "$ " + "\(loginResponse.data.total_earning ?? 0.0)"
                                 self.totalHrs.text = loginResponse.data.spend_time
                                 self.getImageFromURL(imageView: self.userImage, stringURL:  (loginResponse.data.profile_image ?? ""))
-                                self.dashboardData.append(dashboard.init(image: ["target-form", "completed","remaming-form","upcoming"], name: ["All Projects","Completed Projects","OnGoing Projects","Upcoming Projects"], count: [loginResponse.data.all_projects , loginResponse.data.completed_projects , loginResponse.data.ongoing_projects , loginResponse.data.upcoming_projects]))
+                                self.dashboardData.append(dashboard.init(image: ["target-form", "completed","remaming-form","upcoming"], name: ["All Projects".localizeString(string: lang),"Completed Projects".localizeString(string: lang),"OnGoing Projects".localizeString(string: lang),"Upcoming Projects".localizeString(string: lang)], count: [loginResponse.data.all_projects , loginResponse.data.completed_projects , loginResponse.data.ongoing_projects , loginResponse.data.upcoming_projects]))
                                 
                                 
                                 progressHUD.hide()
-                                
+                
                                 self.workerDashTV.delegate = self
                                 self.workerDashTV.dataSource = self
                                 self.workerDashTV.reloadData()
+                                self.updateToken()
                                 
                                 
                             } else {
                                 print("Error decoding JSON")
-                                _ = SweetAlert().showAlert("", subTitle: "Error Decoding", style: AlertStyle.error,buttonTitle:"OK")
+                                _ = SweetAlert().showAlert("", subTitle: "Error Decoding".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                                 progressHUD.hide()
                             }
-                        }else if self.status == 403{
+                        }else if self.status == 502{
                             progressHUD.hide()
                             if let appDomain = Bundle.main.bundleIdentifier {
                                 UserDefaults.standard.removePersistentDomain(forName: appDomain)
                             }
                             NotificationCenter.default.removeObserver(self)
-                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                                 if isOtherButton == true {
                                     ksceneDelegate?.logout()
                                 }
                             }
                         }else if self.status == 202{
                             progressHUD.hide()
-                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                         }else if self.status == 201{
                             progressHUD.hide()
-                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
                         }else{
                             progressHUD.hide()
-                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                         }
                     
                     
@@ -261,11 +283,102 @@ extension WorkerDashVC {
                             }
                             if let message = JSON?["message"] as? String {
                                 print(message)
-                                _ = SweetAlert().showAlert("Failure", subTitle:  message, style: AlertStyle.error,buttonTitle:"OK")
+                                _ = SweetAlert().showAlert("Failure".localizeString(string: lang), subTitle:  message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             }
                         } catch {
                             // Your handling code
-                            _ = SweetAlert().showAlert("Oops..", subTitle:  "Something went wrong ", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("Oops..".localizeString(string: lang), subTitle:  "Something went wrong".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
+
+                        }
+                    }
+                }
+            }
+    }
+    
+    //MARK: Update Token
+    func updateToken()
+    {
+        if reachability.isConnectedToNetwork() == false{
+            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
+            return
+        }
+        let progressHUD = ProgressHUD()
+        self.view.addSubview(progressHUD)
+        progressHUD.show()
+        var appVersions:String = ""
+        if let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
+            print("Current App Version: \(appVersion)")
+            appVersions =  appVersion
+        } else {
+            print("Unable to retrieve app version.")
+        }
+        let fcmToken:String = UserDefaults.standard.string(forKey: "fcm") ?? ""
+        var param: Parameters = ["":""]
+        let url = "\(ApiLink.HOST_URL)/update_fcm"
+        let accessToken = UserDefaults.standard.string(forKey: "token") ?? ""
+        param = ["device_type": "ios", "app_version": appVersions, "fcm_token": fcmToken]
+        print(param)
+        print("Access Token: \(accessToken)")
+        AF.request(url, method: .post, parameters: param, encoding: URLEncoding.default, headers: ["Authorization": "Bearer "+accessToken+""])
+            .validate(statusCode: 200..<300)
+            .validate(contentType: ["application/json"])
+            .responseJSON { response in
+                switch response.result {
+                    
+                case .success(let value):
+                    let dict = value as! [String:Any]
+                    self.status = dict["status"] as! Int
+                        if self.status == 200
+                        {
+                            if let jsonData = try? JSONSerialization.data(withJSONObject: value),
+                               let loginResponse = try? JSONDecoder().decode(DefaultInfo.self, from: jsonData) {
+                               
+                                progressHUD.hide()
+                                
+                            } else {
+                                print("Error decoding JSON")
+                                _ = SweetAlert().showAlert("", subTitle: "Error Decoding".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
+                                progressHUD.hide()
+                            }
+                        }else if self.status == 502{
+                            progressHUD.hide()
+                            if let appDomain = Bundle.main.bundleIdentifier {
+                                UserDefaults.standard.removePersistentDomain(forName: appDomain)
+                            }
+                            NotificationCenter.default.removeObserver(self)
+                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
+                                if isOtherButton == true {
+                                    ksceneDelegate?.logout()
+                                }
+                            }
+                        }else if self.status == 202{
+                            progressHUD.hide()
+                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
+                        }else if self.status == 201{
+                            progressHUD.hide()
+                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
+                        }else{
+                            progressHUD.hide()
+                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
+                        }
+                    
+                    
+                case .failure(_):
+                    progressHUD.hide()
+                    if let response = response.data{
+                        var JSON: [String: Any]?
+                        do {
+                            JSON = try (JSONSerialization.jsonObject(with: response, options: []) as? [String: Any])!
+                            if let code = JSON?["code"] as? Int {
+                                print(code)
+                            }
+                            if let message = JSON?["message"] as? String {
+                                print(message)
+                                _ = SweetAlert().showAlert("Failure".localizeString(string: lang), subTitle:  message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
+                            }
+                        } catch {
+                            // Your handling code
+                            _ = SweetAlert().showAlert("Oops..".localizeString(string: lang), subTitle:  "Something went wrong".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
 
                         }
                     }
@@ -279,7 +392,7 @@ extension WorkerDashVC{
         let customFont = UIFont(name: "Poppins-Medium", size: 17)
 
         let attributedString = NSAttributedString(
-            string: "Location access denied. Please enable location services from iPhone settings",
+            string: "Location access denied. Please enable location services from iPhone settings".localizeString(string: lang),
             attributes: [NSAttributedString.Key.font: customFont as Any]
         )
         let alertController = UIAlertController(
@@ -288,7 +401,7 @@ extension WorkerDashVC{
             preferredStyle: .alert
         )
         alertController.setValue(attributedString, forKey: "attributedMessage")
-        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action: UIAlertAction!) in
+        alertController.addAction(UIAlertAction(title: "OK".localizeString(string: lang), style: .default, handler: { (action: UIAlertAction!) in
             self.openAppSettings()
             
           }))

@@ -25,7 +25,7 @@ class AddProjectVC: UIViewController {
     var choose: String = "S"
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Add Project"
+        self.title = "Create Project"
         self.navigationController?.isNavigationBarHidden = false
         firstCall()
     }
@@ -35,6 +35,7 @@ class AddProjectVC: UIViewController {
 //        if checkAll() {
             //call API
             if let VC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "StepTwoVC") as? StepTwoVC{
+                VC.hidesBottomBarWhenPushed = true
                      self.navigationController?.pushViewController(VC, animated: true)
                  }
 //        }
@@ -83,19 +84,19 @@ extension AddProjectVC {
     
     func checkAll() -> Bool {
         if projectNameTF.text == "" || projectNameTF.text?.count ?? 0 < 7 {
-            _ = SweetAlert().showAlert("", subTitle:  "Please enter project name", style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle:  "Please enter project name", style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return false
         }else if startDateRangeTF.text == "" || startDateRangeTF.text?.count ?? 0 < 7 {
-            _ = SweetAlert().showAlert("", subTitle:  "Please select start date and time", style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle:  "Please select start date and time", style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return false
         }else if endDateRangeTF.text == "" || endDateRangeTF.text?.count ?? 0 < 7 {
-            _ = SweetAlert().showAlert("", subTitle:  "Please select end date and time", style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle:  "Please select end date and time", style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return false
         }else if hourRateTF.text == "" || hourRateTF.text?.count ?? 0 < 10 {
-            _ = SweetAlert().showAlert("", subTitle:  "Please select costing type", style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle:  "Please select costing type", style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return false
         }else if enterPrice.text == "" || enterPrice.text?.count ?? 0 < 2 {
-            _ = SweetAlert().showAlert("", subTitle:  "Please enter the project costing price in dollar", style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle:  "Please enter the project costing price in dollar", style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return false
         }else{
             return true

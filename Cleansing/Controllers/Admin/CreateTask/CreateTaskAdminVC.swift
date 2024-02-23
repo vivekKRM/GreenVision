@@ -9,20 +9,29 @@ import UIKit
 import Alamofire
 import CoreLocation
 class CreateTaskAdminVC: UIViewController {
-
+    
     
     @IBOutlet weak var createTaskTV: UITableView!
     @IBOutlet weak var taskTitle: UITextField!
-    @IBOutlet weak var teamMember: UITextField!
+    @IBOutlet weak var teamMember: UITextView!
     @IBOutlet weak var selectDateTime: UITextField!
     @IBOutlet weak var selectDueDate: UITextField!
     @IBOutlet weak var selectTimeZone: UITextField!
-    @IBOutlet weak var selectLabels: UITextField!
     @IBOutlet weak var selectProject: UITextView!
     @IBOutlet weak var selectWatcher: UITextField!
     @IBOutlet weak var createTask: UIButton!
     @IBOutlet weak var addView: UIView!
     @IBOutlet weak var checkListView: UIView!
+    @IBOutlet weak var topTitleLabel: UILabel!
+    @IBOutlet weak var textViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var checkLabel: UILabel!
+    @IBOutlet weak var checkBtn: UIButton!
+    
+    @IBOutlet weak var newFirst: UILabel!
+    
+    @IBOutlet weak var topView: UIView!
+    @IBOutlet weak var submitBtn: UIButton!
+    @IBOutlet weak var cancelBtn: UIButton!
     
     
     var status:Int = 0
@@ -39,14 +48,22 @@ class CreateTaskAdminVC: UIViewController {
     var location: String = ""
     var dueDate: String = ""
     var taskId: Int = 0
+    var datePicker = UIDatePicker()
+    var tye:String = ""
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationController?.isNavigationBarHidden = true
         firstCall()
-      
+        
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.isNavigationBarHidden = false
     }
     
     @IBAction func taskBtnTap(_ sender: UIButton) {
@@ -61,19 +78,77 @@ class CreateTaskAdminVC: UIViewController {
     }
     
     
+    @IBAction func backBtnTap(_ sender: UIButton) {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    
     @IBAction func addCheckList(_ sender: UIButton) {
         showTextFieldAlert()
     }
-
+    
+    @IBAction func submitBtnTap(_ sender: UIButton) {
+        let selectedDate = datePicker.date
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "d MMM yyyy hh:mm a"
+        let formattedDate = dateFormatter.string(from: selectedDate)
+        if tye == "selectDateTime"{
+            selectDateTime.text = formattedDate
+        }else{
+            selectDueDate.text = formattedDate
+        }
+        
+        let dateFormatter1 = DateFormatter()
+        dateFormatter1.dateFormat = "yyyy-MM-dd hh:mm a"
+        let formattedDate1 = dateFormatter1.string(from: selectedDate)
+        if tye == "selectDateTime"{
+            self.startDate = formattedDate1
+            selectDateTime.resignFirstResponder() // Close the date picker
+        }else{
+            self.dueDate = formattedDate1
+            selectDueDate.resignFirstResponder() // Close the date picker
+        }
+        self.topView.isHidden = true
+        self.datePicker.removeFromSuperview()
+    }
+    
+    @IBAction func cancelBtnTap(_ sender: UIButton) {
+        datePicker.removeFromSuperview()
+        self.topView.isHidden = true
+    }
+    
 }
 //MARK: First Call
 extension CreateTaskAdminVC{
     
     func firstCall()
     {
-        self.title = "Task"
+        selectProject.layer.cornerRadius = 5
+        selectProject.layer.masksToBounds = true
+        selectProject.layer.borderWidth = 0.5
+        selectProject.delegate = self
+        topView.dropShadowWithBlackColor()
+        selectProject.layer.borderColor = UIColor.lightGray.cgColor
+        createTask.setTitle("Create Task".localizeString(string: lang), for: .normal)
+        submitBtn.setTitle("Submit".localizeString(string: lang), for: .normal)
+        cancelBtn.setTitle("Cancel".localizeString(string: lang), for: .normal)
+        newFirst.text = "Select Project".localizeString(string: lang)
+        taskTitle.placeholder = "Enter a task title".localizeString(string: lang)
+        teamMember.text = "Team Members".localizeString(string: lang)
+        teamMember.textColor = .lightGray
+        selectDateTime.placeholder = "Select Date & Time".localizeString(string: lang)
+        selectDueDate.placeholder = "Select Due Date".localizeString(string: lang)
+        selectWatcher.placeholder = "Select Task Watcher".localizeString(string: lang)
+        selectProject.text = "Project".localizeString(string: lang)
+        checkLabel.text = "Check Lists".localizeString(string: lang)
+        checkBtn.setTitle("Add CheckList Item".localizeString(string: lang), for: .normal)
+        if called == "Show"{
+            topTitleLabel.text = "Edit Task".localizeString(string: lang)
+        }else{
+            topTitleLabel.text = "CREATE TASK".localizeString(string: lang)
+        }
         createTask.roundedButton()
-        
+        taskTitle.tintColor = UIColor.init(hexString: "528E4A")
         teamMember.inputView = UIView()
         teamMember.inputAccessoryView = UIView()
         teamMember.tintColor = .white
@@ -86,12 +161,9 @@ extension CreateTaskAdminVC{
         selectTimeZone.inputView = UIView()
         selectTimeZone.inputAccessoryView = UIView()
         selectTimeZone.tintColor = .white
-        selectProject.inputView = UIView()
-        selectProject.inputAccessoryView = UIView()
+        //        selectProject.inputView = UIView()
+        //        selectProject.inputAccessoryView = UIView()
         selectProject.tintColor = .white
-        selectLabels.inputView = UIView()
-        selectLabels.inputAccessoryView = UIView()
-        selectLabels.tintColor = .white
         selectWatcher.inputView = UIView()
         selectWatcher.inputAccessoryView = UIView()
         selectWatcher.tintColor = .white
@@ -99,13 +171,16 @@ extension CreateTaskAdminVC{
             selectProject.textColor = .black
             addView.isHidden = true
             checkListView.isHidden = true
-            createTask.setTitle("Save Task", for: .normal)
+            createTask.setTitle("Save Task".localizeString(string: lang), for: .normal)
         }else{
             selectProject.textColor = .lightGray
-            createTask.setTitle("Create Task", for: .normal)
+            createTask.setTitle("Create Task".localizeString(string: lang), for: .normal)
             checkListView.isHidden = false
             addView.dropShadowWithBlackColor()
+            getProject()
+            getProfile()
         }
+        
         if called == "Show"{
             getTask()
         }
@@ -116,25 +191,25 @@ extension CreateTaskAdminVC{
     func checkAll() -> Bool
     {
         if taskTitle.text == "" {
-            _ = SweetAlert().showAlert("", subTitle:  "Please enter task title", style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle:  "Please enter task title".localizeString(string: lang), style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return false
-        }else if teamMember.text == ""{
-            _ = SweetAlert().showAlert("", subTitle:  "Please enter task member", style: AlertStyle.none,buttonTitle:"OK")
+        }else if teamMember.text == "Team Members".localizeString(string: lang){
+            _ = SweetAlert().showAlert("", subTitle:  "Please enter task member".localizeString(string: lang), style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return false
         }else if selectDateTime.text == ""{
-            _ = SweetAlert().showAlert("", subTitle:  "Please select date time for task", style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle:  "Please select date time for task".localizeString(string: lang), style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return false
         }else if selectDueDate.text == ""{
-            _ = SweetAlert().showAlert("", subTitle:  "Please select due date time for task", style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle:  "Please select due date time for task".localizeString(string: lang), style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return false
         }else if selectTimeZone.text == ""{
-            _ = SweetAlert().showAlert("", subTitle:  "Please select timezone for task", style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle:  "Please select timezone for task".localizeString(string: lang), style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return false
-        }else if selectProject.text == "Project" {
-            _ = SweetAlert().showAlert("", subTitle:  "Please select project for task", style: AlertStyle.none,buttonTitle:"OK")
+        }else if selectProject.text == "Project".localizeString(string: lang) {
+            _ = SweetAlert().showAlert("", subTitle:  "Please select project for task", style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return false
         }else if selectWatcher.text == ""{
-            _ = SweetAlert().showAlert("", subTitle:  "Please select taskwatcher/manager for task", style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle:  "Please select taskwatcher/manager for task".localizeString(string: lang), style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return false
         }else{
             return true
@@ -157,6 +232,7 @@ extension CreateTaskAdminVC{
             print(selections[0].timezone_name)
             if selections[0].type == "Member"{
                 teamMember.text = selections[0].member_name
+                teamMember.textColor = .black
                 memberId = selections[0].member_id
             }else if selections[0].type == "Watcher"{
                 selectWatcher.text = selections[0].watcher_name
@@ -167,61 +243,61 @@ extension CreateTaskAdminVC{
                 location = selections[0].location
                 projectId = selections[0].project_id
             }else if selections[0].type == "TimeZone"{
-                selectTimeZone.text = selections[0].timezone_name
-            }else if selections[0].type == "Label"{
-                selectLabels.text = selections[0].label_name
+//                selectTimeZone.text = selections[0].timezone_name
             }else{
                 
             }
-//            NotificationCenter.default.removeObserver(self, name: NSNotification.Name("disconnectPaxiSockets"), object: nil)
+            //            NotificationCenter.default.removeObserver(self, name: NSNotification.Name("disconnectPaxiSockets"), object: nil)
         }
     }
     
     func showTextFieldAlert() {
         self.view.endEditing(true)
-           // Create the UIAlertController
-           let alertController = UIAlertController(title: "Add CheckList", message: "You can create check list for this task from hereand if you want to check/uncheck the check list item, you can do from task detail screen", preferredStyle: .alert)
-           
-           // Add a text field to the alert
-           alertController.addTextField { (textField) in
-               textField.placeholder = "Enter Checklist"
-           }
-           
-           // Add the buttons
-           let cancelButton = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
-               // Handle cancel button action
-               print("Cancel button tapped")
-           }
-           
-           let submitButton = UIAlertAction(title: "Add", style: .default) { (action) in
-               // Get the text entered in the text field
-               if let textField = alertController.textFields?.first, let enteredText = textField.text {
-                   // Handle submit button action with entered text
-                   print("Submit button tapped with text: \(enteredText)")
-                   self.checkLists.removeAll()
-                   self.checkListData.append(createCheckList.init(id: 0, title: enteredText, status: 0))
-                   self.view.endEditing(true)
-                   self.dismiss(animated: true)
-                   self.createTaskTV.delegate = self
-                   self.createTaskTV.dataSource = self
-                   self.createTaskTV.reloadData()
-               }
-           }
-           
-           // Add the buttons to the alert
-           alertController.addAction(cancelButton)
-           alertController.addAction(submitButton)
-           
-           // Present the alert
-           present(alertController, animated: true, completion: nil)
-       }
+        // Create the UIAlertController
+        let alertController = UIAlertController(title: "Add CheckList".localizeString(string: lang), message: "You can create check list for this task from hereand if you want to check/uncheck the check list item, you can do from task detail screen".localizeString(string: lang), preferredStyle: .alert)
+        
+        // Add a text field to the alert
+        alertController.addTextField { (textField) in
+            textField.placeholder = "Enter Checklist".localizeString(string: lang)
+        }
+        
+        // Add the buttons
+        let cancelButton = UIAlertAction(title: "Cancel".localizeString(string: lang), style: .cancel) { (action) in
+            // Handle cancel button action
+            print("Cancel button tapped")
+        }
+        
+        let submitButton = UIAlertAction(title: "Add".localizeString(string: lang), style: .default) { (action) in
+            // Get the text entered in the text field
+            if let textField = alertController.textFields?.first, let enteredText = textField.text {
+                // Handle submit button action with entered text
+                print("Submit button tapped with text: \(enteredText)")
+                self.checkLists.removeAll()
+                self.checkListData.append(createCheckList.init(id: 0, title: enteredText, status: 0))
+                self.view.endEditing(true)
+                self.dismiss(animated: true)
+                self.createTaskTV.delegate = self
+                self.createTaskTV.dataSource = self
+                self.createTaskTV.reloadData()
+            }
+        }
+        
+        // Add the buttons to the alert
+        alertController.addAction(cancelButton)
+        alertController.addAction(submitButton)
+        
+        // Present the alert
+        present(alertController, animated: true, completion: nil)
+    }
     
     
     func selectTime(set: UITextField)
     {
-        let alertController = UIAlertController(title: "", message: nil, preferredStyle: .actionSheet)
-        // Create a date picker
-        let datePicker = UIDatePicker()
+        
+        self.topView.isHidden = false
+        
+        datePicker = UIDatePicker()
+        // Configure date picker
         datePicker.datePickerMode = .dateAndTime
         if called == "Show" {
             if set == selectDueDate {
@@ -232,43 +308,45 @@ extension CreateTaskAdminVC{
         }else{
             datePicker.minimumDate = Date()
         }
-       
+        datePicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
+        // Add date picker to container view
+        topView.addSubview(datePicker)
+        // Add container view to main vie
+        topView.translatesAutoresizingMaskIntoConstraints = false
+        // Add constraints for the date picker
+        datePicker.translatesAutoresizingMaskIntoConstraints = false
+//        datePicker.removeFromSuperview()
+        NSLayoutConstraint.activate([
+            datePicker.centerXAnchor.constraint(equalTo: topView.centerXAnchor),
+            datePicker.centerYAnchor.constraint(equalTo: topView.centerYAnchor, constant: -20.0)
+        ])
         
-        // Add the date picker to the alert controller
-        alertController.view.addSubview(datePicker)
         
-        // Create a "Done" button
-        let doneAction = UIAlertAction(title: "Done", style: .default) { (action) in
-            let selectedDate = datePicker.date
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "d MMM yyyy hh:mm a"
-            let formattedDate = dateFormatter.string(from: selectedDate)
-            set.text = formattedDate
-            
-            let dateFormatter1 = DateFormatter()
-            dateFormatter1.dateFormat = "yyyy-MM-dd hh:mm a"
-            let formattedDate1 = dateFormatter1.string(from: selectedDate)
-            if set == self.selectDueDate{
-                self.dueDate = formattedDate1
-            }else{
-                self.startDate = formattedDate1
-            }
-           
-        }
-        
-        // Add the "Done" button to the alert controller
-        alertController.addAction(doneAction)
-        
-        // Create a "Cancel" button
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        
-        // Add the "Cancel" button to the alert controller
-        alertController.addAction(cancelAction)
-        
-        // Present the alert controller
-        present(alertController, animated: true, completion: nil)
     }
     
+    
+    @objc func datePickerValueChanged() {
+//        let selectedDate = datePicker.date
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateFormat = "d MMM yyyy hh:mm a"
+//        let formattedDate = dateFormatter.string(from: selectedDate)
+//        if tye == "selectDateTime"{
+//            selectDateTime.text = formattedDate
+//        }else{
+//            selectDueDate.text = formattedDate
+//        }
+//        //        set.text = formattedDate
+//        
+//        let dateFormatter1 = DateFormatter()
+//        dateFormatter1.dateFormat = "yyyy-MM-dd hh:mm a"
+//        let formattedDate1 = dateFormatter1.string(from: selectedDate)
+//        if tye == "selectDateTime"{
+//            self.startDate = formattedDate1
+//        }else{
+//            self.dueDate = formattedDate1
+//        }
+        
+    }
     
 }
 //MARK: UITextField Delegate
@@ -277,17 +355,17 @@ extension CreateTaskAdminVC: UITextFieldDelegate{
     func textFieldDidBeginEditing(_ textField: UITextField) {
         
         if textField == selectTimeZone{
-            if let VC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "SelectionVC") as? SelectionVC{
-                if let presentationController = VC.presentationController as? UISheetPresentationController {
-                    presentationController.detents = [.large()]
-                }
-                VC.calledType = "TimeZone"
-                self.present(VC, animated: true)
-            }
+//            if let VC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "SelectionVC") as? SelectionVC{
+//                if let presentationController = VC.presentationController as? UISheetPresentationController {
+//                    presentationController.detents = [.large()]
+//                }
+//                VC.calledType = "TimeZone"
+//                self.present(VC, animated: true)
+//            }
         }else if textField == selectProject {
             if let VC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "SelectionVC") as? SelectionVC{
                 if let presentationController = VC.presentationController as? UISheetPresentationController {
-                    presentationController.detents = [.medium()]
+                    presentationController.detents = [.large()]
                 }
                 VC.calledType = "Project"
                 self.present(VC, animated: true)
@@ -296,7 +374,7 @@ extension CreateTaskAdminVC: UITextFieldDelegate{
         }else if textField == teamMember {
             if let VC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "SelectionVC") as? SelectionVC{
                 if let presentationController = VC.presentationController as? UISheetPresentationController {
-                    presentationController.detents = [.medium()]
+                    presentationController.detents = [.large()]
                 }
                 VC.calledType = "Member"
                 self.present(VC, animated: true)
@@ -304,22 +382,29 @@ extension CreateTaskAdminVC: UITextFieldDelegate{
         }else if textField == selectWatcher {
             if let VC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "SelectionVC") as? SelectionVC{
                 if let presentationController = VC.presentationController as? UISheetPresentationController {
-                    presentationController.detents = [.medium()]
+                    presentationController.detents = [.large()]
                 }
                 VC.calledType = "Watcher"
                 self.present(VC, animated: true)
             }
         }else if textField == selectDateTime{
-            selectTime(set: selectDateTime)
+            tye = "selectDateTime"
+            if topView.isHidden == true{
+                selectTime(set: selectDateTime)
+            }
         }else if textField == selectDueDate{
-            selectTime(set: selectDueDate)
+            tye = "selectDueDate"
+            if topView.isHidden == true{
+                selectTime(set: selectDueDate)
+            }
+           
         }
     }
     
-    
-   
-    
-    
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        return true
+    }
+
 }
 //MARK: API Integartion
 extension CreateTaskAdminVC {
@@ -328,7 +413,7 @@ extension CreateTaskAdminVC {
     func addTask(title: String, members_id: String, task_watcher: String, start_date_time: String, due_date_time: String, time_zone: String,location: String, project_id: Int, latitude: String, longitude: String, checklist: [String])
     {
         if reachability.isConnectedToNetwork() == false{
-            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return
         }
         let progressHUD = ProgressHUD()
@@ -357,56 +442,56 @@ extension CreateTaskAdminVC {
                            let _ = try? JSONDecoder().decode(AddAdminTasks.self, from: jsonData) {
                             
                             progressHUD.hide()
-                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.success,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.success,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                                 if isOtherButton == true {
                                     self.navigationController?.popViewController(animated: true)
                                 }
                             }
                             
                             
-//                            _ = SweetAlert().showAlert("", subTitle: (dict["message"] as? String ?? "") + "Do you want to add notes for this task ?", style:  AlertStyle.success, buttonTitle: "YES", buttonColor: UIColor.init(hexString: "004080"), otherButtonTitle: "NO", action: { isOtherButton in
-//                                
-//                                if isOtherButton {
-//                                    // NO button tapped
-//                                    print("NO button tapped")
-//                                    self.navigationController?.popViewController(animated: true)
-//                                } else {
-//                                    // YES button tapped
-//                                    print("YES button tapped")
-//                                    if let VC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AddNotesVC") as? AddNotesVC{
-//                                        VC.calledType = ""
-//                                        VC.task_id = loginResponse.task.taskId
-//                                        self.navigationController?.pushViewController(VC, animated: true)
-//                                    }
-//                                }
-//                            })
+                            //                            _ = SweetAlert().showAlert("", subTitle: (dict["message"] as? String ?? "") + "Do you want to add notes for this task ?", style:  AlertStyle.success, buttonTitle: "YES", buttonColor: UIColor.init(hexString: "004080"), otherButtonTitle: "NO", action: { isOtherButton in
+                            //
+                            //                                if isOtherButton {
+                            //                                    // NO button tapped
+                            //                                    print("NO button tapped")
+                            //                                    self.navigationController?.popViewController(animated: true)
+                            //                                } else {
+                            //                                    // YES button tapped
+                            //                                    print("YES button tapped")
+                            //                                    if let VC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AddNotesVC") as? AddNotesVC{
+                            //                                        VC.calledType = ""
+                            //                                        VC.task_id = loginResponse.task.taskId
+                            //                                        self.navigationController?.pushViewController(VC, animated: true)
+                            //                                    }
+                            //                                }
+                            //                            })
                             
                             
                         } else {
                             print("Error decoding JSON")
-                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             progressHUD.hide()
                         }
-                    }else if self.status == 403{
+                    }else if self.status == 502{
                         progressHUD.hide()
                         if let appDomain = Bundle.main.bundleIdentifier {
                             UserDefaults.standard.removePersistentDomain(forName: appDomain)
                         }
                         NotificationCenter.default.removeObserver(self)
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                             if isOtherButton == true {
                                 ksceneDelegate?.logout()
                             }
                         }
                     }else if self.status == 202{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }else if self.status == 201{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
                     }else{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }
                     
                     
@@ -421,11 +506,11 @@ extension CreateTaskAdminVC {
                             }
                             if let message = JSON?["message"] as? String {
                                 print(message)
-                                _ = SweetAlert().showAlert("Failure", subTitle:  message, style: AlertStyle.error,buttonTitle:"OK")
+                                _ = SweetAlert().showAlert("Failure".localizeString(string: lang), subTitle:  message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             }
                         } catch {
                             // Your handling code
-                            _ = SweetAlert().showAlert("Oops..", subTitle:  "Something went wrong ", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("Oops..".localizeString(string: lang), subTitle:  "Something went wrong".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             
                         }
                     }
@@ -437,7 +522,7 @@ extension CreateTaskAdminVC {
     func getTask()
     {
         if reachability.isConnectedToNetwork() == false{
-            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return
         }
         let progressHUD = ProgressHUD()
@@ -466,6 +551,7 @@ extension CreateTaskAdminVC {
                             self.checkListData.removeAll()
                             self.taskTitle.text = loginResponse.task.title
                             self.teamMember.text = loginResponse.task.memberName
+                            self.teamMember.textColor = .black
                             self.selectDateTime.text = loginResponse.task.startDateTime
                             self.selectDueDate.text = loginResponse.task.dueDateTime
                             self.selectTimeZone.text = loginResponse.task.timezone
@@ -473,47 +559,47 @@ extension CreateTaskAdminVC {
                             self.selectWatcher.text = loginResponse.task.managerName
                             
                             self.memberId = loginResponse.task.memberId
-                            self.watcherId = loginResponse.task.managerId
+                            self.watcherId = "\(loginResponse.task.managerId)"
                             self.projectId = loginResponse.task.projectId
                             self.savelat = loginResponse.task.latitude
                             self.savelng = loginResponse.task.longitude
                             self.dueDate = loginResponse.task.formateddueDateTime
                             self.startDate = loginResponse.task.formatedstartDateTime
                             self.location = loginResponse.task.location
-//                            for i in 0..<loginResponse.task.checklist.count{
-//                                self.checkListData.append(createCheckList.init(id: loginResponse.task.checklist[i].id, title: loginResponse.task.checklist[i].title, status: loginResponse.task.checklist[i].status))
-//                            }
+                            //                            for i in 0..<loginResponse.task.checklist.count{
+                            //                                self.checkListData.append(createCheckList.init(id: loginResponse.task.checklist[i].id, title: loginResponse.task.checklist[i].title, status: loginResponse.task.checklist[i].status))
+                            //                            }
                             progressHUD.hide()
-//                            self.createTaskTV.delegate = self
-//                            self.createTaskTV.dataSource = self
-//                            self.createTaskTV.reloadData()
+                            //                            self.createTaskTV.delegate = self
+                            //                            self.createTaskTV.dataSource = self
+                            //                            self.createTaskTV.reloadData()
                             
                             
                         } else {
                             print("Error decoding JSON")
-                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             progressHUD.hide()
                         }
-                    }else if self.status == 403{
+                    }else if self.status == 502{
                         progressHUD.hide()
                         if let appDomain = Bundle.main.bundleIdentifier {
                             UserDefaults.standard.removePersistentDomain(forName: appDomain)
                         }
                         NotificationCenter.default.removeObserver(self)
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                             if isOtherButton == true {
                                 ksceneDelegate?.logout()
                             }
                         }
                     }else if self.status == 202{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }else if self.status == 201{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
                     }else{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }
                     
                     
@@ -528,11 +614,11 @@ extension CreateTaskAdminVC {
                             }
                             if let message = JSON?["message"] as? String {
                                 print(message)
-                                _ = SweetAlert().showAlert("Failure", subTitle:  message, style: AlertStyle.error,buttonTitle:"OK")
+                                _ = SweetAlert().showAlert("Failure".localizeString(string: lang), subTitle:  message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             }
                         } catch {
                             // Your handling code
-                            _ = SweetAlert().showAlert("Oops..", subTitle:  "Something went wrong ", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("Oops..".localizeString(string: lang), subTitle:  "Something went wrong".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             
                         }
                     }
@@ -543,13 +629,13 @@ extension CreateTaskAdminVC {
     func submitCheckList(id: Int, tag: Int)
     {
         if reachability.isConnectedToNetwork() == false{
-            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return
         }
         let progressHUD = ProgressHUD()
         self.view.addSubview(progressHUD)
         progressHUD.show()
-      
+        
         var param: Parameters = ["":""]
         let url = "\(ApiLink.HOST_URL)/change_status_checklist"
         let accessToken = UserDefaults.standard.string(forKey: "token") ?? ""
@@ -565,47 +651,47 @@ extension CreateTaskAdminVC {
                 case .success(let value):
                     let dict = value as! [String:Any]
                     self.status = dict["status"] as! Int
-                        if self.status == 200
-                        {
-                            if let jsonData = try? JSONSerialization.data(withJSONObject: value),
-                               let _ = try? JSONDecoder().decode(DefaultInfo.self, from: jsonData) {
-                             
-                                progressHUD.hide()
-                                
-                                self.getTask()
-//                                print(self.checkListData[tag])
-//                                self.checkListData.insert(createCheckList.init(id:  self.checkListData[tag].id, title:  self.checkListData[tag].title, status: 1), at: tag)
-//                                print(self.checkListData[tag])
-//                                self.checkListData.remove(at: tag + 1)
-//                                self.createTaskTV.reloadData()
-                                    
-                               
-                            } else {
-                                print("Error decoding JSON")
-                                _ = SweetAlert().showAlert("", subTitle: "Error Decoding", style: AlertStyle.error,buttonTitle:"OK")
-                                progressHUD.hide()
-                            }
-                        }else if self.status == 403{
+                    if self.status == 200
+                    {
+                        if let jsonData = try? JSONSerialization.data(withJSONObject: value),
+                           let _ = try? JSONDecoder().decode(DefaultInfo.self, from: jsonData) {
+                            
                             progressHUD.hide()
-                            if let appDomain = Bundle.main.bundleIdentifier {
-                                UserDefaults.standard.removePersistentDomain(forName: appDomain)
-                            }
-                            NotificationCenter.default.removeObserver(self)
-                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK"){ (isOtherButton) -> Void in
-                                if isOtherButton == true {
-                                    ksceneDelegate?.logout()
-                                }
-                            }
-                        }else if self.status == 202{
+                            
+                            self.getTask()
+                            //                                print(self.checkListData[tag])
+                            //                                self.checkListData.insert(createCheckList.init(id:  self.checkListData[tag].id, title:  self.checkListData[tag].title, status: 1), at: tag)
+                            //                                print(self.checkListData[tag])
+                            //                                self.checkListData.remove(at: tag + 1)
+                            //                                self.createTaskTV.reloadData()
+                            
+                            
+                        } else {
+                            print("Error decoding JSON")
+                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             progressHUD.hide()
-                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
-                        }else if self.status == 201{
-                            progressHUD.hide()
-                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK")
-                        }else{
-                            progressHUD.hide()
-                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
                         }
+                    }else if self.status == 502{
+                        progressHUD.hide()
+                        if let appDomain = Bundle.main.bundleIdentifier {
+                            UserDefaults.standard.removePersistentDomain(forName: appDomain)
+                        }
+                        NotificationCenter.default.removeObserver(self)
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
+                            if isOtherButton == true {
+                                ksceneDelegate?.logout()
+                            }
+                        }
+                    }else if self.status == 202{
+                        progressHUD.hide()
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
+                    }else if self.status == 201{
+                        progressHUD.hide()
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
+                    }else{
+                        progressHUD.hide()
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
+                    }
                     
                     
                 case .failure(_):
@@ -619,12 +705,12 @@ extension CreateTaskAdminVC {
                             }
                             if let message = JSON?["message"] as? String {
                                 print(message)
-                                _ = SweetAlert().showAlert("Failure", subTitle:  message, style: AlertStyle.error,buttonTitle:"OK")
+                                _ = SweetAlert().showAlert("Failure".localizeString(string: lang), subTitle:  message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             }
                         } catch {
                             // Your handling code
-                            _ = SweetAlert().showAlert("Oops..", subTitle:  "Something went wrong ", style: AlertStyle.error,buttonTitle:"OK")
-
+                            _ = SweetAlert().showAlert("Oops..".localizeString(string: lang), subTitle:  "Something went wrong".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
+                            
                         }
                     }
                 }
@@ -635,7 +721,7 @@ extension CreateTaskAdminVC {
     func editTask(title: String, members_id: String, task_watcher: String, start_date_time: String, due_date_time: String, time_zone: String,location: String, project_id: Int, latitude: String, longitude: String, checklist: [String])
     {
         if reachability.isConnectedToNetwork() == false{
-            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK")
+            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
             return
         }
         let progressHUD = ProgressHUD()
@@ -662,10 +748,10 @@ extension CreateTaskAdminVC {
                     {
                         if let jsonData = try? JSONSerialization.data(withJSONObject: value),
                            let loginResponse = try? JSONDecoder().decode(DefaultInfo.self, from: jsonData) {
-                           
+                            
                             
                             progressHUD.hide()
-                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.success,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.success,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                                 if isOtherButton == true {
                                     self.navigationController?.popViewController(animated: true)
                                 }
@@ -674,31 +760,31 @@ extension CreateTaskAdminVC {
                             
                         } else {
                             print("Error decoding JSON")
-                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             progressHUD.hide()
                         }
-                    }else if self.status == 403{
+                    }else if self.status == 502{
                         progressHUD.hide()
                         if let appDomain = Bundle.main.bundleIdentifier {
                             UserDefaults.standard.removePersistentDomain(forName: appDomain)
                         }
                         NotificationCenter.default.removeObserver(self)
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK"){ (isOtherButton) -> Void in
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                             if isOtherButton == true {
                                 ksceneDelegate?.logout()
                             }
                         }
                     }else if self.status == 202{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }else if self.status == 201{
                         progressHUD.hide()
                         if self.called == "Show"{
-                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
                         }
                     }else{
                         progressHUD.hide()
-                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK")
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }
                     
                     
@@ -713,17 +799,188 @@ extension CreateTaskAdminVC {
                             }
                             if let message = JSON?["message"] as? String {
                                 print(message)
-                                _ = SweetAlert().showAlert("Failure", subTitle:  message, style: AlertStyle.error,buttonTitle:"OK")
+                                _ = SweetAlert().showAlert("Failure".localizeString(string: lang), subTitle:  message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             }
                         } catch {
                             // Your handling code
-                            _ = SweetAlert().showAlert("Oops..", subTitle:  "Something went wrong ", style: AlertStyle.error,buttonTitle:"OK")
+                            _ = SweetAlert().showAlert("Oops..".localizeString(string: lang), subTitle:  "Something went wrong".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                             
                         }
                     }
                 }
             }
     }
+    
+    
+    //MARK: Get Project API to create Task Admin
+    func getProject()
+    {
+        if reachability.isConnectedToNetwork() == false{
+            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
+            return
+        }
+        let progressHUD = ProgressHUD()
+        self.view.addSubview(progressHUD)
+        progressHUD.show()
+        
+        var param: Parameters = ["":""]
+        let url = "\(ApiLink.HOST_URL)/get_project"
+        let accessToken = UserDefaults.standard.string(forKey: "token") ?? ""
+        print(param)
+        print("Access Token: \(accessToken)")
+        AF.request(url, method: .get, parameters: nil, encoding: URLEncoding.default, headers: ["Authorization": "Bearer "+accessToken+""])
+            .validate(statusCode: 200..<300)
+            .validate(contentType: ["application/json"])
+            .responseJSON { response in
+                switch response.result {
+                    
+                case .success(let value):
+                    let dict = value as! [String:Any]
+                    self.status = dict["status"] as! Int
+                    if self.status == 200
+                    {
+                        if let jsonData = try? JSONSerialization.data(withJSONObject: value),
+                           let loginResponse = try? JSONDecoder().decode(ProjectResponse.self, from: jsonData) {
+                            self.selectProject.text = loginResponse.projects[0].projectName + " - " + loginResponse.projects[0].location
+                            self.selectProject.textColor = UIColor.black
+                            self.projectId = loginResponse.projects[0].id
+                            progressHUD.hide()
+                            
+                        } else {
+                            print("Error decoding JSON")
+                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
+                            progressHUD.hide()
+                        }
+                    }else if self.status == 502{
+                        progressHUD.hide()
+                        if let appDomain = Bundle.main.bundleIdentifier {
+                            UserDefaults.standard.removePersistentDomain(forName: appDomain)
+                        }
+                        NotificationCenter.default.removeObserver(self)
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
+                            if isOtherButton == true {
+                                ksceneDelegate?.logout()
+                            }
+                        }
+                    }else if self.status == 202{
+                        progressHUD.hide()
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
+                    }else if self.status == 201{
+                        progressHUD.hide()
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
+                    }else{
+                        progressHUD.hide()
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
+                    }
+                    
+                    
+                case .failure(_):
+                    progressHUD.hide()
+                    if let response = response.data{
+                        var JSON: [String: Any]?
+                        do {
+                            JSON = try (JSONSerialization.jsonObject(with: response, options: []) as? [String: Any])!
+                            if let code = JSON?["code"] as? Int {
+                                print(code)
+                            }
+                            if let message = JSON?["message"] as? String {
+                                print(message)
+                                _ = SweetAlert().showAlert("Failure".localizeString(string: lang), subTitle:  message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
+                            }
+                        } catch {
+                            // Your handling code
+                            _ = SweetAlert().showAlert("Oops..".localizeString(string: lang), subTitle:  "Something went wrong".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
+                            
+                        }
+                    }
+                }
+            }
+    }
+    
+    //MARK: Get Profile API
+    func getProfile()
+    {
+        if reachability.isConnectedToNetwork() == false{
+            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
+            return
+        }
+        let progressHUD = ProgressHUD()
+        self.view.addSubview(progressHUD)
+        progressHUD.show()
+        
+        var param: Parameters = ["":""]
+        let url = "\(ApiLink.HOST_URL)/get_profile"
+        let accessToken = UserDefaults.standard.string(forKey: "token") ?? ""
+        print("Access Token: \(accessToken)")
+        AF.request(url, method: .get, parameters: nil, encoding: URLEncoding.default, headers: ["Authorization": "Bearer "+accessToken+""])
+            .validate(statusCode: 200..<300)
+            .validate(contentType: ["application/json"])
+            .responseJSON { response in
+                switch response.result {
+                    
+                case .success(let value):
+                    let dict = value as! [String:Any]
+                    self.status = dict["status"] as! Int
+                    if self.status == 200
+                    {
+                        if let jsonData = try? JSONSerialization.data(withJSONObject: value),
+                           let loginResponse = try? JSONDecoder().decode(ProfileInfo.self, from: jsonData) {
+                            
+                            self.selectWatcher.text = loginResponse.data.fullname + "(Task Watcher)"
+                            
+                            progressHUD.hide()
+                            
+                        } else {
+                            print("Error decoding JSON")
+                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
+                            progressHUD.hide()
+                        }
+                    }else if self.status == 502{
+                        progressHUD.hide()
+                        if let appDomain = Bundle.main.bundleIdentifier {
+                            UserDefaults.standard.removePersistentDomain(forName: appDomain)
+                        }
+                        NotificationCenter.default.removeObserver(self)
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
+                            if isOtherButton == true {
+                                ksceneDelegate?.logout()
+                            }
+                        }
+                    }else if self.status == 202{
+                        progressHUD.hide()
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
+                    }else if self.status == 201{
+                        progressHUD.hide()
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
+                    }else{
+                        progressHUD.hide()
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
+                    }
+                    
+                    
+                case .failure(_):
+                    progressHUD.hide()
+                    if let response = response.data{
+                        var JSON: [String: Any]?
+                        do {
+                            JSON = try (JSONSerialization.jsonObject(with: response, options: []) as? [String: Any])!
+                            if let code = JSON?["code"] as? Int {
+                                print(code)
+                            }
+                            if let message = JSON?["message"] as? String {
+                                print(message)
+                                _ = SweetAlert().showAlert("Failure".localizeString(string: lang), subTitle:  message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
+                            }
+                        } catch {
+                            // Your handling code
+                            _ = SweetAlert().showAlert("Oops..".localizeString(string: lang), subTitle:  "Something went wrong".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
+                            
+                        }
+                    }
+                }
+            }
+    }
+    
 }
 
 //MARK: TableView Delegate
@@ -743,6 +1000,11 @@ extension CreateTaskAdminVC: UITableViewDelegate, UITableViewDataSource{
         cell.deleteBtn.tag = indexPath.row
         cell.deleteBtn.addTarget(self, action: #selector(deleteBtnTap(_:)), for: .touchUpInside)
         checkLists.append(checkListData[indexPath.row].title)
+        if called == "Show"{
+            cell.topButton.isHidden = false
+        }else{
+            cell.topButton.isHidden = true
+        }
         cell.topButton.tag = indexPath.row
         cell.topButton.addTarget(self, action: #selector(selectBtnTap(_:)), for: .touchUpInside)
         if checkListData[indexPath.row].status == 1{
@@ -764,7 +1026,7 @@ extension CreateTaskAdminVC: UITableViewDelegate, UITableViewDataSource{
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print(indexPath.row)
-      
+        
     }
     
     @objc func deleteBtnTap(_ sender: UIButton){
@@ -781,29 +1043,26 @@ extension CreateTaskAdminVC: UITableViewDelegate, UITableViewDataSource{
 
 extension CreateTaskAdminVC: UITextViewDelegate{
     
-    func textViewDidChange(_ textView: UITextView) {
-           // Adjust the height of the UITextView based on its content
-           adjustTextViewHeight()
-       }
-       
-       func adjustTextViewHeight() {
-           // Calculate the new height required for the content
-           let newSize = selectProject.sizeThatFits(CGSize(width: selectProject.frame.width, height: CGFloat.greatestFiniteMagnitude))
-           
-           // Update the height constraint of the UITextView
-           selectProject.constraints.filter { $0.firstAttribute == .height }.first?.constant = newSize.height
-           
-           // Optionally, update the view or layout if needed
-           view.layoutIfNeeded()
-       }
-    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        print(textView)
+    }
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if let VC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "SelectionVC") as? SelectionVC{
-            if let presentationController = VC.presentationController as? UISheetPresentationController {
-                presentationController.detents = [.medium()]
+        if textView == teamMember{
+            if let VC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "SelectionVC") as? SelectionVC{
+                if let presentationController = VC.presentationController as? UISheetPresentationController {
+                    presentationController.detents = [.large()]
+                }
+                VC.calledType = "Member"
+                self.present(VC, animated: true)
             }
-            VC.calledType = "Project"
-            self.present(VC, animated: true)
+        }else{
+            if let VC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "SelectionVC") as? SelectionVC{
+                if let presentationController = VC.presentationController as? UISheetPresentationController {
+                    presentationController.detents = [.large()]
+                }
+                VC.calledType = "Project"
+                self.present(VC, animated: true)
+            }
         }
     }
 }
