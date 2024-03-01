@@ -37,7 +37,8 @@ class AdminClockInVC: UIViewController {
     var status:Int = 0
     var pid: Int = 0
     var workID: Int = 0
-    var counter = 0;
+    var counter = 0
+    var timer: Timer?
 //    var breakID: Int = 0
     var selectedRow: Int = 0
     var breaksData:[(String, String)] = [("Break Start 1", "Break End 1")]
@@ -79,11 +80,14 @@ class AdminClockInVC: UIViewController {
         self.navigationController?.isNavigationBarHidden = false
         yourTimer?.invalidate()
         yourTimer = nil
+        timer?.invalidate()
+        timer = nil
     }
     
     @IBAction func startBtnTap(_ sender: UIButton) {
         if let buttonText = sender.titleLabel?.text {
             if buttonText == "Start Time".localizeString(string: lang){
+                startTimer()
                 sender.setTitle("Start Break".localizeString(string: lang), for: .normal)
                     print("Start Time")
                     startColorChangingTimer()
@@ -115,6 +119,8 @@ class AdminClockInVC: UIViewController {
             let dateFormatter = DateFormatter()
             self.yourTimer?.invalidate()
             self.yourTimer = nil
+            self.timer?.invalidate()
+            self.timer = nil
             dateFormatter.dateFormat = "d MMM yyyy hh:mm a"
             // Get the current date and time
             let currentDate = Date()
@@ -202,6 +208,13 @@ extension AdminClockInVC{
         personImage.isUserInteractionEnabled = true
         personImage.addGestureRecognizer(tapGesture)
         localizeTabBar()
+//        latestupdate()
+//        NotificationCenter.default.addObserver(self, selector: #selector(disconnectPaxiSocket(_:)), name: Notification.Name(rawValue: "NotificationUpdate"), object: nil)
+    }
+    
+    
+    @objc func disconnectPaxiSocket(_ notification: Notification) {
+        latestupdate()
     }
     
     //MARK: Change Text of TabBar
@@ -213,6 +226,27 @@ extension AdminClockInVC{
         tabBarController?.tabBar.items![3].title = "Projects".localizeString(string: lang)
         tabBarController?.tabBar.items![4].title = "Crew".localizeString(string: lang)
     }
+    
+    func showUpgradeAlert() {
+        let alertController = UIAlertController(title: "Update Green Vision Cleansing", message: "Green Vision Cleansing recommends that you update to the latest version.\nPlease click update button to go to app store.", preferredStyle: .alert)
+        
+        // Add an action for the update button
+        let updateAction = UIAlertAction(title: "UPDATE", style: .default) { (action) in
+            // Handle update button tap
+            // For example, open the App Store for updating the app
+            if let url = URL(string: "https://apps.apple.com/us/app/green-vision-cleansing/id6476094607") {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
+        }
+        alertController.addAction(updateAction)
+        // Add a cancel action
+//        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+//        alertController.addAction(cancelAction)
+        // Present the alert controller
+        //        alertController.modalPresentationStyle = .overFullScreen
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
     
     
     
@@ -262,6 +296,14 @@ extension AdminClockInVC{
              }
       
     }
+    
+    
+    func startTimer() {
+            timer?.invalidate()
+            timer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { timer in
+                self.workerProjectDetails()
+            }
+        }
     
     
     func floatingView()
@@ -547,6 +589,112 @@ extension AdminClockInVC: UITextViewDelegate
 //MARK: API Integration
 extension AdminClockInVC {
     
+    //MARK: Update prompt
+    func latestupdate()
+    {
+        if reachability.isConnectedToNetwork() == false{
+            _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
+            return
+        }
+        
+        var versions:String = ""
+        if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
+            print("Current app version: \(version)")
+            versions = String(version)
+        } else {
+            print("Unable to retrieve app version")
+        }
+        
+        
+        let progressHUD = ProgressHUD()
+        self.view.addSubview(progressHUD)
+        progressHUD.show()
+        
+        let url = "\(ApiLink.HOST_URL)/force_update"
+        let accessToken = UserDefaults.standard.string(forKey: "token") ?? ""
+        var param: Parameters = ["":""]
+        param = ["type": "ios"]
+        print(param)
+        print("Access Token: \(accessToken)")
+        AF.request(url, method: .post, parameters: param, encoding: URLEncoding.default, headers: ["Authorization": "Bearer "+accessToken+""])
+            .validate(statusCode: 200..<300)
+            .validate(contentType: ["application/json"])
+            .responseJSON { response in
+                switch response.result {
+                    
+                case .success(let value):
+                    let dict = value as! [String:Any]
+                    self.status = dict["status"] as! Int
+                    if self.status == 200
+                    {
+                        if let jsonData = try? JSONSerialization.data(withJSONObject: value),
+                           let loginResponse = try? JSONDecoder().decode(AppInfo.self, from: jsonData) {
+                            progressHUD.hide()
+                            
+                             let currentVersionString = loginResponse.app.version
+                                let comparisonResult = versions.compare(currentVersionString, options: .numeric)
+                                switch comparisonResult {
+                                case .orderedAscending:
+                                    print("Current version is less than server version")
+                                    self.showUpgradeAlert()
+                                case .orderedDescending:
+                                    print("Current version is greater than server version")
+                                    
+                                case .orderedSame:
+                                    print("Current version is equal to server version")
+                                    
+                                }
+                         } else {
+                            print("Error decoding JSON")
+                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
+                            progressHUD.hide()
+                        }
+                        
+                    }else if self.status == 502{
+                        progressHUD.hide()
+                        if let appDomain = Bundle.main.bundleIdentifier {
+                            UserDefaults.standard.removePersistentDomain(forName: appDomain)
+                        }
+                        NotificationCenter.default.removeObserver(self)
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
+                            if isOtherButton == true {
+                                ksceneDelegate?.logout()
+                            }
+                        }
+                    }else if self.status == 202{
+                        progressHUD.hide()
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
+                    }else if self.status == 201{
+                        progressHUD.hide()
+                        
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
+                    }else{
+                        progressHUD.hide()
+                        _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
+                    }
+                case .failure(_):
+                    progressHUD.hide()
+                    if let response = response.data{
+                        var JSON: [String: Any]?
+                        do {
+                            JSON = try (JSONSerialization.jsonObject(with: response, options: []) as? [String: Any])!
+                            if let code = JSON?["code"] as? Int {
+                                print(code)
+                            }
+                            if let message = JSON?["message"] as? String {
+                                print(message)
+                                _ = SweetAlert().showAlert("Failure".localizeString(string: lang), subTitle:  message, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
+                            }
+                        } catch {
+                            // Your handling code
+                            _ = SweetAlert().showAlert("Oops..".localizeString(string: lang), subTitle:  "Something went wrong".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
+                            
+                        }
+                    }
+                }
+            }
+    }
+    
     //MARK: Task Detail API//run every 1 minute
     func workerProjectDetails()
     {
@@ -591,6 +739,9 @@ extension AdminClockInVC {
                                 self.yourTimer?.invalidate()
                                 self.yourTimer = nil
                                 self.startColorChangingTimer()
+                                self.timer?.invalidate()
+                                self.timer = nil
+                                self.startTimer()
                                 self.finishBtn.isHidden = false
                                 self.startBtn.setTitle("Start Break".localizeString(string: lang), for: .normal)
                             }else if loginResponse.data.status == 2{
@@ -599,6 +750,9 @@ extension AdminClockInVC {
                                 self.yourTimer?.invalidate()
                                 self.yourTimer = nil
                                 self.startColorChangingTimer()
+                                self.timer?.invalidate()
+                                self.timer = nil
+                                self.startTimer()
                                 self.deleteBtn.isHidden = false
                                 self.startBtn.setTitle("End Break".localizeString(string: lang), for: .normal)
                                 self.startBtn.isEnabled = true
@@ -616,6 +770,9 @@ extension AdminClockInVC {
                                 self.yourTimer?.invalidate()
                                 self.yourTimer = nil
                                 self.startColorChangingTimer()
+                                self.timer?.invalidate()
+                                self.timer = nil
+                                self.startTimer()
                                 self.startBtn.setTitle("Break".localizeString(string: lang), for: .normal)
                                 self.startBtn.isEnabled = true
                                 self.deleteBtn.isHidden = false
@@ -858,6 +1015,8 @@ extension AdminClockInVC {
                                 if isOtherButton == true {
                                     self.yourTimer?.invalidate()
                                     self.yourTimer = nil
+                                    self.timer?.invalidate()
+                                    self.timer = nil
                                     self.breakID.removeAll()
                                     self.breakStart.removeAll()
                                     self.breakEnd.removeAll()

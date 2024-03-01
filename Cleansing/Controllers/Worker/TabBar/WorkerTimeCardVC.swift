@@ -123,7 +123,7 @@ extension WorkerTimeCardVC {
             print("Button 1 tapped")
             self.taskBtn.setTitle("All Tasks".localizeString(string: lang), for: .normal)
             self.workingStatu = ""
-            self.getTask(id: self.project_id, filter: self.date_selection, workingStatus: "")
+            self.getTask(id: "\(self.project_id)", filter: self.date_selection, workingStatus: "")
         }
         
         let button2 = UIAlertAction(title: "Completed".localizeString(string: lang), style: .default) { (action) in
@@ -131,7 +131,7 @@ extension WorkerTimeCardVC {
             print("Button 2 tapped")
             self.taskBtn.setTitle("Completed".localizeString(string: lang), for: .normal)
             self.workingStatu = "3"
-            self.getTask(id: self.project_id, filter: self.date_selection, workingStatus: "3")
+            self.getTask(id: "\(self.project_id)", filter: self.date_selection, workingStatus: "3")
         }
         
         let button3 = UIAlertAction(title: "Ongoing".localizeString(string: lang), style: .default) { (action) in
@@ -139,7 +139,7 @@ extension WorkerTimeCardVC {
             print("Button 3 tapped")
             self.taskBtn.setTitle("Ongoing".localizeString(string: lang), for: .normal)
             self.workingStatu = "2"
-            self.getTask(id: self.project_id, filter: self.date_selection, workingStatus: "2")
+            self.getTask(id: "\(self.project_id)", filter: self.date_selection, workingStatus: "2")
         }
         
         let button4 = UIAlertAction(title: "Upcoming".localizeString(string: lang), style: .default) { (action) in
@@ -147,7 +147,7 @@ extension WorkerTimeCardVC {
             print("Button 3 tapped")
             self.taskBtn.setTitle("Upcoming".localizeString(string: lang), for: .normal)
             self.workingStatu = "1"
-            self.getTask(id: self.project_id, filter: self.date_selection, workingStatus: "1")
+            self.getTask(id: "\(self.project_id)", filter: self.date_selection, workingStatus: "1")
         }
         
         let dismissAction = UIAlertAction(title: "Dismiss".localizeString(string: lang), style: .cancel, handler: nil)
@@ -187,7 +187,7 @@ extension WorkerTimeCardVC {
                 self?.filterBtn.setTitle(selectedOption, for: .normal)
                 print(selectedOption ?? "" + "Hello".localizeString(string: lang))
                 self?.project_id = self?.showData[selectedRow].id ?? 0
-                self?.getTask(id: self?.project_id ?? 0, filter: self?.date_selection ?? "", workingStatus: self?.workingStatu ?? "")
+                self?.getTask(id: "\(self?.project_id ?? 0)", filter: self?.date_selection ?? "", workingStatus: self?.workingStatu ?? "")
             }
         }
         // Add actions to the UIAlertController
@@ -233,7 +233,7 @@ extension WorkerTimeCardVC {
         let finals = fromstring + " - " + tostring
         changeDateBtn.setTitle(finals, for: .normal)
         date_selection = finals
-        getTask(id: self.project_id ?? 0, filter: finals, workingStatus: self.workingStatu ?? "")
+        getTask(id: "\(self.project_id ?? 0)", filter: finals, workingStatus: self.workingStatu ?? "")
         
     }
     
@@ -429,12 +429,13 @@ extension WorkerTimeCardVC {
                         if let jsonData = try? JSONSerialization.data(withJSONObject: value),
                            let loginResponse = try? JSONDecoder().decode(GetProjectInfo.self, from: jsonData) {
                             self.showData.removeAll()
-                            self.filterBtn.setTitle(loginResponse.data[0].project_name, for: .normal)
+                            self.showData.append(showProject.init(id: 0, name: "All Projects"))
+                            self.filterBtn.setTitle("All Projects", for: .normal)
                             for i in 0..<loginResponse.data.count{
                                 self.showData.append(showProject.init(id: loginResponse.data[i].id, name: loginResponse.data[i].project_name))
                             }
                             self.project_id = self.showData[0].id
-                            self.getTask(id: self.showData[0].id, filter: "", workingStatus: self.workingStatu ?? "")
+                            self.getTask(id: "\(self.project_id)", filter: "", workingStatus: self.workingStatu ?? "")
                             progressHUD.hide()
                         } else {
                             print("Error decoding JSON")
@@ -491,7 +492,7 @@ extension WorkerTimeCardVC {
     
     
     //MARK: Get Task API
-    func getTask(id: Int, filter: String, workingStatus: String)
+    func getTask(id: String, filter: String, workingStatus: String)
     {
         if reachability.isConnectedToNetwork() == false{
             _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
@@ -500,10 +501,15 @@ extension WorkerTimeCardVC {
         let progressHUD = ProgressHUD()
         self.view.addSubview(progressHUD)
         progressHUD.show()
-        
+        var ids:String = ""
         var param: Parameters = ["":""]
         let url = "\(ApiLink.HOST_URL)/tasktfetch"
-        param = ["project": String(id), "date_filter": filter, "working_status": workingStatus]
+        if(id == "0"){
+            ids = "all"
+        }else{
+            ids = id
+        }
+        param = ["project": ids, "date_filter": filter, "working_status": workingStatus]
         print(param)
         let accessToken = UserDefaults.standard.string(forKey: "token") ?? ""
         print("Access Token: \(accessToken)")
@@ -560,17 +566,19 @@ extension WorkerTimeCardVC {
                         progressHUD.hide()
                         self.searchData.removeAll()
                         self.timeCardTV.reloadData()
-                        
+                        self.filteredData.removeAll()
                         _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }else if self.status == 201{
                         progressHUD.hide()
                         self.searchData.removeAll()
+                        self.filteredData.removeAll()
                         self.changeDateBtn.setTitle( dict["filter"] as? String, for: .normal)
                         self.timeCardTV.reloadData()
                         _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
                     }else{
                         progressHUD.hide()
                         self.searchData.removeAll()
+                        self.filteredData.removeAll()
                         self.timeCardTV.reloadData()
                         _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }
@@ -579,6 +587,7 @@ extension WorkerTimeCardVC {
                 case .failure(_):
                     progressHUD.hide()
                     self.searchData.removeAll()
+                    self.filteredData.removeAll()
                     self.timeCardTV.reloadData()
                     if let response = response.data{
                         var JSON: [String: Any]?

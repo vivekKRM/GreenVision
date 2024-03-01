@@ -57,7 +57,6 @@ class WorkerClockInVC: UIViewController {
     var servicelng:Double = 0.0
     var colorIndex = 0
     let colors: [UIColor] = [.green, .brown, .orange, .red]
-    
     var breaks = [breakDurations]()
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -82,11 +81,14 @@ class WorkerClockInVC: UIViewController {
         self.navigationController?.isNavigationBarHidden = false
         yourTimer?.invalidate()
         yourTimer = nil
+        timer?.invalidate()
+        timer = nil
     }
     
     @IBAction func startBtnTap(_ sender: UIButton) {
         if let buttonText = sender.titleLabel?.text {
             if buttonText == "Start Time".localizeString(string: lang){
+                startTimer()
                 sender.setTitle("Start Break".localizeString(string: lang), for: .normal)
                     print("Start Time")
                     startColorChangingTimer()
@@ -118,6 +120,8 @@ class WorkerClockInVC: UIViewController {
             let dateFormatter = DateFormatter()
             self.yourTimer?.invalidate()
             self.yourTimer = nil
+            self.timer?.invalidate()
+            self.timer = nil
             dateFormatter.dateFormat = "d MMM yyyy hh:mm a"
             // Get the current date and time
             let currentDate = Date()
@@ -197,7 +201,15 @@ extension WorkerClockInVC{
         personImage.addGestureRecognizer(tapGesture)
         localizeTabBar()
 //        latestupdate()
+//        NotificationCenter.default.addObserver(self, selector: #selector(disconnectPaxiSocket(_:)), name: Notification.Name(rawValue: "NotificationUpdate"), object: nil)
     }
+    
+    
+    @objc func disconnectPaxiSocket(_ notification: Notification) {
+        latestupdate()
+    }
+    
+    
     
     
     //MARK: Change Text of TabBar
@@ -209,13 +221,13 @@ extension WorkerClockInVC{
     }
     
     func showUpgradeAlert() {
-        let alertController = UIAlertController(title: "Update Green Vision Cleansing", message: "Green Vision Cleansing recommends that you update to the latest version.\nPlease click update button to go to play store.", preferredStyle: .alert)
+        let alertController = UIAlertController(title: "Update Green Vision Cleansing", message: "Green Vision Cleansing recommends that you update to the latest version.\nPlease click update button to go to app store.", preferredStyle: .alert)
         
         // Add an action for the update button
         let updateAction = UIAlertAction(title: "UPDATE", style: .default) { (action) in
             // Handle update button tap
             // For example, open the App Store for updating the app
-            if let url = URL(string: "https://apps.apple.com/us/app/ingenious-bluprint/id1480479193") {
+            if let url = URL(string: "https://apps.apple.com/us/app/green-vision-cleansing/id6476094607") {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             }
         }
@@ -271,6 +283,13 @@ extension WorkerClockInVC{
            print("Image tapped!")
         self.tabBarController?.selectedIndex = 3
     }
+    
+    func startTimer() {
+            timer?.invalidate()
+            timer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { timer in
+                self.workerProjectDetails()
+            }
+        }
     
     
     func floatingView()
@@ -408,29 +427,6 @@ extension WorkerClockInVC{
         let currentDate = Date() // Get the current date
         let formattedDate = dateFormatter.string(from: currentDate)
 //        startTime.text = formattedDate + " " + selectedTime//2 Jan
-    }
-    //MARK: Update Timer of Task
-    @objc func updateTimer() {
-        if let startTime = startTimes {
-            let currentTime = Date()
-            let elapsedTime = currentTime.timeIntervalSince(startTime)
-            
-            let hours = Int(elapsedTime / 3600)
-            let minutes = Int((elapsedTime / 60).truncatingRemainder(dividingBy: 60))
-            let seconds = Int(elapsedTime.truncatingRemainder(dividingBy: 60))
-            
-            let hourString = String(format: "%02d", hours)
-            let minuteString = String(format: "%02d", minutes)
-            let secondString = String(format: "%02d", seconds)
-            
-            if hours > 0 {
-                progressTime.text = "\(hourString)H \(minuteString)M"
-            } else if minutes > 0 {
-                progressTime.text = "\(minuteString)M \(secondString)S"
-            } else {
-                progressTime.text = "\(secondString)S"
-            }
-        }
     }
     
     
@@ -594,6 +590,9 @@ extension WorkerClockInVC {
                                 self.projectProgress.text = "WORKING".localizeString(string: lang)
                                 self.yourTimer?.invalidate()
                                 self.yourTimer = nil
+                                self.timer?.invalidate()
+                                self.timer = nil
+                                self.startTimer()
                                 self.startColorChangingTimer()
                                 self.finishBtn.isHidden = false
                                 self.startBtn.setTitle("Start Break".localizeString(string: lang), for: .normal)
@@ -603,6 +602,9 @@ extension WorkerClockInVC {
                                 self.yourTimer?.invalidate()
                                 self.yourTimer = nil
                                 self.startColorChangingTimer()
+                                self.timer?.invalidate()
+                                self.timer = nil
+                                self.startTimer()
                                 self.deleteBtn.isHidden = false
                                 self.startBtn.setTitle("End Break".localizeString(string: lang), for: .normal)
                                 self.startBtn.isEnabled = true
@@ -620,6 +622,9 @@ extension WorkerClockInVC {
                                 self.yourTimer?.invalidate()
                                 self.yourTimer = nil
                                 self.startColorChangingTimer()
+                                self.timer?.invalidate()
+                                self.timer = nil
+                                self.startTimer()
                                 self.startBtn.setTitle("Break".localizeString(string: lang), for: .normal)
                                 self.startBtn.isEnabled = true
                                 self.deleteBtn.isHidden = false
@@ -862,6 +867,8 @@ extension WorkerClockInVC {
                                 if isOtherButton == true {
                                     self.yourTimer?.invalidate()
                                     self.yourTimer = nil
+                                    self.timer?.invalidate()
+                                    self.timer = nil
                                     self.breakID.removeAll()
                                     self.breakStart.removeAll()
                                     self.breakEnd.removeAll()
@@ -1039,15 +1046,14 @@ extension WorkerClockInVC {
             print("Unable to retrieve app version")
         }
         
-        
         let progressHUD = ProgressHUD()
         self.view.addSubview(progressHUD)
         progressHUD.show()
         
-        let url = "\(ApiLink.HOST_URL)/latest_version"
+        let url = "\(ApiLink.HOST_URL)/force_update"
         let accessToken = UserDefaults.standard.string(forKey: "token") ?? ""
         var param: Parameters = ["":""]
-        param = ["device_type": "ios","current_version": versions]
+        param = ["type": "ios"]
         print(param)
         print("Access Token: \(accessToken)")
         AF.request(url, method: .post, parameters: param, encoding: URLEncoding.default, headers: ["Authorization": "Bearer "+accessToken+""])
@@ -1061,27 +1067,27 @@ extension WorkerClockInVC {
                     self.status = dict["status"] as! Int
                     if self.status == 200
                     {
-//                        if let jsonData = try? JSONSerialization.data(withJSONObject: value),
-//                           let loginResponse = try? JSONDecoder().decode(DefaultInfo.self, from: jsonData) {
+                        if let jsonData = try? JSONSerialization.data(withJSONObject: value),
+                           let loginResponse = try? JSONDecoder().decode(AppInfo.self, from: jsonData) {
                             progressHUD.hide()
-//                        let serverVersion = Float(value["current_version"] as? String ?? "") ?? 0.0
-//                    
-//                            print(versions)
-//                            
-//                            if let currentVersionString = value["current_version"] as? String {
-//                                let comparisonResult = versions.compare(currentVersionString, options: .numeric)
-//                                switch comparisonResult {
-//                                case .orderedAscending:
-//                                    print("Current version is less than server version")
-//                                    self.showUpgradeAlert()
-//                                case .orderedDescending:
-//                                    print("Current version is greater than server version")
-//                                   
-//                                case .orderedSame:
-//                                    print("Current version is equal to server version")
-//                                    
-//                                }
-                        
+                            
+                             let currentVersionString = loginResponse.app.version
+                                let comparisonResult = versions.compare(currentVersionString, options: .numeric)
+                                switch comparisonResult {
+                                case .orderedAscending:
+                                    print("Current version is less than server version")
+                                    self.showUpgradeAlert()
+                                case .orderedDescending:
+                                    print("Current version is greater than server version")
+                                case .orderedSame:
+                                    print("Current version is equal to server version")
+                                    
+                                }
+                         } else {
+                            print("Error decoding JSON")
+                            _ = SweetAlert().showAlert("", subTitle: "Error Decoding".localizeString(string: lang), style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
+                            progressHUD.hide()
+                        }
                         
                     }else if self.status == 502{
                         progressHUD.hide()

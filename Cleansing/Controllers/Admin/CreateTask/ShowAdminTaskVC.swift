@@ -398,18 +398,21 @@ extension ShowAdminTaskVC{
                     }else if self.status == 202{
                         progressHUD.hide()
                         self.searchData.removeAll()
+                        self.filteredTasks.removeAll()
                         self.showAdminTaskTV.reloadData()
                         
                         _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }else if self.status == 201{
                         progressHUD.hide()
                         self.searchData.removeAll()
+                        self.filteredTasks.removeAll()
                         //                        self.changeDateBtn.setTitle( dict["filter"] as? String, for: .normal)
                         self.showAdminTaskTV.reloadData()
                         _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.warning,buttonTitle:"OK".localizeString(string: lang))
                     }else{
                         progressHUD.hide()
                         self.searchData.removeAll()
+                        self.filteredTasks.removeAll()
                         self.showAdminTaskTV.reloadData()
                         _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.error,buttonTitle:"OK".localizeString(string: lang))
                     }

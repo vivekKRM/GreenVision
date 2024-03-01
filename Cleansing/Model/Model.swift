@@ -437,3 +437,20 @@ struct registerListing: Codable {
 }
 
 
+struct AppInfo: Codable {
+    let status: Int
+    let message: String
+    let app: AppDetails
+}
+
+struct AppDetails: Codable {
+    let url: String
+    let version: String
+    let deviceType: String
+
+    // Define custom coding keys to map snake_case keys to camelCase
+    private enum CodingKeys: String, CodingKey {
+        case url, version
+        case deviceType = "device_type"
+    }
+}
