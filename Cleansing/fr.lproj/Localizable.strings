@@ -436,3 +436,11 @@
 "Select worker" = "Sélectionner un travailleur";
 "Select time approver" = "Sélectionner l'approbateur de temps";
 "RESET TO DEAFULT" = "RÉINITIALISER SUR SOURD";
+
+"Search here.." = "Rechercher ici..";
+"TOTAL" = "TOTAL";
+"REGULAR" = "RÉGULIER";
+"OVERTIME" = "HEURES SUPPLÉMENTAIRES";
+"Show Results" = "Afficher les résultats";
+"(Working from:- " = "(Travail à partir de:- ";
+"(Total time:- " = "(Durée totale:- ";

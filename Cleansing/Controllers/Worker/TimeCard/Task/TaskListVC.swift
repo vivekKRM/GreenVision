@@ -17,6 +17,18 @@ class TaskListVC: UIViewController {
     @IBOutlet weak var changeDateBtn: UIButton!
     @IBOutlet weak var segmentControl: UISegmentedControl!
     
+    @IBOutlet weak var totalBtn: UIButton!
+    @IBOutlet weak var totalTime: UILabel!
+    @IBOutlet weak var totalView: UIView!
+    @IBOutlet weak var viewHeight: NSLayoutConstraint!
+    @IBOutlet weak var regularTime: UILabel!
+    @IBOutlet weak var overtime: UILabel!
+    @IBOutlet weak var showCount: UIButton!
+    @IBOutlet weak var searchBar: UISearchBar!
+    
+    @IBOutlet weak var regularLabel: UILabel!
+    @IBOutlet weak var overtimeLabel: UILabel!
+    @IBOutlet weak var resultLabel: UILabel!
     
     
     var pickerView: UIPickerView!
@@ -28,7 +40,9 @@ class TaskListVC: UIViewController {
     var servicelat: Double = 0.0
     var servicelong: Double = 0.0
     var date_selection: String = ""
+    var timecardcount: String = ""
     var workingStatu: String = ""
+    var pageStatus: String = ""
     var project_id: Int = 0
     var alertController: UIAlertController!
     var searchData = [search]()
@@ -101,11 +115,52 @@ class TaskListVC: UIViewController {
     }
     
     
+    
+    @IBAction func totalBtnTap(_ sender: UIButton) {
+        
+        if let anotherImage = UIImage(systemName: "arrow.up"){
+            if let image = sender.currentImage {
+                if image.isEqualToImage(image: anotherImage){
+                    viewHeight.constant = 0
+                    totalView.isHidden = true
+                    sender.setImage(UIImage(systemName: "arrow.down"), for: .normal)
+                }else{
+                    viewHeight.constant = 60
+                    totalView.isHidden = false
+                    sender.setImage(UIImage(systemName: "arrow.up"), for: .normal)
+                }
+                print("Button image: \(image)")
+            } else {
+                print("Button does not have an image set.")
+            }
+        }
+    }
+    
+    
+    @IBAction func showCountBtnTap(_ sender: UIButton) {
+        showAlert()
+    }
+    
+    
 }
 extension TaskListVC {
     
     func firstCall()
     {
+        viewHeight.constant = 0
+        totalView.isHidden = true
+        timecardcount = "10"
+        showCount.layer.masksToBounds = true
+        showCount.layer.cornerRadius = 5
+        showCount.layer.borderWidth = 0.5
+        showCount.layer.borderColor = UIColor.lightGray.cgColor    
+    
+        searchBar.placeholder = "Search here..".localizeString(string: lang)
+        totalBtn.setTitle("TOTAL".localizeString(string: lang), for: .normal)
+        regularLabel.text = "REGULAR".localizeString(string: lang)
+        overtimeLabel.text = "OVERTIME".localizeString(string: lang)
+        resultLabel.text = "Show Results".localizeString(string: lang)
+        
         filterBtn.setTitle("Time Cards".localizeString(string: lang), for: .normal)
         let customFont = UIFont(name: "Poppins-Medium", size: 14.0)
         let normalTextAttributes: [NSAttributedString.Key: Any] = [
@@ -127,7 +182,7 @@ extension TaskListVC {
         //            locationAlert()
         //        }
         floatingBtn()
-        getTask(filter: "")
+        getTask(filter: "", tcount: timecardcount)
         self.navigationController?.isNavigationBarHidden = true
         
         
@@ -157,6 +212,62 @@ extension TaskListVC {
             self.navigationController?.pushViewController(VC, animated: true)
         }
     }
+    
+    //MARK: Pagination Control Alert
+    func showAlert() {
+        // Create an alert controller
+        let alertController = UIAlertController(title: "Choose timecard count to show".localizeString(string: lang), message: "", preferredStyle: .alert)
+        // Create three buttons with different actions
+        let button1 = UIAlertAction(title: "10", style: .default) { (action) in
+            // Code to be executed when Button 1 is tapped
+            print("Button 1 tapped")
+            self.showCount.setTitle("10", for: .normal)
+            self.timecardcount = "10"
+            self.getTask(filter: self.changeDateBtn.titleLabel?.text ?? "", tcount: self.timecardcount)
+        }
+        
+        let button2 = UIAlertAction(title: "25".localizeString(string: lang), style: .default) { (action) in
+            // Code to be executed when Button 2 is tapped
+            print("Button 2 tapped")
+            self.showCount.setTitle("25", for: .normal)
+            self.timecardcount = "25"
+            self.getTask(filter: self.changeDateBtn.titleLabel?.text ?? "", tcount: self.timecardcount)
+        }
+        
+        let button3 = UIAlertAction(title: "50".localizeString(string: lang), style: .default) { (action) in
+            // Code to be executed when Button 3 is tapped
+            print("Button 3 tapped")
+            self.showCount.setTitle("50", for: .normal)
+            self.timecardcount = "50"
+            self.getTask(filter: self.changeDateBtn.titleLabel?.text ?? "", tcount: self.timecardcount)
+        }
+        
+        let button4 = UIAlertAction(title: "All".localizeString(string: lang), style: .default) { (action) in
+            // Code to be executed when Button 3 is tapped
+            print("Button 3 tapped")
+            self.showCount.setTitle("All".localizeString(string: lang), for: .normal)
+            self.timecardcount = "All"
+            self.getTask(filter: self.changeDateBtn.titleLabel?.text ?? "", tcount: self.timecardcount)
+        }
+        
+        let dismissAction = UIAlertAction(title: "Dismiss".localizeString(string: lang), style: .cancel, handler: nil)
+        // Set the text color of the buttons to black
+        alertController.view.tintColor = .black
+        dismissAction.setValue(UIColor.red, forKey: "titleTextColor")
+        
+        // Add the buttons to the alert controller
+        alertController.addAction(button1)
+        alertController.addAction(button2)
+        alertController.addAction(button3)
+        alertController.addAction(button4)
+        alertController.addAction(dismissAction)
+        
+        // Present the alert controller
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    
+    
     
     //MARK: Project Picker
     func projectPicker()
@@ -224,7 +335,7 @@ extension TaskListVC {
         let finals = fromstring + " - " + tostring
         changeDateBtn.setTitle(finals, for: .normal)
         date_selection = finals
-        getTask(filter: finals)
+        getTask(filter: finals, tcount: timecardcount)
         
     }
     
@@ -258,12 +369,12 @@ extension TaskListVC: UITableViewDelegate, UITableViewDataSource{
         }
         if searchData[indexPath.row].workingType == "0"{
             cell.checkTypeView.backgroundColor = UIColor.init(hexString: "3CDACA")
-            cell.hourMinuteLabel.text = "(Working from:- " + searchData[indexPath.row].hours + "h:" +  searchData[indexPath.row].minutes + "m)"
+            cell.hourMinuteLabel.text = "(Working from:- ".localizeString(string: lang) + searchData[indexPath.row].hours + "h:" +  searchData[indexPath.row].minutes + "m)"
             cell.checkType.text = "CLOCKED IN".localizeString(string: lang)
             cell.hourMinuteLabel.textColor = UIColor.init(hexString: "3CDACA")
         }else if searchData[indexPath.row].workingType == "1"{
             cell.checkTypeView.backgroundColor = UIColor.init(hexString: "004080")
-            cell.hourMinuteLabel.text = "(Total time:- " + searchData[indexPath.row].hours + "h:" +  searchData[indexPath.row].minutes + "m)"
+            cell.hourMinuteLabel.text = "(Total time:- ".localizeString(string: lang) + searchData[indexPath.row].hours + "h:" +  searchData[indexPath.row].minutes + "m)"
             cell.checkType.text = "CLOCKED OUT".localizeString(string: lang)
             cell.hourMinuteLabel.textColor =  UIColor.init(hexString: "004080")
         }else{
@@ -530,7 +641,7 @@ extension TaskListVC {
     
     
     //MARK: Get Task API
-    func getTask(filter: String)
+    func getTask(filter: String, tcount: String)
     {
         if reachability.isConnectedToNetwork() == false{
             _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
@@ -542,7 +653,7 @@ extension TaskListVC {
         
         var param: Parameters = ["":""]
         let url = "\(ApiLink.HOST_URL)/get_time_card"
-        param = ["date_filter": filter]
+        param = ["date_filter": filter, "count": tcount]
         print(param)
         let accessToken = UserDefaults.standard.string(forKey: "token") ?? ""
         print("Access Token: \(accessToken)")
@@ -561,6 +672,9 @@ extension TaskListVC {
                            let loginResponse = try? JSONDecoder().decode(GetTimeCardNewInfo.self, from: jsonData) {
                             
                             self.changeDateBtn.setTitle(loginResponse.filter, for: .normal)
+                            self.totalTime.text = loginResponse.totalTime
+                            self.regularTime.text = loginResponse.regulartime
+                            self.overtime.text = loginResponse.overtime
                             self.searchData.removeAll()
                             for i in 0..<loginResponse.timeCards.count{
                                 self.searchData.append(search.init(workingType: "\(loginResponse.timeCards[i].approve)", name: loginResponse.timeCards[i].name, taskTitle: loginResponse.timeCards[i].short_name ,dateRange: loginResponse.timeCards[i].date, startTime: loginResponse.timeCards[i].start_time, id: loginResponse.timeCards[i].id, endTime: loginResponse.timeCards[i].end_time, breakTime: "\(loginResponse.timeCards[i].break)", servicelat: loginResponse.timeCards[i].site_latitude, servicelong: loginResponse.timeCards[i].site_longitude, type: loginResponse.timeCards[i].type, timeCardType: loginResponse.timeCards[i].timecard_type, createBy: loginResponse.timeCards[i].created_by, taskName: loginResponse.timeCards[i].task_name, hours: loginResponse.timeCards[i].hours, minutes: loginResponse.timeCards[i].minutes))
@@ -751,7 +865,7 @@ extension TaskListVC {
                             progressHUD.hide()
                             _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.success,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                                 if isOtherButton == true {
-                                    self.getTask( filter: "")
+                                    self.getTask( filter: "", tcount: self.timecardcount)
                                 }
                             }
                             

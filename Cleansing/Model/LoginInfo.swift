@@ -315,6 +315,9 @@ struct GetTimeCardNewInfo: Codable {
     let message: String
 //    let url: String
     let filter: String
+    let totalTime:String
+    let regulartime:String
+    let overtime:String
     let timeCards: [GetTaskNew]
 }
 

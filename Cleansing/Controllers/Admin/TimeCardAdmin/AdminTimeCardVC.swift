@@ -18,6 +18,20 @@ class AdminTimeCardVC: UIViewController {
     @IBOutlet weak var changeDateBtn: UIButton!
     
     
+    
+    @IBOutlet weak var totalBtn: UIButton!
+    @IBOutlet weak var totalTime: UILabel!
+    @IBOutlet weak var totalView: UIView!
+    @IBOutlet weak var viewHeight: NSLayoutConstraint!
+    @IBOutlet weak var regularTime: UILabel!
+    @IBOutlet weak var overtime: UILabel!
+    @IBOutlet weak var showCount: UIButton!
+    @IBOutlet weak var searchBar: UISearchBar!
+    
+    @IBOutlet weak var regularLabel: UILabel!
+    @IBOutlet weak var overtimeLabel: UILabel!
+    @IBOutlet weak var resultLabel: UILabel!
+    
     var pickerView: UIPickerView!
     var status:Int = 0
     var count = 0
@@ -27,6 +41,7 @@ class AdminTimeCardVC: UIViewController {
     var servicelat: Double = 0.0
     var servicelong: Double = 0.0
     var date_selection: String = ""
+    var timecardcount:String = "10"
     var workingStatu: String = ""
     var project_id: Int = 0
     var alertController: UIAlertController!
@@ -90,11 +105,52 @@ class AdminTimeCardVC: UIViewController {
     }
     
     
+    @IBAction func totalBtnTap(_ sender: UIButton) {
+        
+        if let anotherImage = UIImage(systemName: "arrow.up"){
+            if let image = sender.currentImage {
+                if image.isEqualToImage(image: anotherImage){
+                    viewHeight.constant = 0
+                    totalView.isHidden = true
+                    sender.setImage(UIImage(systemName: "arrow.down"), for: .normal)
+                }else{
+                    viewHeight.constant = 60
+                    totalView.isHidden = false
+                    sender.setImage(UIImage(systemName: "arrow.up"), for: .normal)
+                }
+                print("Button image: \(image)")
+            } else {
+                print("Button does not have an image set.")
+            }
+        }
+    }
+    
+    
+    @IBAction func showCountBtnTap(_ sender: UIButton) {
+        showAlertCount()
+    }
+    
 }
 extension AdminTimeCardVC {
     
     func firstCall()
     {
+        
+        viewHeight.constant = 0
+        totalView.isHidden = true
+        showCount.layer.masksToBounds = true
+        showCount.layer.cornerRadius = 5
+        showCount.layer.borderWidth = 0.5
+        showCount.layer.borderColor = UIColor.lightGray.cgColor
+        timecardcount = "10"
+        searchBar.placeholder = "Search here..".localizeString(string: lang)
+        totalBtn.setTitle("TOTAL".localizeString(string: lang), for: .normal)
+        regularLabel.text = "REGULAR".localizeString(string: lang)
+        overtimeLabel.text = "OVERTIME".localizeString(string: lang)
+        resultLabel.text = "Show Results".localizeString(string: lang)
+        
+        
+        
         let customFont = UIFont(name: "Poppins-Medium", size: 14.0)
         let normalTextAttributes: [NSAttributedString.Key: Any] = [
             NSAttributedString.Key.font: customFont as Any,
@@ -116,7 +172,7 @@ extension AdminTimeCardVC {
         worker = UserDefaults.standard.string(forKey: "workerT") ?? ""
         statusF = UserDefaults.standard.string(forKey: "statusT") ?? ""
         approver = UserDefaults.standard.string(forKey: "approverT") ?? ""
-        getTask(filter: filters, workers: worker, status: statusF, approver: approver)
+        getTask(filter: filters, workers: worker, status: statusF, approver: approver, tcount: timecardcount)
         self.navigationController?.isNavigationBarHidden = true
         
     }
@@ -143,6 +199,64 @@ extension AdminTimeCardVC {
             self.navigationController?.pushViewController(VC, animated: true)
         }
     }
+    
+    //MARK: Pagination Control Alert
+    func showAlertCount() {
+        // Create an alert controller
+        let alertController = UIAlertController(title: "Choose timecard count to show".localizeString(string: lang), message: "", preferredStyle: .alert)
+        let filter = UserDefaults.standard.string(forKey: "dfilter") ?? ""
+        self.worker = UserDefaults.standard.string(forKey: "workerT") ?? ""
+        self.statusF = UserDefaults.standard.string(forKey: "statusT") ?? ""
+        self.approver = UserDefaults.standard.string(forKey: "approverT") ?? ""
+        // Create three buttons with different actions
+        let button1 = UIAlertAction(title: "10", style: .default) { (action) in
+            // Code to be executed when Button 1 is tapped
+            print("Button 1 tapped")
+            self.showCount.setTitle("10", for: .normal)
+            self.timecardcount = "10"
+            self.getTask(filter: filter, workers: self.worker, status: self.statusF, approver: self.approver, tcount: self.timecardcount)
+        }
+        
+        let button2 = UIAlertAction(title: "25".localizeString(string: lang), style: .default) { (action) in
+            // Code to be executed when Button 2 is tapped
+            print("Button 2 tapped")
+            self.showCount.setTitle("25", for: .normal)
+            self.timecardcount = "25"
+            self.getTask(filter: filter, workers: self.worker, status: self.statusF, approver: self.approver, tcount: self.timecardcount)
+        }
+        
+        let button3 = UIAlertAction(title: "50".localizeString(string: lang), style: .default) { (action) in
+            // Code to be executed when Button 3 is tapped
+            print("Button 3 tapped")
+            self.showCount.setTitle("50", for: .normal)
+            self.timecardcount = "50"
+            self.getTask(filter: filter, workers: self.worker, status: self.statusF, approver: self.approver, tcount: self.timecardcount)
+        }
+        
+        let button4 = UIAlertAction(title: "All".localizeString(string: lang), style: .default) { (action) in
+            // Code to be executed when Button 3 is tapped
+            print("Button 3 tapped")
+            self.showCount.setTitle("All".localizeString(string: lang), for: .normal)
+            self.timecardcount = "All"
+            self.getTask(filter: filter, workers: self.worker, status: self.statusF, approver: self.approver, tcount: self.timecardcount)
+        }
+        
+        let dismissAction = UIAlertAction(title: "Dismiss".localizeString(string: lang), style: .cancel, handler: nil)
+        // Set the text color of the buttons to black
+        alertController.view.tintColor = .black
+        dismissAction.setValue(UIColor.red, forKey: "titleTextColor")
+        
+        // Add the buttons to the alert controller
+        alertController.addAction(button1)
+        alertController.addAction(button2)
+        alertController.addAction(button3)
+        alertController.addAction(button4)
+        alertController.addAction(dismissAction)
+        
+        // Present the alert controller
+        present(alertController, animated: true, completion: nil)
+    }
+    
     
     //MARK: Project Picker
     func projectPicker()
@@ -212,7 +326,7 @@ extension AdminTimeCardVC {
         worker = UserDefaults.standard.string(forKey: "workerT") ?? ""
         statusF = UserDefaults.standard.string(forKey: "statusT") ?? ""
         approver = UserDefaults.standard.string(forKey: "approverT") ?? ""
-        getTask(filter: finals, workers: worker, status: statusF, approver: approver)
+        getTask(filter: finals, workers: worker, status: statusF, approver: approver, tcount: timecardcount)
         
     }
     
@@ -247,17 +361,17 @@ extension AdminTimeCardVC: UITableViewDelegate, UITableViewDataSource{
         if searchData[indexPath.row].workingType == "0"{
             cell.checkTypeView.backgroundColor = UIColor.init(hexString: "3CDACA")
             cell.checkType.text = "CLOCKED IN".localizeString(string: lang)
-            cell.hourMinuteLabel.text = "(Working from:- " + searchData[indexPath.row].hours + "h:" +  searchData[indexPath.row].minutes + "m)"
+            cell.hourMinuteLabel.text = "(Working from:- ".localizeString(string: lang) + searchData[indexPath.row].hours + "h:" +  searchData[indexPath.row].minutes + "m)"
             cell.hourMinuteLabel.textColor = UIColor.init(hexString: "3CDACA")
         }else if searchData[indexPath.row].workingType == "1"{
             cell.checkTypeView.backgroundColor = UIColor.init(hexString: "004080")
             cell.checkType.text = "CLOCKED OUT".localizeString(string: lang)
-            cell.hourMinuteLabel.text = "(Total time:- " + searchData[indexPath.row].hours + "h:" +  searchData[indexPath.row].minutes + "m)"
+            cell.hourMinuteLabel.text = "(Total time:- ".localizeString(string: lang) + searchData[indexPath.row].hours + "h:" +  searchData[indexPath.row].minutes + "m)"
             cell.hourMinuteLabel.textColor =  UIColor.init(hexString: "004080")
         }else{
             cell.checkTypeView.backgroundColor = UIColor.init(hexString: "F37290")
             cell.checkType.text = "APPROVED".localizeString(string: lang)
-            cell.hourMinuteLabel.text = "(Total time:- " + searchData[indexPath.row].hours + "h:" +  searchData[indexPath.row].minutes + "m)"
+            cell.hourMinuteLabel.text = "(Total time:- ".localizeString(string: lang) + searchData[indexPath.row].hours + "h:" +  searchData[indexPath.row].minutes + "m)"
             cell.hourMinuteLabel.textColor = UIColor.init(hexString: "F37290")
         }
 //        }else if cell.checkType.text == "Completed"{
@@ -437,7 +551,7 @@ extension AdminTimeCardVC {
     
 
     //MARK: Get TimeCard API
-    func getTask(filter: String, workers:String, status: String, approver: String)
+    func getTask(filter: String, workers:String, status: String, approver: String, tcount: String)
     {
         if reachability.isConnectedToNetwork() == false{
             _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
@@ -449,7 +563,7 @@ extension AdminTimeCardVC {
         
         var param: Parameters = ["":""]
         let url = "\(ApiLink.HOST_URL)/get_time_card"
-        param = ["date_filter": filter,"workers": workers, "status": status, "approver": approver]
+        param = ["date_filter": filter,"workers": workers, "status": status, "approver": approver, "count": tcount]
         print(param)
         let accessToken = UserDefaults.standard.string(forKey: "token") ?? ""
         print("Access Token: \(accessToken)")
@@ -468,6 +582,9 @@ extension AdminTimeCardVC {
                            let loginResponse = try? JSONDecoder().decode(GetTimeCardNewInfo.self, from: jsonData) {
                             self.searchData.removeAll()
                             self.changeDateBtn.setTitle(loginResponse.filter, for: .normal)
+                            self.totalTime.text = loginResponse.totalTime
+                            self.regularTime.text = loginResponse.regulartime
+                            self.overtime.text = loginResponse.overtime
                             for i in 0..<loginResponse.timeCards.count{
                                 self.searchData.append(search.init(workingType: "\(loginResponse.timeCards[i].approve)", name: loginResponse.timeCards[i].name, taskTitle: loginResponse.timeCards[i].short_name ,dateRange: loginResponse.timeCards[i].date, startTime: loginResponse.timeCards[i].start_time, id: loginResponse.timeCards[i].id, endTime: loginResponse.timeCards[i].end_time, breakTime: "\(loginResponse.timeCards[i].break)", servicelat: loginResponse.timeCards[i].site_latitude, servicelong: loginResponse.timeCards[i].site_longitude, type: loginResponse.timeCards[i].type, timeCardType: loginResponse.timeCards[i].timecard_type, createBy: loginResponse.timeCards[i].created_by, taskName: loginResponse.timeCards[i].task_name, hours: loginResponse.timeCards[i].hours, minutes: loginResponse.timeCards[i].minutes))
                             }
@@ -578,7 +695,7 @@ extension AdminTimeCardVC {
                                     self.worker = UserDefaults.standard.string(forKey: "workerT") ?? ""
                                     self.statusF = UserDefaults.standard.string(forKey: "statusT") ?? ""
                                     self.approver = UserDefaults.standard.string(forKey: "approverT") ?? ""
-                                    self.getTask(filter: filter, workers: self.worker, status: self.statusF, approver: self.approver)
+                                    self.getTask(filter: filter, workers: self.worker, status: self.statusF, approver: self.approver, tcount: self.timecardcount)
                                 }
                             }
                             
