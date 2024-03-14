@@ -35,6 +35,7 @@ class AddNotesVC: UIViewController {
     var typee:String = ""
     var textChnage: Bool = false
     var count = 0
+    var timecard_type:Int = 0
     var status: Int = 0
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,16 +69,12 @@ class AddNotesVC: UIViewController {
                 addNotesShow(task_id: task_id, note_title: notesTitle.text ?? "", notes: descriptionTV.text ?? "", note_id: noteId)
             }
         }
-       
         if calledType == "TimeCard"{
             self.navigationController?.popViewController(animated: true)
         }else{
             self.navigationController?.popViewController(animated: true)
         }
-        
     }
-    
-    
     
     @IBAction func addImageBtnTap(_ sender: UIButton) {
         if checkAll(){
@@ -383,7 +380,10 @@ extension AddNotesVC {
         let accessToken = UserDefaults.standard.string(forKey: "token") ?? ""
 //        descriptionTV.textColor = .lightGray
 //        descriptionTV.text = "Enter Description(Optional)"
-        param = ["task_ids": "\(task_id)", "note_title": note_title, "notes": notes, "note_id": note_id]
+        
+        
+        
+        param = ["task_ids": "\(task_id)", "note_title": note_title, "notes": notes, "note_id": note_id, "timecard_type": self.timecard_type]
         print(param)
         print("Access Token: \(accessToken)")
         let header : HTTPHeaders = ["Content-type": "application/json","enctype" : "multipart/form-data","Authorization": "Bearer "+accessToken+""]
@@ -614,8 +614,11 @@ extension AddNotesVC {
                     {
                         if let jsonData = try? JSONSerialization.data(withJSONObject: value),
                            let loginResponse = try? JSONDecoder().decode(TimeCardDetailsInfo.self, from: jsonData) {
-                           
-                            self.task_id = loginResponse.timeCards[0].task_id
+                            if loginResponse.timeCards[0].task_id == 0 {
+                                self.task_id = loginResponse.timeCards[0].id
+                            }else{
+                                self.task_id = loginResponse.timeCards[0].task_id
+                            }
                             
                             progressHUD.hide()
                         } else {

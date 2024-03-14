@@ -55,6 +55,7 @@ class AdminDetailTimeCardVC: UIViewController {
     var projectID: Int = 0
     var managerId: String = ""
     var memberId: String = ""
+    var timecard_type:Int = 0
     //Date Picker
     let datePicker: UIDatePicker? = UIDatePicker()
     var startype: String = ""
@@ -759,9 +760,8 @@ extension AdminDetailTimeCardVC {
                             self.startTime.text = loginResponse.timeCards[0].start_time
                             self.finishTime.text = loginResponse.timeCards[0].end_time
                             self.projectType = loginResponse.timeCards[0].approve
-                            
-                         
-                            
+                            self.timecard_type = loginResponse.timeCards[0].timecard_type
+                                                     
                             let dateFormatter = DateFormatter()
                             dateFormatter.dateFormat = "E, d MMM yyyy hh:mm a"
                             if let date = dateFormatter.date(from: self.startTime.text ?? "") {

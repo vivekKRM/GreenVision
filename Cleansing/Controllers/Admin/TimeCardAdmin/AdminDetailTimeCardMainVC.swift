@@ -20,6 +20,7 @@ class AdminDetailTimeCardMainVC: UIViewController {
     var site_latitude: Double = 0.0
     var site_longitude: Double = 0.0
     var underlineView = UIView()
+    var timecard_type:Int = 0
     var approve: Int = 0
     //Add Child Controllers
     
@@ -247,7 +248,7 @@ extension AdminDetailTimeCardMainVC{
                             } else {
                                 print("Invalid input: \(loginResponse.timeCards[0].site_longitude) is not a valid double.")
                             }
-                            
+                            self.timecard_type = loginResponse.timeCards[0].timecard_type
                             self.timerLabel.text = loginResponse.timeCards[0].hours + "h " + loginResponse.timeCards[0].minutes + "m"
                             self.approve = loginResponse.timeCards[0].approve
                             if loginResponse.timeCards[0].approve == 0{

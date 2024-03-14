@@ -21,6 +21,7 @@ class ShowNotesAdminVC: UIViewController {
     var projectType: Int = 0
     var calledFrom: String = ""
     var notesdetails = [showNotes]()
+    var timecard_type:Int = 0
     var exist:[Bool] = []
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,6 +44,7 @@ class ShowNotesAdminVC: UIViewController {
             if let VC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AddNotesVC") as? AddNotesVC{
                 VC.hidesBottomBarWhenPushed = true
                 VC.calledType = calledFrom
+                VC.timecard_type = timecard_type
                 VC.task_id = taskID
                 self.navigationController?.pushViewController(VC, animated: true)
             }
@@ -73,6 +75,7 @@ extension ShowNotesAdminVC {
         if let VC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AddNotesVC") as? AddNotesVC{
             VC.hidesBottomBarWhenPushed = true
             VC.calledType = ""
+            VC.timecard_type = timecard_type
             VC.task_id = taskID
             self.navigationController?.pushViewController(VC, animated: true)
         }
@@ -103,6 +106,7 @@ extension ShowNotesAdminVC {
             print("Floating button tapped!")
             if let VC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AddNotesVC") as? AddNotesVC{
                 VC.hidesBottomBarWhenPushed = true
+                VC.timecard_type = timecard_type
                 VC.calledType = calledFrom
                 VC.task_id = taskID
                 self.navigationController?.pushViewController(VC, animated: true)
@@ -177,6 +181,7 @@ extension ShowNotesAdminVC: UITableViewDelegate, UITableViewDataSource{
                 if  calledFrom == "AdminTask"{
                     VC.typee = "Timers"
                 }
+                VC.timecard_type = timecard_type
                 VC.noteId = "\(notesdetails[indexPath.row].nid)"
                 VC.task_id = taskID
                 self.navigationController?.pushViewController(VC, animated: true)
@@ -290,6 +295,7 @@ extension ShowNotesAdminVC {
                            let loginResponse = try? JSONDecoder().decode(TimeCardDetailsInfo.self, from: jsonData) {
                             self.notesdetails.removeAll()
                             self.exist.removeAll()
+                            self.timecard_type = loginResponse.timeCards[0].timecard_type
                             for i in 0..<loginResponse.timeCards[0].notes.count{
                                 self.notesdetails.append(showNotes.init(nsdate: loginResponse.timeCards[0].notes[i].date ?? "", nstime: loginResponse.timeCards[0].notes[i].time ?? "", ntitle: loginResponse.timeCards[0].notes[i].note_title ?? "", nid: loginResponse.timeCards[0].notes[i].id ?? 0, nImageId: loginResponse.timeCards[0].notes[i].image, url: loginResponse.timeCards[0].notes[i].url ?? "", npimage: loginResponse.timeCards[0].notes[i].uploaded_by_profile ?? "", npname: loginResponse.timeCards[0].notes[i].uploaded_by ?? "", roleId: loginResponse.timeCards[0].notes[i].role ?? 0))
                                 self.projectType = loginResponse.timeCards[0].approve

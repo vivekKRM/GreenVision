@@ -15,6 +15,7 @@ class ShowTaskListMainVC: UIViewController {
     @IBOutlet weak var bottomView: UIView!
     @IBOutlet weak var timeHeight: NSLayoutConstraint!
     var taskID: Int = 0
+    var timecard_type:Int = 0
     var status:Int = 0
     var site_latitude: Double = 0.0
     var site_longitude: Double = 0.0
@@ -242,7 +243,7 @@ extension ShowTaskListMainVC{
                             } else {
                                 print("Invalid input: \(loginResponse.timeCards[0].site_longitude) is not a valid double.")
                             }
-                            
+                            self.timecard_type = loginResponse.timeCards[0].timecard_type
                             self.timerLabel.text = loginResponse.timeCards[0].hours + "h " + loginResponse.timeCards[0].minutes + "m"
                             self.approve = loginResponse.timeCards[0].approve
                             if loginResponse.timeCards[0].approve == 0{

@@ -59,6 +59,7 @@ class ShowTaskListVC: UIViewController {
     var cbreakEnd: String = "00:00"
     var manager_id: String = ""
     var projectType: Int = 0
+    var timecard_type:Int = 0
     var datePickers = UIDatePicker()
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -631,7 +632,7 @@ extension ShowTaskListVC {
                             self.startTime.text = loginResponse.timeCards[0].start_time
                             self.finishTime.text = loginResponse.timeCards[0].end_time
                             self.projectType = loginResponse.timeCards[0].approve
-                            
+                            self.timecard_type = loginResponse.timeCards[0].timecard_type
                             if loginResponse.timeCards[0].timecard_type == 1 && loginResponse.timeCards[0].approve == 0{
                                 self.saveBtn.isHidden = true
                             }
