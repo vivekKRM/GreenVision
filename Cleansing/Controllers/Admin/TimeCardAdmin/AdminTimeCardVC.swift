@@ -44,6 +44,7 @@ class AdminTimeCardVC: UIViewController {
     var timecardcount:String = "10"
     var workingStatu: String = ""
     var project_id: Int = 0
+    var searchText:String = ""
     var alertController: UIAlertController!
     var searchData = [search]()
     var showData = [showProject]()
@@ -143,14 +144,14 @@ extension AdminTimeCardVC {
         showCount.layer.borderWidth = 0.5
         showCount.layer.borderColor = UIColor.lightGray.cgColor
         timecardcount = "10"
-        searchBar.placeholder = "Search here..".localizeString(string: lang)
+        searchBar.placeholder = "Search worker".localizeString(string: lang)
+        searchBar.delegate = self
+        searchBar.showsCancelButton = true
         totalBtn.setTitle("TOTAL".localizeString(string: lang), for: .normal)
         regularLabel.text = "REGULAR".localizeString(string: lang)
         overtimeLabel.text = "OVERTIME".localizeString(string: lang)
         resultLabel.text = "Show Results".localizeString(string: lang)
-        
-        
-        
+                
         let customFont = UIFont(name: "Poppins-Medium", size: 14.0)
         let normalTextAttributes: [NSAttributedString.Key: Any] = [
             NSAttributedString.Key.font: customFont as Any,
@@ -172,7 +173,7 @@ extension AdminTimeCardVC {
         worker = UserDefaults.standard.string(forKey: "workerT") ?? ""
         statusF = UserDefaults.standard.string(forKey: "statusT") ?? ""
         approver = UserDefaults.standard.string(forKey: "approverT") ?? ""
-        getTask(filter: filters, workers: worker, status: statusF, approver: approver, tcount: timecardcount)
+        getTask(filter: filters, workers: worker, status: statusF, approver: approver, tcount: timecardcount, searchText: searchText)
         self.navigationController?.isNavigationBarHidden = true
         
     }
@@ -214,7 +215,7 @@ extension AdminTimeCardVC {
             print("Button 1 tapped")
             self.showCount.setTitle("10", for: .normal)
             self.timecardcount = "10"
-            self.getTask(filter: filter, workers: self.worker, status: self.statusF, approver: self.approver, tcount: self.timecardcount)
+            self.getTask(filter: filter, workers: self.worker, status: self.statusF, approver: self.approver, tcount: self.timecardcount, searchText: self.searchText)
         }
         
         let button2 = UIAlertAction(title: "25".localizeString(string: lang), style: .default) { (action) in
@@ -222,7 +223,7 @@ extension AdminTimeCardVC {
             print("Button 2 tapped")
             self.showCount.setTitle("25", for: .normal)
             self.timecardcount = "25"
-            self.getTask(filter: filter, workers: self.worker, status: self.statusF, approver: self.approver, tcount: self.timecardcount)
+            self.getTask(filter: filter, workers: self.worker, status: self.statusF, approver: self.approver, tcount: self.timecardcount, searchText: self.searchText)
         }
         
         let button3 = UIAlertAction(title: "50".localizeString(string: lang), style: .default) { (action) in
@@ -230,7 +231,7 @@ extension AdminTimeCardVC {
             print("Button 3 tapped")
             self.showCount.setTitle("50", for: .normal)
             self.timecardcount = "50"
-            self.getTask(filter: filter, workers: self.worker, status: self.statusF, approver: self.approver, tcount: self.timecardcount)
+            self.getTask(filter: filter, workers: self.worker, status: self.statusF, approver: self.approver, tcount: self.timecardcount, searchText: self.searchText)
         }
         
         let button4 = UIAlertAction(title: "All".localizeString(string: lang), style: .default) { (action) in
@@ -238,7 +239,7 @@ extension AdminTimeCardVC {
             print("Button 3 tapped")
             self.showCount.setTitle("All".localizeString(string: lang), for: .normal)
             self.timecardcount = "All"
-            self.getTask(filter: filter, workers: self.worker, status: self.statusF, approver: self.approver, tcount: self.timecardcount)
+            self.getTask(filter: filter, workers: self.worker, status: self.statusF, approver: self.approver, tcount: self.timecardcount, searchText: self.searchText)
         }
         
         let dismissAction = UIAlertAction(title: "Dismiss".localizeString(string: lang), style: .cancel, handler: nil)
@@ -326,7 +327,7 @@ extension AdminTimeCardVC {
         worker = UserDefaults.standard.string(forKey: "workerT") ?? ""
         statusF = UserDefaults.standard.string(forKey: "statusT") ?? ""
         approver = UserDefaults.standard.string(forKey: "approverT") ?? ""
-        getTask(filter: finals, workers: worker, status: statusF, approver: approver, tcount: timecardcount)
+        getTask(filter: finals, workers: worker, status: statusF, approver: approver, tcount: timecardcount, searchText: searchText)
         
     }
     
@@ -551,7 +552,7 @@ extension AdminTimeCardVC {
     
 
     //MARK: Get TimeCard API
-    func getTask(filter: String, workers:String, status: String, approver: String, tcount: String)
+    func getTask(filter: String, workers:String, status: String, approver: String, tcount: String, searchText: String)
     {
         if reachability.isConnectedToNetwork() == false{
             _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
@@ -563,7 +564,7 @@ extension AdminTimeCardVC {
         
         var param: Parameters = ["":""]
         let url = "\(ApiLink.HOST_URL)/get_time_card"
-        param = ["date_filter": filter,"workers": workers, "status": status, "approver": approver, "count": tcount]
+        param = ["date_filter": filter,"workers": workers, "status": status, "approver": approver, "count": tcount, "search": searchText]
         print(param)
         let accessToken = UserDefaults.standard.string(forKey: "token") ?? ""
         print("Access Token: \(accessToken)")
@@ -695,7 +696,7 @@ extension AdminTimeCardVC {
                                     self.worker = UserDefaults.standard.string(forKey: "workerT") ?? ""
                                     self.statusF = UserDefaults.standard.string(forKey: "statusT") ?? ""
                                     self.approver = UserDefaults.standard.string(forKey: "approverT") ?? ""
-                                    self.getTask(filter: filter, workers: self.worker, status: self.statusF, approver: self.approver, tcount: self.timecardcount)
+                                    self.getTask(filter: filter, workers: self.worker, status: self.statusF, approver: self.approver, tcount: self.timecardcount, searchText: self.searchText)
                                 }
                             }
                             
@@ -750,4 +751,35 @@ extension AdminTimeCardVC {
                 }
             }
     }
+}
+// MARK: - UISearchBarDelegate methods
+extension AdminTimeCardVC: UISearchBarDelegate{
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+            // This method is called whenever the text in the search bar changes
+            print("Search text changed:", searchText)
+            // Perform any filtering or search logic here
+        }
+
+        func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+            // This method is called when the search button on the keyboard is pressed
+            guard let searchText = searchBar.text else { return }
+            print("Search button clicked with text:", searchText)
+            self.searchText = searchText
+            let filter = UserDefaults.standard.string(forKey: "dfilter") ?? ""
+            self.worker = UserDefaults.standard.string(forKey: "workerT") ?? ""
+            self.statusF = UserDefaults.standard.string(forKey: "statusT") ?? ""
+            self.approver = UserDefaults.standard.string(forKey: "approverT") ?? ""
+            self.getTask(filter: filter, workers: self.worker, status: self.statusF, approver: self.approver, tcount: self.timecardcount, searchText: self.searchText)
+            // Perform any action upon search submission
+            searchBar.resignFirstResponder() // Dismiss the keyboard
+        }
+
+        func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+            // This method is called when the cancel button is pressed
+            print("Cancel button clicked")
+            // Reset the search bar or perform any cleanup
+            searchBar.text = nil
+            searchBar.resignFirstResponder() // Dismiss the keyboard
+        }
 }

@@ -47,6 +47,7 @@ class TaskListVC: UIViewController {
     var alertController: UIAlertController!
     var searchData = [search]()
     var showData = [showProject]()
+    var searchText:String = ""
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Time Cards".localizeString(string: lang)
@@ -156,6 +157,8 @@ extension TaskListVC {
         showCount.layer.borderColor = UIColor.lightGray.cgColor    
     
         searchBar.placeholder = "Search here..".localizeString(string: lang)
+        searchBar.delegate = self
+        searchBar.showsCancelButton = true
         totalBtn.setTitle("TOTAL".localizeString(string: lang), for: .normal)
         regularLabel.text = "REGULAR".localizeString(string: lang)
         overtimeLabel.text = "OVERTIME".localizeString(string: lang)
@@ -182,7 +185,7 @@ extension TaskListVC {
         //            locationAlert()
         //        }
         floatingBtn()
-        getTask(filter: "", tcount: timecardcount)
+        getTask(filter: "", tcount: timecardcount, searchText: searchText)
         self.navigationController?.isNavigationBarHidden = true
         
         
@@ -223,7 +226,7 @@ extension TaskListVC {
             print("Button 1 tapped")
             self.showCount.setTitle("10", for: .normal)
             self.timecardcount = "10"
-            self.getTask(filter: self.changeDateBtn.titleLabel?.text ?? "", tcount: self.timecardcount)
+            self.getTask(filter: self.changeDateBtn.titleLabel?.text ?? "", tcount: self.timecardcount, searchText: self.searchText)
         }
         
         let button2 = UIAlertAction(title: "25".localizeString(string: lang), style: .default) { (action) in
@@ -231,7 +234,7 @@ extension TaskListVC {
             print("Button 2 tapped")
             self.showCount.setTitle("25", for: .normal)
             self.timecardcount = "25"
-            self.getTask(filter: self.changeDateBtn.titleLabel?.text ?? "", tcount: self.timecardcount)
+            self.getTask(filter: self.changeDateBtn.titleLabel?.text ?? "", tcount: self.timecardcount, searchText: self.searchText)
         }
         
         let button3 = UIAlertAction(title: "50".localizeString(string: lang), style: .default) { (action) in
@@ -239,7 +242,7 @@ extension TaskListVC {
             print("Button 3 tapped")
             self.showCount.setTitle("50", for: .normal)
             self.timecardcount = "50"
-            self.getTask(filter: self.changeDateBtn.titleLabel?.text ?? "", tcount: self.timecardcount)
+            self.getTask(filter: self.changeDateBtn.titleLabel?.text ?? "", tcount: self.timecardcount, searchText: self.searchText)
         }
         
         let button4 = UIAlertAction(title: "All".localizeString(string: lang), style: .default) { (action) in
@@ -247,7 +250,7 @@ extension TaskListVC {
             print("Button 3 tapped")
             self.showCount.setTitle("All".localizeString(string: lang), for: .normal)
             self.timecardcount = "All"
-            self.getTask(filter: self.changeDateBtn.titleLabel?.text ?? "", tcount: self.timecardcount)
+            self.getTask(filter: self.changeDateBtn.titleLabel?.text ?? "", tcount: self.timecardcount, searchText: self.searchText)
         }
         
         let dismissAction = UIAlertAction(title: "Dismiss".localizeString(string: lang), style: .cancel, handler: nil)
@@ -335,7 +338,7 @@ extension TaskListVC {
         let finals = fromstring + " - " + tostring
         changeDateBtn.setTitle(finals, for: .normal)
         date_selection = finals
-        getTask(filter: finals, tcount: timecardcount)
+        getTask(filter: finals, tcount: timecardcount, searchText: searchText)
         
     }
     
@@ -641,7 +644,7 @@ extension TaskListVC {
     
     
     //MARK: Get Task API
-    func getTask(filter: String, tcount: String)
+    func getTask(filter: String, tcount: String, searchText:String)
     {
         if reachability.isConnectedToNetwork() == false{
             _ = SweetAlert().showAlert("", subTitle: ApiLink.INTERNET_ERROR_MESSAGE, style: AlertStyle.none,buttonTitle:"OK".localizeString(string: lang))
@@ -653,7 +656,7 @@ extension TaskListVC {
         
         var param: Parameters = ["":""]
         let url = "\(ApiLink.HOST_URL)/get_time_card"
-        param = ["date_filter": filter, "count": tcount]
+        param = ["date_filter": filter, "count": tcount, "search": searchText]
         print(param)
         let accessToken = UserDefaults.standard.string(forKey: "token") ?? ""
         print("Access Token: \(accessToken)")
@@ -865,7 +868,7 @@ extension TaskListVC {
                             progressHUD.hide()
                             _ = SweetAlert().showAlert("", subTitle:  dict["message"] as? String, style: AlertStyle.success,buttonTitle:"OK".localizeString(string: lang)){ (isOtherButton) -> Void in
                                 if isOtherButton == true {
-                                    self.getTask( filter: "", tcount: self.timecardcount)
+                                    self.getTask( filter: "", tcount: self.timecardcount, searchText: self.searchText)
                                 }
                             }
                             
@@ -922,3 +925,31 @@ extension TaskListVC {
     }
 }
 
+// MARK: - UISearchBarDelegate methods
+extension TaskListVC: UISearchBarDelegate{
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+            // This method is called whenever the text in the search bar changes
+            print("Search text changed:", searchText)
+            // Perform any filtering or search logic here
+        }
+
+        func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+            // This method is called when the search button on the keyboard is pressed
+            guard let searchText = searchBar.text else { return }
+            print("Search button clicked with text:", searchText)
+            self.searchText = searchText
+            self.getTask(filter: self.changeDateBtn.titleLabel?.text ?? "", tcount: self.timecardcount, searchText: self.searchText)
+
+            // Perform any action upon search submission
+            searchBar.resignFirstResponder() // Dismiss the keyboard
+        }
+
+        func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+            // This method is called when the cancel button is pressed
+            print("Cancel button clicked")
+            // Reset the search bar or perform any cleanup
+            searchBar.text = nil
+            searchBar.resignFirstResponder() // Dismiss the keyboard
+        }
+}
