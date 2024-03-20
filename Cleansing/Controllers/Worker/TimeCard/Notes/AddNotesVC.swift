@@ -614,10 +614,10 @@ extension AddNotesVC {
                     {
                         if let jsonData = try? JSONSerialization.data(withJSONObject: value),
                            let loginResponse = try? JSONDecoder().decode(TimeCardDetailsInfo.self, from: jsonData) {
-                            if loginResponse.timeCards[0].task_id == 0 {
-                                self.task_id = loginResponse.timeCards[0].id
-                            }else{
+                            if loginResponse.timeCards[0].timecard_type == 0 {
                                 self.task_id = loginResponse.timeCards[0].task_id
+                            }else{
+                                self.task_id = loginResponse.timeCards[0].id
                             }
                             
                             progressHUD.hide()
