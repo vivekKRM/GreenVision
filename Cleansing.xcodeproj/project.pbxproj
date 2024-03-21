@@ -37,6 +37,7 @@
 		5DB5ED912B3590C800B736D0 /* WorkerRouteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB5ED902B3590C800B736D0 /* WorkerRouteVC.swift */; };
 		5DC0FB902B5534CF0065D773 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5DC0FB8F2B5534CF0065D773 /* GoogleService-Info.plist */; };
 		5DC4C2A62B4D4A1F00F713BE /* WorkerClockInMapVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC4C2A52B4D4A1F00F713BE /* WorkerClockInMapVC.swift */; };
+		5DC5B9BE2BAC2C6800865D77 /* WebViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC5B9BD2BAC2C6800865D77 /* WebViewVC.swift */; };
 		5DCF62EB2B3ED9F2005B7546 /* ShowNotesAdminVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCF62EA2B3ED9F2005B7546 /* ShowNotesAdminVC.swift */; };
 		5DCF62EE2B3EE1B5005B7546 /* AdminClockInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCF62ED2B3EE1B5005B7546 /* AdminClockInVC.swift */; };
 		5DDDD2B62B21BF0500A77C18 /* AdminDetailTimeCardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDDD2B52B21BF0500A77C18 /* AdminDetailTimeCardVC.swift */; };
@@ -157,6 +158,7 @@
 		5DC0FB8F2B5534CF0065D773 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5DC0FB912B553BB70065D773 /* Cleansing.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Cleansing.entitlements; sourceTree = "<group>"; };
 		5DC4C2A52B4D4A1F00F713BE /* WorkerClockInMapVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkerClockInMapVC.swift; sourceTree = "<group>"; };
+		5DC5B9BD2BAC2C6800865D77 /* WebViewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewVC.swift; sourceTree = "<group>"; };
 		5DCF62EA2B3ED9F2005B7546 /* ShowNotesAdminVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowNotesAdminVC.swift; sourceTree = "<group>"; };
 		5DCF62ED2B3EE1B5005B7546 /* AdminClockInVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminClockInVC.swift; sourceTree = "<group>"; };
 		5DDDD2B52B21BF0500A77C18 /* AdminDetailTimeCardVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminDetailTimeCardVC.swift; sourceTree = "<group>"; };
@@ -523,6 +525,7 @@
 				890C95272AB31C93000E466C /* BottomDrawerVC.swift */,
 				5D1E2F482B57BC300001782B /* LanguageVC.swift */,
 				5D8ADC8E2B591159000B5405 /* LanguageTVC.swift */,
+				5DC5B9BD2BAC2C6800865D77 /* WebViewVC.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -871,6 +874,7 @@
 				8913E98B2A9624530037C5DC /* AddWorker.swift in Sources */,
 				899B2D482A94916200AE8711 /* DashboardTVC.swift in Sources */,
 				891D3D3D2AB1D51900AB5274 /* APIService.swift in Sources */,
+				5DC5B9BE2BAC2C6800865D77 /* WebViewVC.swift in Sources */,
 				891D3D392AB1A1F000AB5274 /* ShowImageVC.swift in Sources */,
 				5DCF62EB2B3ED9F2005B7546 /* ShowNotesAdminVC.swift in Sources */,
 				89761B092A9F87B40006BEF1 /* MyWorkerTVC.swift in Sources */,
@@ -1061,7 +1065,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.3.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.greenvison.cleansing;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1104,7 +1108,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.3.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.greenvison.cleansing;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

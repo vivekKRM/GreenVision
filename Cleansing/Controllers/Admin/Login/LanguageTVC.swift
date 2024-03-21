@@ -23,7 +23,7 @@ class LanguageTVC: UITableViewCell {
 //            if selected {
 //                langBtn.setImage(UIImage(systemName: "circle.fill"), for: .normal)
 //            } else {
-//                langBtn.setImage(UIImage(systemName: "circle"), for: .normal)
+//               langBtn.setImage(UIImage(systemName: "circle"), for: .normal)
 //            }
         }
 
