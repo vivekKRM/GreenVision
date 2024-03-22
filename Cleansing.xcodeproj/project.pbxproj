@@ -25,6 +25,7 @@
 		5D4EA1E12B4E65970068DE9A /* AdminDashTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4EA1E02B4E65970068DE9A /* AdminDashTVC.swift */; };
 		5D5E1A542B0228D8008433B7 /* ShowAdminTaskDetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D5E1A532B0228D8008433B7 /* ShowAdminTaskDetailsVC.swift */; };
 		5D63A3DA2B19B71000B0930E /* AdminTimeCardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D63A3D92B19B71000B0930E /* AdminTimeCardVC.swift */; };
+		5D64C1882BAD3C4E00F6989F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5D64C1872BAD3C4E00F6989F /* GoogleService-Info.plist */; };
 		5D65506B2AFDDB8E0086CCA1 /* SelectionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D65506A2AFDDB8E0086CCA1 /* SelectionVC.swift */; };
 		5D65E81C2B7CB58B00063DAB /* TimeCardCheckListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D65E81B2B7CB58B00063DAB /* TimeCardCheckListVC.swift */; };
 		5D6985B62AF3B401002E2C3D /* LogsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D6985B52AF3B401002E2C3D /* LogsVC.swift */; };
@@ -35,7 +36,6 @@
 		5D862AC72B4BD78600CFEF95 /* WorkerClockInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D862AC62B4BD78600CFEF95 /* WorkerClockInVC.swift */; };
 		5D8ADC8F2B591159000B5405 /* LanguageTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D8ADC8E2B591159000B5405 /* LanguageTVC.swift */; };
 		5DB5ED912B3590C800B736D0 /* WorkerRouteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB5ED902B3590C800B736D0 /* WorkerRouteVC.swift */; };
-		5DC0FB902B5534CF0065D773 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5DC0FB8F2B5534CF0065D773 /* GoogleService-Info.plist */; };
 		5DC4C2A62B4D4A1F00F713BE /* WorkerClockInMapVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC4C2A52B4D4A1F00F713BE /* WorkerClockInMapVC.swift */; };
 		5DC5B9BE2BAC2C6800865D77 /* WebViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC5B9BD2BAC2C6800865D77 /* WebViewVC.swift */; };
 		5DCF62EB2B3ED9F2005B7546 /* ShowNotesAdminVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCF62EA2B3ED9F2005B7546 /* ShowNotesAdminVC.swift */; };
@@ -145,6 +145,7 @@
 		5D4EA1E02B4E65970068DE9A /* AdminDashTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminDashTVC.swift; sourceTree = "<group>"; };
 		5D5E1A532B0228D8008433B7 /* ShowAdminTaskDetailsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowAdminTaskDetailsVC.swift; sourceTree = "<group>"; };
 		5D63A3D92B19B71000B0930E /* AdminTimeCardVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminTimeCardVC.swift; sourceTree = "<group>"; };
+		5D64C1872BAD3C4E00F6989F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5D65506A2AFDDB8E0086CCA1 /* SelectionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionVC.swift; sourceTree = "<group>"; };
 		5D65E81B2B7CB58B00063DAB /* TimeCardCheckListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeCardCheckListVC.swift; sourceTree = "<group>"; };
 		5D6985B52AF3B401002E2C3D /* LogsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsVC.swift; sourceTree = "<group>"; };
@@ -155,7 +156,6 @@
 		5D862AC62B4BD78600CFEF95 /* WorkerClockInVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkerClockInVC.swift; sourceTree = "<group>"; };
 		5D8ADC8E2B591159000B5405 /* LanguageTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageTVC.swift; sourceTree = "<group>"; };
 		5DB5ED902B3590C800B736D0 /* WorkerRouteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkerRouteVC.swift; sourceTree = "<group>"; };
-		5DC0FB8F2B5534CF0065D773 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5DC0FB912B553BB70065D773 /* Cleansing.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Cleansing.entitlements; sourceTree = "<group>"; };
 		5DC4C2A52B4D4A1F00F713BE /* WorkerClockInMapVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkerClockInMapVC.swift; sourceTree = "<group>"; };
 		5DC5B9BD2BAC2C6800865D77 /* WebViewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewVC.swift; sourceTree = "<group>"; };
@@ -483,8 +483,8 @@
 				89AAB43E2A8F6BC000A073AA /* Main.storyboard */,
 				89AAB4412A8F6BC200A073AA /* Assets.xcassets */,
 				89AAB4432A8F6BC200A073AA /* LaunchScreen.storyboard */,
-				5DC0FB8F2B5534CF0065D773 /* GoogleService-Info.plist */,
 				89AAB4462A8F6BC200A073AA /* Info.plist */,
+				5D64C1872BAD3C4E00F6989F /* GoogleService-Info.plist */,
 				89AAB4592A8F771800A073AA /* Controllers */,
 				89AAB44C2A8F711C00A073AA /* Extensions */,
 				5D3BDF4F2B68AC48007CD6E2 /* Localizable.strings */,
@@ -705,8 +705,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				89AAB4452A8F6BC200A073AA /* LaunchScreen.storyboard in Resources */,
-				5DC0FB902B5534CF0065D773 /* GoogleService-Info.plist in Resources */,
 				89AAB4422A8F6BC200A073AA /* Assets.xcassets in Resources */,
+				5D64C1882BAD3C4E00F6989F /* GoogleService-Info.plist in Resources */,
 				89AAB46F2A8F88E400A073AA /* Poppins-Regular.ttf in Resources */,
 				5D3BDF4D2B68AC48007CD6E2 /* Localizable.strings in Resources */,
 				89AAB46D2A8F88DE00A073AA /* Poppins-Medium.ttf in Resources */,
@@ -1065,8 +1065,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.greenvison.cleansing;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.greenvision.cleansing;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1108,8 +1108,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.greenvison.cleansing;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.greenvision.cleansing;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

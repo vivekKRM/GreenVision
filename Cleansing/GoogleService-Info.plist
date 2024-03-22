@@ -9,7 +9,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.greenvison.cleansing</string>
+	<string>com.greenvision.cleansing</string>
 	<key>PROJECT_ID</key>
 	<string>green-vision-cleansing-app</string>
 	<key>STORAGE_BUCKET</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:220338274079:ios:583ff91683aa9ae3f03a2a</string>
+	<string>1:220338274079:ios:8081421c163b96c7f03a2a</string>
 </dict>
 </plist>
